@@ -14,6 +14,7 @@ class DBLoader:
         self._configs = config.config
         self._db_name = self._configs.get('db_name')
         self._table_name = self._configs.get('table_name')
+        self.conn = None
         self.db = None
 
     def __enter__(self):
@@ -24,18 +25,17 @@ class DBLoader:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.db is not None:
-            self.db.close()
+            self.conn.close()
 
     def _load_data_from_db(self):
         if config.get_args('mode') != 'db':
             return
-        conn = pymongo.MongoClient(host=self._configs["db_host"])
+        self.conn = pymongo.MongoClient(host=self._configs["db_host"])
         try:
             if self._configs.get('password') and self._configs.get('root'):
-                conn.authenticate(self._configs.get('root'), self._configs.get('password'))
-            print(self._db_name, self._table_name)
+                self.conn.authenticate(self._configs.get('root'), self._configs.get('password'))
             # self.db = hasattr(hasattr(conn, self._db_name), self._table_name)
-            self.db = conn.aof.history
+            self.db = self.conn.aof.history
             print("db连接成功")
         except Exception as e:
             print(e)
@@ -49,7 +49,7 @@ class DBLoader:
                                        '$lt': datetime.strptime(end_timestamp, "%Y-%m-%d %H:%M:%S").timestamp()}
 
     def run_query(self):
-        print(self.db)
+        print(self.db, self.query)
         return self.db.find(self.query)
 
 
