@@ -49,7 +49,6 @@ class DBLoader:
                                        '$lt': datetime.strptime(end_timestamp, "%Y-%m-%d %H:%M:%S").timestamp()}
 
     def run_query(self):
-        print(self.db, self.query)
         return self.db.find(self.query)
 
 
