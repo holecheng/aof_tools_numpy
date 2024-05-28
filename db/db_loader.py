@@ -29,15 +29,15 @@ class DBLoader:
     def _load_data_from_db(self):
         if config.get_args('mode') != 'db':
             return
-        print(111111111)
         conn = pymongo.MongoClient(host=self._configs["db_host"])
+        print(1111111111)
         try:
             if self._configs.get('password') and self._configs.get('root'):
                 conn.authenticate(self._configs.get('root'), self._configs.get('password'))
             self.db = hasattr(hasattr(conn, self._db_name), self._table_name)
-            logger.info("db连接成功")
+            print("db连接成功")
         except Exception as e:
-            logger.error(e)
+            print(e)
             raise 'db连接有误'
 
     def _init_query(self):
