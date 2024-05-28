@@ -26,10 +26,11 @@ class TimeStrategy(Strategy):
     # 针对时间做数据清洗
     def cleaning(self, data):
         select_time = config.get_args('select_time').strip()
-        print(select_time)
         start = end = None
         if select_time:
-            start, end if not end else datetime.now().strftime("%Y-%m-%d") = config.get_args('select_time').strip().split(',')
+            start, end = config.get_args('select_time').strip().split(',')
+            if not end:
+                end = datetime.now().strftime("%Y-%m-%d")
         print('正在处理 {} 到 {} 时间内的数据'.format(start, end))
         return data
 
