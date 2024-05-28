@@ -51,5 +51,4 @@ class DBLoader:
         return self.db.find(self.query)
 
 
-
-
+db_col = DBLoader()
