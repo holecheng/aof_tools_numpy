@@ -19,6 +19,7 @@ def init_query():
         dic = {'card_list': [], 'pid_list': [], 'hero_index': None,
                'flop_insurance': None, 'turn_insurance': None, 'leader_index': None,
                'card_leader': False, 'pid': None, 'card': None}
+        print('文件总长度{}'.format(len(result)))
         for line in result:
             if not title:
                 title = list(line.keys()) + ['card_num', 'card', 'ev_player', 'outcome_player', 'pid',
@@ -73,21 +74,30 @@ def init_query():
             else:
                 row_data += ['', '']
             print('=====================================处理中===========================================')
-            numpy_data.append(row_data)
-        print('文件总长度{}'.format(len(numpy_data)))
-        np_data = np.array(numpy_data)
-        return np_data
+            yield row_data
 
 
 class NumpyReadDb:
 
     def __init__(self):
-        self.result = init_query()
-        self.write_excel()
+        self.result_gen = init_query()
+        self.title = next(self.result_gen)
 
-    def write_excel(self, types='whole'):
+    def add_result(self):
+        nps = []
+        while True:
+            try:
+                row = next(self.result_gen)
+                nps.append(row)
+            except StopIteration:
+                break
+        self.write_excel(nps)
+
+    def write_excel(self, nps, types='whole'):
         print('正在写入处理文件~')
-        to_excel_numpy(self.result[1:], 'db', self.result[0], )
+        to_excel_numpy(nps, 'db', self.title)
+
+
 
 
 
