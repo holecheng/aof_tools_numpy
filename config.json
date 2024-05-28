@@ -1,5 +1,5 @@
 {
-    "db_host": "mongodb://localhost:27017/",
+    "db_host": "127.0.0.1",
     "db_name": "aof",
     "table_name": "history",
     "root": "",
