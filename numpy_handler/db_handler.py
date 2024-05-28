@@ -12,6 +12,8 @@ class NumpyReadDb:
         self.db_cl = db_col
         if self.db_cl.db is not None:
             self.init_query()
+        else:
+            print('数据库为未连接')
 
 
     def init_query(self):
