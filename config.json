@@ -1,5 +1,5 @@
 {
-    "db_host": "127.0.0.1",
+    "db_host": "10.140.0.7",
     "db_name": "aof",
     "table_name": "history",
     "root": "",
