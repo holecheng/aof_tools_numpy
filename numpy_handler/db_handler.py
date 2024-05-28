@@ -72,7 +72,9 @@ def init_query():
                 row_data += [dic['turn_insurance'], dic['flop_insurance'], ]
             else:
                 row_data += ['', '']
+            print('=====================================处理中===========================================')
             numpy_data.append(row_data)
+        print('文件总长度{}'.format(len(numpy_data)))
         np_data = np.array(numpy_data)
         return np_data
 
@@ -84,6 +86,7 @@ class NumpyReadDb:
         self.write_excel()
 
     def write_excel(self, types='whole'):
+        print('正在写入处理文件~')
         to_excel_numpy(self.result[1:], 'db', self.result[0], )
 
 
