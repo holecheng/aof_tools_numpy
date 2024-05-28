@@ -16,6 +16,6 @@ class NumpyReadDb:
         with self.db:
             result = self.db.run_query()
             for i, history in enumerate(result):
-                logger.info('{} : {}'.format(i, history))
+                print('{} : {}'.format(i, history))
 
 
