@@ -34,6 +34,7 @@ class DBLoader:
         try:
             if self._configs.get('password') and self._configs.get('root'):
                 conn.authenticate(self._configs.get('root'), self._configs.get('password'))
+            print(conn.aof.history)
             self.db = hasattr(hasattr(conn, self._db_name), self._table_name)
             print("db连接成功")
         except Exception as e:
