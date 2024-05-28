@@ -29,6 +29,7 @@ class DBLoader:
     def _load_data_from_db(self):
         if config.get_args('mode') != 'db':
             return
+        print(111111111)
         conn = pymongo.MongoClient(host=self._configs["db_host"])
         try:
             if self._configs.get('password') and self._configs.get('root'):
