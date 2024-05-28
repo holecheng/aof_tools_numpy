@@ -26,6 +26,7 @@ class TimeStrategy(Strategy):
     # 针对时间做数据清洗
     def cleaning(self, data):
         select_time = config.get_args('select_time').strip()
+        print(select_time)
         start = end = None
         if select_time:
             start, end if not end else datetime.now().strftime("%Y-%m-%d") = config.get_args('select_time').strip().split(',')
