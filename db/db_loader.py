@@ -27,7 +27,6 @@ class DBLoader:
             self.db.close()
 
     def _load_data_from_db(self):
-        print(config.get_args('mode'))
         if config.get_args('mode') != 'db':
             return
         conn = pymongo.MongoClient(host=self._configs["db_host"])
