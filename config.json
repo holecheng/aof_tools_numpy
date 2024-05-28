@@ -1,0 +1,10 @@
+{
+    "db_host": "mongodb://localhost:27017/",
+    "db_name": "aof",
+    "table_name": "history",
+    "root": "",
+    "password": ""
+}
+
+
+
