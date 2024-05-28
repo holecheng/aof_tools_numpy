@@ -30,12 +30,12 @@ class DBLoader:
         if config.get_args('mode') != 'db':
             return
         conn = pymongo.MongoClient(host=self._configs["db_host"])
-        print(1111111111)
         try:
             if self._configs.get('password') and self._configs.get('root'):
                 conn.authenticate(self._configs.get('root'), self._configs.get('password'))
-            print(conn.aof.history)
-            self.db = hasattr(hasattr(conn, self._db_name), self._table_name)
+            print(self._db_name, self._table_name)
+            # self.db = hasattr(hasattr(conn, self._db_name), self._table_name)
+            self.db = conn.aof.history
             print("db连接成功")
         except Exception as e:
             print(e)
