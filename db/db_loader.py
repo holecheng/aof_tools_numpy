@@ -23,7 +23,7 @@ class DBLoader:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        if self.db:
+        if self.db is not None:
             self.db.close()
 
     def _load_data_from_db(self):
