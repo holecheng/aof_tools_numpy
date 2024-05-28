@@ -10,6 +10,9 @@ class NumpyReadDb:
 
     def __init__(self):
         self.db = db_col
+        if self.db.db is not None:
+            self.init_query()
+
 
     def init_query(self):
         # todo此处可以对处理数据进行进一步query筛选
