@@ -11,15 +11,16 @@ class DBLoader:
 
     def __init__(self):
         self.query = dict()
-        self.configs = config.config
-        self._db_name = self.configs.get('db_name')
-        self._table_name = self.configs.get('table_name')
+        self._configs = config.config
+        self._db_name = self._configs.get('db_name')
+        self._table_name = self._configs.get('table_name')
         self.db = None
 
     def __enter__(self):
         self._load_data_from_db()
         self._init_query()
         logger.info("query:{}".format(self.query))
+        return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.db:
@@ -29,10 +30,10 @@ class DBLoader:
         print(config.get_args('mode'))
         if config.get_args('mode') != 'db':
             return
-        conn = pymongo.MongoClient(host=self.configs["db_host"])
+        conn = pymongo.MongoClient(host=self._configs["db_host"])
         try:
-            if self.configs.get('password') and self.configs.get('root'):
-                conn.authenticate(self.configs.get('root'), self.configs.get('password'))
+            if self._configs.get('password') and self._configs.get('root'):
+                conn.authenticate(self._configs.get('root'), self._configs.get('password'))
             self.db = hasattr(hasattr(conn, self._db_name), self._table_name)
             logger.info("db连接成功")
         except Exception as e:
