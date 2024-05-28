@@ -12,8 +12,10 @@ from numpy_handler.db_handler import NumpyReadDb
 
 def run():
     if config.get_args('mode') == 'cmd':
+        print('正在从命令行获取数据地址')
         NumpyReadFile(config.get_config('path'))
     elif config.get_args('mode') == 'db':
+        print('正在从数据库获取数据')
         NumpyReadDb()
 
 

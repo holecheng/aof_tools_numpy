@@ -25,7 +25,7 @@ from config_parse import config
 class TimeStrategy(Strategy):
     # 针对时间做数据清洗
     def cleaning(self, data):
-        start, end if not end else datetime.now().strftime("%Y-%m-%d") = config.get_config('select-time').strip().split(',')
+        start, end if not end else datetime.now().strftime("%Y-%m-%d") = config.get_args('select_time').strip().split(',')
         print('正在处理 {} 到 {} 时间内的数据'.format(start, end))
         return data
 
