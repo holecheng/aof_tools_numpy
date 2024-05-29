@@ -94,8 +94,7 @@ class NumpyReadDb:
         try:
             gen_data = next(self.result_gen)
             return gen_data
-        except Exception as e:
-            print('数据处理已完成')
+        except StopIteration:
             return False
 
     def add_result(self):
@@ -105,6 +104,7 @@ class NumpyReadDb:
             while final:
                 nps = []
                 page_row = 10000
+                print(final)
                 while page_row:
                     row = self.get_generator()
                     if row:
@@ -112,11 +112,11 @@ class NumpyReadDb:
                         nps.append(row)
                     else:
                         final = 0
+                        break
                 else:
                     page += 1
                     # self.write_excel(nps, page)
         except Exception as e:
-            print(e)
             print('已完成~共处理数据{}页'.format(page))
 
     def write_excel(self, nps, page):
