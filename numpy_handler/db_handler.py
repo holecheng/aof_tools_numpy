@@ -94,8 +94,8 @@ class NumpyReadDb:
         try:
             gen_data = next(self.result_gen)
             return gen_data
-        except StopIteration:
-            print(222222222222)
+        except Exception as e:
+            print('数据处理已完成')
             return False
 
     def add_result(self):
@@ -105,7 +105,6 @@ class NumpyReadDb:
             while final:
                 nps = []
                 page_row = 10000
-                print(final)
                 while page_row:
                     row = self.get_generator()
                     if row:
