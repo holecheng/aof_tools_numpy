@@ -26,7 +26,7 @@ def init_query():
                           'seat', 'action', 'ante']
             yield line_key + player_key
             line = i.copy()
-            row_dic = {k: v for k, v in line if k in line_key}
+            row_dic = {k: v for k, v in line.items() if k in line_key}
             row_dic['timestamp'] = datetime.datetime.fromtimestamp(line.get('timestamp')).strftime('%Y-%m-%d %H:%M:%S')
             row_dic['blindLevel'] = sign_blind_level(line.get('blindLevel')['blinds'])
             players = line.pop('players')
@@ -35,7 +35,7 @@ def init_query():
             ev = line.pop('ev')[hero_index] if hero_index == -1 else ''
             row_dic.update({'outcome': outcome, 'ev': ev})
             if hero_index != -1:
-                player = {k: v for k, v in players[hero_index] if k in player_key}
+                player = {k: v for k, v in players[hero_index].items() if k in player_key}
                 if plyer_limit == str(player.get('pId')):
                     continue
                 card = player.get('cards', '')
