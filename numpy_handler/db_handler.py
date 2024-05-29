@@ -26,6 +26,7 @@ def init_query():
                 title = list(line.keys()) + ['card_num', 'card', 'ev_player', 'outcome_player', 'pid',
                                              'card_leader', 'ai_count', 'flop_insurance', 'turn_insurance']
                 yield title
+                continue
             row_data = []
             for i in line.keys():
                 ai_count = 0
@@ -78,14 +79,13 @@ def init_query():
             yield row_data
 
 
-
-
 class NumpyReadDb:
 
     def __init__(self):
         s = time.time()
         self.result_gen = init_query()
         self.title = next(self.result_gen)
+        print(self.title)
         self.add_result()
         print(time.time()-s)
 
