@@ -43,7 +43,7 @@ class PlayerStrategy(Strategy):
 
 
 class AvgStrategy(Strategy):
-    def cleaning(self, nps: np.ndarray):
+    def cleaning(self, nps):
         return self.get_group_avg(nps)
 
     @staticmethod
