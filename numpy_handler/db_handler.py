@@ -21,7 +21,7 @@ def init_query():
         turn_limit = config.get_args('turn')
         row_key = []
         for i in result:
-            line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName']
+            line_key = ['handNumber', 'river', 'heroIndex', 'reqid']
             player_key = ['playerId', 'pId', 'straddle', 'flop', 'turn', 'card_num', 'cards', 'stack',
                           'seat', 'action', 'ante', 'winner', 'ev', 'outcome']
             if not row_key:
@@ -100,7 +100,7 @@ class NumpyReadDb:
                 page += 1
                 self.write_excel(nps, str(page))
                 nps.insert(0, self.title)
-                np_apply = get_analysis(AvgStrategy(), np.array(nps, dtype=str))
+                np_apply = get_analysis(AvgStrategy(), np.array(nps, dtype=int))
                 self.write_excel(np_apply, str(page) + '_avg')
                 print('已完成处理数据第{}页'.format(page))
 
