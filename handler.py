@@ -62,7 +62,7 @@ class AvgStrategy(Strategy):
                     grouped_avg[i][j] = val
                 else:
                     new_col = nps[:, index]
-                    condition = new_col and new_col != 0
+                    condition = new_col != ''
                     indices = np.where(condition is False)
                     filtered_array = new_col[indices]
                     grouped_avg[i][j] = np.mean(filtered_array.astype(int), axis=0)
