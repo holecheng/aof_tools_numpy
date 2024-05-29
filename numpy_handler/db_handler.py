@@ -84,10 +84,18 @@ class NumpyReadDb:
     def __init__(self):
         s = time.time()
         self.result_gen = init_query()
-        self.title = next(self.result_gen)
-        print(self.title)
-        self.add_result()
+        self.title = self.get_generator()
+        print('文件的格式{}'.format(self.title))
+        if self.title:
+            self.add_result()
         print(time.time()-s)
+
+    def get_generator(self):
+        try:
+            gen_data = next(self.result_gen)
+            return gen_data
+        except StopIteration:
+            return False
 
     def add_result(self):
         page = 0
@@ -97,14 +105,12 @@ class NumpyReadDb:
                 nps = []
                 page_row = 10000
                 while page_row:
-                    try:
-                        row = next(self.result_gen)
+                    row = self.get_generator()
+                    if row:
                         page_row -= 1
                         nps.append(row)
-                    except Exception as e:
-                        print('已完成~')
+                    else:
                         final = 0
-                        break
                 else:
                     page += 1
                     # self.write_excel(nps, page)
