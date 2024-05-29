@@ -132,5 +132,5 @@ class NumpyReadDb:
     async def to_excel_numpy(self, nps, df_path, title, suffix='all'):
         df = pd.DataFrame(nps)
         df.columns = title
-        self.tasks.append(df.to_excel('./output/' + os.path.basename(df_path).split('.')[0] + '_'
-                                      + suffix + '.xlsx', sheet_name='data', index=False))
+        self.tasks.append(asyncio.create_task(df.to_excel('./output/' + os.path.basename(df_path).split('.')[0] + '_'
+                                                          + suffix + '.xlsx', sheet_name='data', index=False)))
