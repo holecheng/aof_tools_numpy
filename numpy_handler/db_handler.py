@@ -84,6 +84,7 @@ class NumpyReadDb:
                 row_dic = self.get_generator()
                 if row_dic:
                     page_row -= 1
+                    print(self.title)
                     nps.append([row_dic[i] for i in self.title])
                 else:
                     final = 0
