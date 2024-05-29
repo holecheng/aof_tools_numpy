@@ -43,6 +43,8 @@ def init_query():
                 winners = line.get('winners')
                 if str(player.get('pId')) in winners:
                     row_dic['winner'] = 'True'
+                else:
+                    row_dic['winner'] = 'False'
                 card = player.get('cards', '')
                 a, b = max(card[0], card[2]), min(card[0], card[2])
                 player['card_num'] = '%s%s' % (a, b)
@@ -98,8 +100,7 @@ class NumpyReadDb:
                 page += 1
                 self.write_excel(nps, str(page))
                 nps.insert(0, self.title)
-                # print(len(nps[0]), len(self.title))
-                np_apply = get_analysis(AvgStrategy(), nps)
+                np_apply = get_analysis(AvgStrategy(), np.array(nps, dtype=str))
                 self.write_excel(np_apply, str(page) + '_avg')
                 print('已完成处理数据第{}页'.format(page))
 
