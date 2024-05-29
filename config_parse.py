@@ -24,7 +24,7 @@ class Config(object):
 
     def _init_parser(self):
         self._parser.add_argument('--select-time', type=str, nargs='?', help='起始时间')
-        self._parser.add_argument('--player_id', type=str, nargs='?', help='玩家pid')
+        self._parser.add_argument('--player', type=str, nargs='?', help='玩家pid')
         self._parser.add_argument('--flop', type=str, nargs='?', help='flop保险')
         self._parser.add_argument('--turn', type=str, nargs='?', help='turn保险')
         self._parser.add_argument('--path', type=str, nargs='?', help='文件路径')
