@@ -95,6 +95,7 @@ class NumpyReadDb:
             gen_data = next(self.result_gen)
             return gen_data
         except StopIteration:
+            print(222222222222)
             return False
 
     def add_result(self):
