@@ -85,7 +85,7 @@ class NumpyReadDb:
         page = 0
         final = 1
         while final:
-            nps = []
+            nps = [self.title]
             page_row = 10000
             while page_row:
                 row_dic = self.get_generator()
@@ -99,9 +99,8 @@ class NumpyReadDb:
             else:
                 page += 1
                 self.write_excel(nps, str(page))
-                nps.insert(0, self.title)
-                np_apply = get_analysis(AvgStrategy(), np.array(nps, dtype=str))
-                self.write_excel(np_apply, str(page) + '_avg')
+                # np_apply = get_analysis(AvgStrategy(), np.array(nps, dtype=str))
+                # self.write_excel(np_apply, str(page) + '_avg')
                 print('已完成处理数据第{}页'.format(page))
 
     def write_excel(self, nps, page):

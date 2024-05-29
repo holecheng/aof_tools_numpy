@@ -49,23 +49,19 @@ class AvgStrategy(Strategy):
     @staticmethod
     def get_group_avg(nps: np.ndarray):
         title = nps[0].tolist()
-        nps = nps[1:]
+        col = config.get_args('col').split(',')
         group_i = title.index(config.get_args('group'))
+        col_list = [group_i] + [title.index(i) for i in col]
+        nps = nps[1:]
         group_np = nps[: group_i]
         unique_values = np.unique(group_np)
-        col = config.get_args('col').split(',')
-        col_list = [group_i] + [title.index(i) for i in col]
         grouped_avg = np.zeros((len(unique_values), len(col) + 1))
         for i, val in enumerate(unique_values):
             for j, index in enumerate(col_list):
                 if j == group_i:
                     grouped_avg[i][j] = val
                 else:
-                    new_col = nps[:, index]
-                    condition = new_col is not None
-                    indices = np.where(condition is False)
-                    filtered_array = new_col[indices]
-                    grouped_avg[i][j] = np.mean(filtered_array.astype(int), axis=0)
+                    grouped_avg[i][j] = np.mean(nps[:, index].astype(int), axis=0)
         grouped_avg = np.vstack((np.array(title), grouped_avg))
         return grouped_avg
 
