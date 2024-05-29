@@ -61,7 +61,7 @@ class AvgStrategy(Strategy):
                 if j == group_i:
                     grouped_avg[i][j] = val
                 else:
-                    grouped_avg[i][j] = np.mean(nps[:, index].astype(int), axis=0)
+                    grouped_avg[i][j] = np.mean(nps[:, index][nps[:, index] is None].astype(int), axis=0)
         grouped_avg = np.vstack((np.array(title), grouped_avg))
         return grouped_avg
 

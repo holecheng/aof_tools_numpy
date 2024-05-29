@@ -33,8 +33,8 @@ def init_query():
             row_dic['blindLevel'] = sign_blind_level(line.get('blindLevel')['blinds'])
             players = line.pop('players')
             hero_index = int(line.get('heroIndex'))
-            outcome = line.pop('outcome')[hero_index] if hero_index == -1 else ''
-            ev = line.pop('ev')[hero_index] if hero_index == -1 else ''
+            outcome = line.pop('outcome')[hero_index] if hero_index == -1 else 0
+            ev = line.pop('ev')[hero_index] if hero_index == -1 else 0
             row_dic.update({'outcome': outcome, 'ev': ev})
             if hero_index != -1:
                 player = {k: v for k, v in players[hero_index].items() if k in player_key}
