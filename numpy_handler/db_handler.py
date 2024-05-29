@@ -99,6 +99,7 @@ class NumpyReadDb:
                     try:
                         row = next(self.result_gen)
                         page_row -= 1
+                        print(row)
                         nps.append(row)
                     except Exception as e:
                         print('已完成~')
