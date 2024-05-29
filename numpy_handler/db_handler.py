@@ -106,7 +106,7 @@ class NumpyReadDb:
                         break
                 else:
                     page += 1
-                    self.write_excel(nps, page)
+                    # self.write_excel(nps, page)
         except Exception as e:
             print('已完成~共处理数据{}页'.format(page))
 
