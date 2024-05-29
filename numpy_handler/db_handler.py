@@ -88,7 +88,7 @@ class NumpyReadDb:
             try:
                 row = next(self.result_gen)
                 nps.append(row)
-            except StopIteration:
+            except Exception as e:
                 print('已完成~')
                 break
         self.write_excel(nps)
