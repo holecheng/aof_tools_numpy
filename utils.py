@@ -4,7 +4,6 @@ import pandas as pd
 import numba as nb
 
 
-
 def resize_timestamp(result):
     if 'timestamp' in result:
         result['timestamp'] = datetime.datetime.fromtimestamp(result['timestamp']).strftime('%Y-%m-%d %H:%M:%S')
