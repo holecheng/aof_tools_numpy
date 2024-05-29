@@ -1,15 +1,12 @@
 import logging
-import json
-import asyncio
 import datetime
-import os
 import time
-import pandas as pd
 
-from utils import sign_blind_level
+from utils import sign_blind_level, to_excel_numpy
 import numpy as np
 
 from db.db_loader import db_col
+
 
 logger = logging.getLogger()
 
@@ -88,13 +85,9 @@ class NumpyReadDb:
         self.result_gen = init_query()
         self.title = self.get_generator()
         print('文件的格式{}'.format(self.title))
-        loop = asyncio.get_event_loop()
-        asyncio.set_event_loop(loop)
-        self.tasks = []
-        self.results = loop.run_until_complete(asyncio.gather(*self.tasks))
         if self.title:
             self.add_result()
-        print(time.time() - s)
+        print(time.time()-s)
 
     def get_generator(self):
         try:
@@ -122,15 +115,21 @@ class NumpyReadDb:
                     break
             else:
                 page += 1
-                self.tasks.append(self.write_excel(nps, page))
+                self.write_excel(nps, page)
                 print('已完成处理数据第{}页'.format(page))
 
     def write_excel(self, nps, page):
         print('正在写入处理文件~')
-        self.to_excel_numpy(nps, 'db', self.title, str(page))
+        to_excel_numpy(nps, 'db', self.title, str(page))
 
-    async def to_excel_numpy(self, nps, df_path, title, suffix='all'):
-        df = pd.DataFrame(nps)
-        df.columns = title
-        self.tasks.append(asyncio.create_task(df.to_excel('./output/' + os.path.basename(df_path).split('.')[0] + '_'
-                                                          + suffix + '.xlsx', sheet_name='data', index=False)))
+
+
+
+
+
+
+
+
+
+
+
