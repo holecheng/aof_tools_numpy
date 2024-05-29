@@ -1,9 +1,7 @@
 from datetime import datetime
-import numpy as np
 from strategy import Strategy
 from config_parse import config
-
-import numba as nb
+from utils import get_group_avg
 
 
 # class GroupStrategy(Strategy):
@@ -46,24 +44,8 @@ class PlayerStrategy(Strategy):
 
 
 class AvgStrategy(Strategy):
-    @nb.njit
     def cleaning(self, nps):
-        title = nps[0]
-        nps = nps[1:]
-        group_i = nps.index(config.get_args('group'))
-        group_np = nps[: group_i]
-        unique_values = np.unique(group_np)
-        col = config.get_args('col').split(',')
-        col_list = [group_i] + [title.index(i) for i in col]
-        grouped_sum = np.zeros((len(unique_values), len(col)+1))
-        for i, val in enumerate(unique_values):
-            for j, index in enumerate(col_list):
-                if j == group_i:
-                    grouped_sum[i][j] = val
-                else:
-                    grouped_sum[i][j] = np.mean(nps[:, index], axis=0)
-
-        return grouped_sum
+        return get_group_avg(nps)
 
 
 class InsuranceStrategy(Strategy):
