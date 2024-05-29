@@ -89,7 +89,7 @@ class NumpyReadDb:
 
     def add_result(self):
         nps = []
-        i = 100000
+        i = 400000
         while i:
             try:
                 row = next(self.result_gen)
