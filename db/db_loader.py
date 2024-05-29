@@ -51,10 +51,10 @@ class DBLoader:
                 self.query['timestamp'] = collections.defaultdict(dict)
                 if start_timestamp.strip():
                     self.query['timestamp'].update({'$gt': datetime.strptime(start_timestamp.strip(),
-                                                                        "%Y-%m-%d %H:%M:%S").timestamp()})
+                                                                        "%Y-%m-%d").timestamp()})
                 if end_timestamp.strip():
                     self.query['timestamp'].update({'$gt': datetime.strptime(start_timestamp.strip(),
-                                                                             "%Y-%m-%d %H:%M:%S").timestamp()})
+                                                                             "%Y-%m-%d").timestamp()})
 
     def run_query(self):
         return self.db.find(self.query)
