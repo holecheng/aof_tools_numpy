@@ -53,7 +53,7 @@ class DBLoader:
                     self.query['timestamp'].update({'$gt': datetime.strptime(start_timestamp.strip(),
                                                                         "%Y-%m-%d").timestamp()})
                 if end_timestamp.strip():
-                    self.query['timestamp'].update({'$lt': datetime.strptime(start_timestamp.strip(),
+                    self.query['timestamp'].update({'$lt': datetime.strptime(end_timestamp.strip(),
                                                                              "%Y-%m-%d").timestamp()})
 
     def run_query(self):
