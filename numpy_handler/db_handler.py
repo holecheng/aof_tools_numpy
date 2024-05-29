@@ -24,8 +24,8 @@ def init_query():
         for line in result:
             if not title:
                 print('title共有{}'.format(len(line.keys())))
-                title = line.keys() + ['card_num', 'card', 'ev_player', 'outcome_player', 'pid',
-                                       'card_leader', 'ai_count', 'flop_insurance', 'turn_insurance']
+                title = list(line.keys()) + ['card_num', 'card', 'ev_player', 'outcome_player', 'pid',
+                                             'card_leader', 'ai_count', 'flop_insurance', 'turn_insurance']
                 yield title
                 continue
             row_data = []
@@ -128,10 +128,10 @@ class NumpyReadDb:
                 page += 1
                 self.write_excel(nps, str(page))
                 nps.insert(0, self.title)
-                print(len(nps[0]))
+                print(nps[1])
                 for i in nps:
                     if len(i) != len(nps[1]):
-                        print('错误列{}'.format(len(i)))
+                        print('错误列{}'.format(i))
                         break
                 np_apply = get_analysis(AvgStrategy(), np.array(nps))
                 self.write_excel(np_apply, str(page) + '_avg')
