@@ -75,7 +75,6 @@ def init_query():
                 row_data += [dic['turn_insurance'], dic['flop_insurance'], ]
             else:
                 row_data += ['', '']
-            print(row_data)
 
 
 class NumpyReadDb:
