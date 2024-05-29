@@ -57,9 +57,9 @@ class NumpyReadFile:
     def handler_to_strategy_apply(self, strategy):
         pass
 
-    async def write_numpy(self, result, df_path):
+    def write_numpy(self, result, df_path):
         ans_data = result[1:]
-        await self.to_excel_numpy(ans_data, df_path, result[0])
+        self.to_excel_numpy(ans_data, df_path, result[0])
 
     async def to_excel_numpy(self, nps, df_path, title, suffix='all'):
         df = pd.DataFrame(nps)

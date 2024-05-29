@@ -125,9 +125,9 @@ class NumpyReadDb:
                 self.tasks.append(self.write_excel(nps, page))
                 print('已完成处理数据第{}页'.format(page))
 
-    async def write_excel(self, nps, page):
+    def write_excel(self, nps, page):
         print('正在写入处理文件~')
-        await self.to_excel_numpy(nps, 'db', self.title, str(page))
+        self.to_excel_numpy(nps, 'db', self.title, str(page))
 
     async def to_excel_numpy(self, nps, df_path, title, suffix='all'):
         df = pd.DataFrame(nps)
