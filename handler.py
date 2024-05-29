@@ -1,8 +1,7 @@
 from datetime import datetime
 from strategy import Strategy
 from config_parse import config
-from utils import get_group_avg
-
+import numpy as np
 
 # class GroupStrategy(Strategy):
 #     def cleaning(self, data: pd.DataFrame, group=0, args=None, group_type='mean') -> pd.DataFrame:
@@ -45,7 +44,25 @@ class PlayerStrategy(Strategy):
 
 class AvgStrategy(Strategy):
     def cleaning(self, nps):
-        return get_group_avg(nps)
+        return self.get_group_avg(nps)
+
+    @staticmethod
+    def get_group_avg(nps):
+        title = nps[0]
+        nps = nps[1:]
+        group_i = nps.index(config.get_args('group'))
+        group_np = nps[: group_i]
+        unique_values = np.unique(group_np)
+        col = config.get_args('col').split(',')
+        col_list = [group_i] + [title.index(i) for i in col]
+        grouped_avg = np.zeros((len(unique_values), len(col) + 1))
+        for i, val in enumerate(unique_values):
+            for j, index in enumerate(col_list):
+                if j == group_i:
+                    grouped_avg[i][j] = val
+                else:
+                    grouped_avg[i][j] = np.mean(nps[:, index], axis=0)
+        return grouped_avg
 
 
 class InsuranceStrategy(Strategy):
