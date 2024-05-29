@@ -9,7 +9,6 @@ from config_parse import config
 
 from db.db_loader import db_col
 
-
 logger = logging.getLogger()
 
 
@@ -24,8 +23,9 @@ def init_query():
         print('文件总长度{}'.format(result.count()))
         for line in result:
             if not title:
-                title = list(line.keys()) + ['card_num', 'card', 'ev_player', 'outcome_player', 'pid',
-                                             'card_leader', 'ai_count', 'flop_insurance', 'turn_insurance']
+                print('title共有{}'.format(len(line.keys())))
+                title = line.keys() + ['card_num', 'card', 'ev_player', 'outcome_player', 'pid',
+                                       'card_leader', 'ai_count', 'flop_insurance', 'turn_insurance']
                 yield title
                 continue
             row_data = []
@@ -99,7 +99,7 @@ class NumpyReadDb:
         print('文件的格式{}'.format(self.title))
         if self.title:
             self.add_result()
-        print(time.time()-s)
+        print(time.time() - s)
 
     def get_generator(self):
         try:
@@ -134,21 +134,9 @@ class NumpyReadDb:
                         print('错误列{}'.format(len(i)))
                         break
                 np_apply = get_analysis(AvgStrategy(), np.array(nps))
-                self.write_excel(np_apply, str(page)+'_avg')
+                self.write_excel(np_apply, str(page) + '_avg')
                 print('已完成处理数据第{}页'.format(page))
 
     def write_excel(self, nps, page):
         print('正在写入处理文件~')
         to_excel_numpy(nps, 'db', self.title, page)
-
-
-
-
-
-
-
-
-
-
-
-
