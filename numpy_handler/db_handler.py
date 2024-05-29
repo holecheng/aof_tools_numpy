@@ -21,9 +21,9 @@ def init_query():
         turn_limit = config.get_args('turn')
         row_key = []
         for i in result:
-            line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName', 'winner']
+            line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName']
             player_key = ['playerId', 'pId', 'straddle', 'flop', 'turn', 'card_num', 'cards', 'stack',
-                          'seat', 'action', 'ante']
+                          'seat', 'action', 'ante', 'winner']
             if not row_key:
                 row_key = line_key + player_key
                 yield row_key
