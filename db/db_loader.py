@@ -4,8 +4,6 @@ import pymongo
 import logging
 from config_parse import config
 from datetime import datetime
-from collections import defaultdict
-
 
 logger = logging.getLogger()
 
@@ -51,7 +49,7 @@ class DBLoader:
                 self.query['timestamp'] = collections.defaultdict(dict)
                 if start_timestamp.strip():
                     self.query['timestamp'].update({'$gt': datetime.strptime(start_timestamp.strip(),
-                                                                        "%Y-%m-%d").timestamp()})
+                                                                             "%Y-%m-%d").timestamp()})
                 if end_timestamp.strip():
                     self.query['timestamp'].update({'$lt': datetime.strptime(end_timestamp.strip(),
                                                                              "%Y-%m-%d").timestamp()})

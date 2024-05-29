@@ -4,6 +4,7 @@ import time
 
 from utils import sign_blind_level, to_excel_numpy
 import numpy as np
+from config_parse import config
 
 from db.db_loader import db_col
 
@@ -39,11 +40,17 @@ def init_query():
                         flop_insurance = player.get('flopInsurance')
                         turn_insurance = player.get('turnInsurance')
                         if flop_insurance and flop_insurance[0].get('betStacks') > 0:
-                            dic['flop_insurance'] = flop_insurance[0].get('betStacks')
-                            dic['leader_index'] = int(p)
+                            if not config.get_args('flop'):
+                                dic['flop_insurance'] = flop_insurance[0].get('betStacks')
+                                dic['leader_index'] = int(p)
+                            elif flop_insurance[0].get('betStacks') < config.get_args('flop'):
+                                continue
                         if turn_insurance and turn_insurance[0].get('betStacks') > 0:
-                            dic['turn_insurance'] = turn_insurance[0].get('betStacks')
-                            dic['leader_index'] = int(p)  # todo 如果需要排除异常数据在此处理
+                            if not config.get_args('turn'):
+                                dic['turn_insurance'] = turn_insurance[0].get('betStacks')
+                                dic['leader_index'] = int(p)  # todo 如果需要排除异常数据在此处理
+                            elif turn_insurance[0].get('betStacks') < config.get_args('turn'):
+                                continue
                 if i == 'timestamp':
                     row_data.append(datetime.datetime.fromtimestamp(line.get(i)).strftime('%Y-%m-%d %H:%M:%S'))
                 elif i == 'blindLevel':
@@ -57,7 +64,11 @@ def init_query():
                     if line.get(i) != -1:
                         ai_count += 1
                         dic['card'] = dic['card_list'][line.get(i)]
-                        dic['pid'] = dic['pid_list'][line.get(i)]
+                        player_id = dic['pid_list'][line.get(i)]
+                        if player_id and config.get_args('player_id') == str(player_id):
+                            continue
+                        else:
+                            dic['pid'] = player_id
                         if line.get(i) == dic['leader_index']:
                             dic['card_leader'] = True
                 elif i in ['ev', 'outcome']:
