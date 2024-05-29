@@ -16,7 +16,6 @@ def init_query():
     # todo此处可以对处理数据进行进一步query筛选
     with db_col:
         result = db_col.run_query()
-        numpy_data = []
         title = []
         dic = {'card_list': [], 'pid_list': [], 'hero_index': None,
                'flop_insurance': None, 'turn_insurance': None, 'leader_index': None,
@@ -26,7 +25,7 @@ def init_query():
             if not title:
                 title = list(line.keys()) + ['card_num', 'card', 'ev_player', 'outcome_player', 'pid',
                                              'card_leader', 'ai_count', 'flop_insurance', 'turn_insurance']
-                numpy_data.append(title)  # 将列放入数组中，处理时候可以无视
+                yield title
             row_data = []
             for i in line.keys():
                 ai_count = 0
@@ -76,28 +75,43 @@ def init_query():
             else:
                 row_data += ['', '']
 
+            yield row_data
+
+
+
 
 class NumpyReadDb:
 
     def __init__(self):
         s = time.time()
-        init_query()
-        # self.title = next(self.result_gen)
-        # self.add_result()
+        self.result_gen = init_query()
+        self.title = next(self.result_gen)
+        self.add_result()
         print(time.time()-s)
 
-    # def add_result(self):
-    #     while i:
-    #         try:
-    #             row = next(self.result_gen)
-    #         except Exception as e:
-    #             print('已完成~')
-    #             break
-    #     # self.write_excel(nps)
+    def add_result(self):
+        try:
+            while True:
+                nps = []
+                page = 0
+                page_row = 10000
+                while page_row:
+                    try:
+                        row = next(self.result_gen)
+                        page_row -= 1
+                        nps.append(row)
+                    except Exception as e:
+                        print('已完成~')
+                        break
+                else:
+                    page += 1
+                    self.write_excel(nps, page)
+        except Exception as e:
+            print('已完成~')
 
-    def write_excel(self, nps, types='whole'):
+    def write_excel(self, nps, page):
         print('正在写入处理文件~')
-        to_excel_numpy(nps, 'db', self.title)
+        to_excel_numpy(nps, 'db', self.title, page)
 
 
 
