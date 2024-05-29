@@ -81,6 +81,7 @@ class NumpyReadDb:
     def __init__(self):
         self.result_gen = init_query()
         self.title = next(self.result_gen)
+        self.add_result()
 
     def add_result(self):
         nps = []
