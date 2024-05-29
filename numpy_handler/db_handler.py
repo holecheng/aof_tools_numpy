@@ -21,7 +21,7 @@ def init_query():
         turn_limit = config.get_args('turn')
         row_key = []
         for i in result:
-            line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'winners', 'leagueName', 'nash_range']
+            line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName', 'winner']
             player_key = ['playerId', 'pId', 'straddle', 'flop', 'turn', 'card_num', 'cards', 'stack',
                           'seat', 'action', 'ante']
             if not row_key:
@@ -40,6 +40,9 @@ def init_query():
                 player = {k: v for k, v in players[hero_index].items() if k in player_key}
                 if plyer_limit == str(player.get('pId')):
                     continue
+                winners = line.get('winners')
+                if str(player.get('pId')) in winners:
+                    row_dic['winner'] = 'True'
                 card = player.get('cards', '')
                 a, b = max(card[0], card[2]), min(card[0], card[2])
                 player['card_num'] = '%s%s' % (a, b)
