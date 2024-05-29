@@ -89,9 +89,11 @@ class NumpyReadDb:
 
     def add_result(self):
         nps = []
-        while True:
+        i = 10000
+        while i:
             try:
                 row = next(self.result_gen)
+                i -= 1
                 print(len(row))
                 # nps.append(row)
             except Exception as e:
