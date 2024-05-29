@@ -57,6 +57,7 @@ class DBLoader:
                                                                              "%Y-%m-%d").timestamp()})
 
     def run_query(self):
+        print(self.query)
         return self.db.find(self.query)
 
 
