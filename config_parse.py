@@ -30,6 +30,8 @@ class Config(object):
         self._parser.add_argument('--path', type=str, nargs='?', help='文件路径')
         self._parser.add_argument('--mode', type=str, nargs='?', help='数据库连接方式', default='cmd')
         self._parser.add_argument('--query-time', type=str, nargs='?', help='数据库连接筛选时段')
+        self._parser.add_argument('--group', type=str, nargs='?', help='分组索引')
+        self._parser.add_argument('--col', type=str, nargs='?', help='分组列')
         self._args = self._parser.parse_args()
 
     def get_args(self, key):

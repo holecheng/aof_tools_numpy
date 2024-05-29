@@ -2,6 +2,7 @@ import logging
 import datetime
 import time
 
+from handler import get_analysis, AvgStrategy
 from utils import sign_blind_level, to_excel_numpy
 import numpy as np
 from config_parse import config
@@ -114,7 +115,6 @@ class NumpyReadDb:
         while final:
             nps = []
             page_row = 10000
-            print(final)
             while page_row:
                 row = self.get_generator()
                 if row:
@@ -126,12 +126,15 @@ class NumpyReadDb:
                     break
             else:
                 page += 1
-                self.write_excel(nps, page)
+                self.write_excel(nps, str(page))
+                nps = np.array([self.title]+nps)
+                np_apply = get_analysis(AvgStrategy(), nps)
+                self.write_excel(np_apply, str(page)+'_avg')
                 print('已完成处理数据第{}页'.format(page))
 
     def write_excel(self, nps, page):
         print('正在写入处理文件~')
-        to_excel_numpy(nps, 'db', self.title, str(page))
+        to_excel_numpy(nps, 'db', self.title, )
 
 
 

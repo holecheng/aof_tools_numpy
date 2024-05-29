@@ -58,7 +58,6 @@ class NumpyReadFile:
         to_excel_numpy(ans_data, df_path, result[0])
 
 
-
 async def read_numpy(file_path: str) -> np.ndarray:
     numpy_data = []
     title = []
