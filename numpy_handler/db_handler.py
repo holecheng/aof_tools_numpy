@@ -92,7 +92,8 @@ class NumpyReadDb:
     def add_result(self):
         page = 0
         try:
-            while True:
+            final = 1
+            while final:
                 nps = []
                 page_row = 10000
                 while page_row:
@@ -103,6 +104,7 @@ class NumpyReadDb:
                         nps.append(row)
                     except Exception as e:
                         print('已完成~')
+                        final = 0
                         break
                 else:
                     page += 1
