@@ -121,7 +121,7 @@ class NumpyReadDb:
 
     def write_excel(self, nps, page):
         print('正在写入处理文件~')
-        to_excel_numpy(nps, 'db', self.title, page)
+        to_excel_numpy(nps, 'db', self.title, str(page))
 
 
 
