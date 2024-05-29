@@ -100,26 +100,24 @@ class NumpyReadDb:
 
     def add_result(self):
         page = 0
-        try:
-            final = 1
-            while final:
-                nps = []
-                page_row = 10000
-                print(final)
-                while page_row:
-                    row = self.get_generator()
-                    if row:
-                        page_row -= 1
-                        nps.append(row)
-                    else:
-                        final = 0
-                        break
+        final = 1
+        while final:
+            nps = []
+            page_row = 10000
+            print(final)
+            while page_row:
+                row = self.get_generator()
+                if row:
+                    page_row -= 1
+                    nps.append(row)
                 else:
-                    page += 1
-                    self.write_excel(nps, page)
-        except Exception as e:
-            print(e)
-            print('已完成~共处理数据{}页'.format(page))
+                    final = 0
+                    print('数据处理完毕！')
+                    break
+            else:
+                page += 1
+                self.write_excel(nps, page)
+                print('已完成处理数据第{}页'.format(page))
 
     def write_excel(self, nps, page):
         print('正在写入处理文件~')
