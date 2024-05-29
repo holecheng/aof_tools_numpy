@@ -1,6 +1,8 @@
 import logging
 import json
 import datetime
+import time
+
 from utils import sign_blind_level, to_excel_numpy
 import numpy as np
 
@@ -79,9 +81,11 @@ def init_query():
 class NumpyReadDb:
 
     def __init__(self):
+        s = time.time()
         self.result_gen = init_query()
         self.title = next(self.result_gen)
         self.add_result()
+        print(time.time()-s)
 
     def add_result(self):
         nps = []
