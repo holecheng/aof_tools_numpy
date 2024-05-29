@@ -88,7 +88,6 @@ class NumpyReadDb:
         while True:
             try:
                 row = next(self.result_gen)
-                print(row)
                 nps.append(row)
             except Exception as e:
                 print('已完成~')
