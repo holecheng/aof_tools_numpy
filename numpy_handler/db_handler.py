@@ -23,12 +23,12 @@ def init_query():
         print('文件总长度{}'.format(result.count()))
         for line in result:
             if not title:
-                print('title共有{}'.format(len(line.keys())))
                 title = list(line.keys()) + ['card_num', 'card', 'ev_player', 'outcome_player', 'pid',
                                              'card_leader', 'ai_count', 'flop_insurance', 'turn_insurance']
                 yield title
                 continue
             row_data = []
+            is_active = True
             for i in line.keys():
                 ai_count = 0
                 if i == 'players':
@@ -45,13 +45,15 @@ def init_query():
                                 dic['flop_insurance'] = flop_insurance[0].get('betStacks')
                                 dic['leader_index'] = int(p)
                             elif flop_insurance[0].get('betStacks') < config.get_args('flop'):
-                                continue
+                                is_active = False
+                                break
                         if turn_insurance and turn_insurance[0].get('betStacks') > 0:
                             if not config.get_args('turn'):
                                 dic['turn_insurance'] = turn_insurance[0].get('betStacks')
                                 dic['leader_index'] = int(p)  # todo 如果需要排除异常数据在此处理
                             elif turn_insurance[0].get('betStacks') < config.get_args('turn'):
-                                continue
+                                is_active = False
+                                break
                 if i == 'timestamp':
                     row_data.append(datetime.datetime.fromtimestamp(line.get(i)).strftime('%Y-%m-%d %H:%M:%S'))
                 elif i == 'blindLevel':
@@ -67,7 +69,8 @@ def init_query():
                         dic['card'] = dic['card_list'][line.get(i)]
                         player_id = dic['pid_list'][line.get(i)]
                         if player_id and config.get_args('player') and config.get_args('player') == str(player_id):
-                            continue
+                            is_active = False
+                            break
                         else:
                             dic['pid'] = player_id
                         if line.get(i) == dic['leader_index']:
@@ -87,7 +90,8 @@ def init_query():
             else:
                 row_data += ['', '']
 
-            yield row_data
+            if is_active:
+                yield row_data
 
 
 class NumpyReadDb:
