@@ -66,7 +66,7 @@ def init_query():
                         ai_count += 1
                         dic['card'] = dic['card_list'][line.get(i)]
                         player_id = dic['pid_list'][line.get(i)]
-                        if player_id and config.get_args('player_id') and config.get_args('player_id') == str(player_id):
+                        if player_id and config.get_args('player') and config.get_args('player') == str(player_id):
                             continue
                         else:
                             dic['pid'] = player_id
