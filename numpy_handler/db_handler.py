@@ -16,83 +16,45 @@ def init_query():
     # todo此处可以对处理数据进行进一步query筛选
     with db_col:
         result = db_col.run_query()
-        title = []
-        dic = {'card_list': [], 'pid_list': [], 'hero_index': None,
-               'flop_insurance': None, 'turn_insurance': None, 'leader_index': None,
-               'card_leader': False, 'pid': None, 'card': None}
-        print('文件总长度{}'.format(result.count()))
-        for line in result:
-            print(line.keys())
-            if not title:
-                title = list(line.keys()) + ['card_num', 'card', 'ev_player', 'outcome_player', 'pid',
-                                             'card_leader', 'ai_count', 'flop_insurance', 'turn_insurance']
-                yield title
-                continue
-            row_data = []
-            is_active = True
-            for i in line.keys():
-                ai_count = 0
-                if i == 'players':
-                    players = line[i]
-                    for p in range(len(players)):
-                        player = players[p]
-                        # 有牌处理 无牌
-                        dic['card_list'].append(player.get('cards'))
-                        dic['pid_list'].append(player.get('pId'))
-                        flop_insurance = player.get('flopInsurance')
-                        turn_insurance = player.get('turnInsurance')
-                        if flop_insurance and flop_insurance[0].get('betStacks') > 0:
-                            if not config.get_args('flop'):
-                                dic['flop_insurance'] = flop_insurance[0].get('betStacks')
-                                dic['leader_index'] = int(p)
-                            elif flop_insurance[0].get('betStacks') < config.get_args('flop'):
-                                is_active = False
-                                break
-                        if turn_insurance and turn_insurance[0].get('betStacks') > 0:
-                            if not config.get_args('turn'):
-                                dic['turn_insurance'] = turn_insurance[0].get('betStacks')
-                                dic['leader_index'] = int(p)  # todo 如果需要排除异常数据在此处理
-                            elif turn_insurance[0].get('betStacks') < config.get_args('turn'):
-                                is_active = False
-                                break
-                if i == 'timestamp':
-                    row_data.append(datetime.datetime.fromtimestamp(line.get(i)).strftime('%Y-%m-%d %H:%M:%S'))
-                elif i == 'blindLevel':
-                    row_data.append(sign_blind_level(line.get(i)['blinds']))
-                elif isinstance(line.get(i), (str, int, float)):
-                    row_data.append(line.get(i))
-                else:
-                    row_data.append('')
-                if i == 'heroIndex':
-                    dic['hero_index'] = line.get(i)
-                    if line.get(i) != -1:
-                        ai_count += 1
-                        dic['card'] = dic['card_list'][line.get(i)]
-                        player_id = dic['pid_list'][line.get(i)]
-                        if player_id and config.get_args('player') and config.get_args('player') == str(player_id):
-                            is_active = False
-                            break
-                        else:
-                            dic['pid'] = player_id
-                        if line.get(i) == dic['leader_index']:
-                            dic['card_leader'] = True
-                elif i in ['ev', 'outcome']:
-                    hero_index = dic.get('hero_index', '')
-                    dic[i] = float(line.get(i)[hero_index]) if hero_index != -1 else ''
-            card = dic.get('card')
-            if card:
-                a, b = max(card[0], card[2]), min(card[0], card[2])
-                row_data.append('%s%s' % (a, b))
-            else:
-                row_data.append('')
-            row_data += [card, dic['ev'], dic['outcome'], dic['pid'], dic['card_leader'], ai_count]
-            if dic['card_leader']:
-                row_data += [dic['turn_insurance'], dic['flop_insurance'], ]
-            else:
-                row_data += ['', '']
+        plyer_limit = config.get_args('player')
+        flop_limit = config.get_args('flop')
+        turn_limit = config.get_args('turn')
 
-            if is_active:
-                yield row_data
+        for i in result:
+            line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'winners', 'leagueName', 'nash_range']
+            player_key = ['playerId', 'pId', 'straddle', 'flop', 'turn', 'card_num', 'cards', 'stack',
+                          'seat', 'action', 'ante']
+            yield line_key + player_key
+            line = i.copy()
+            row_dic = {k: v for k, v in line if k in line_key}
+            row_dic['timestamp'] = datetime.datetime.fromtimestamp(line.get('timestamp')).strftime('%Y-%m-%d %H:%M:%S')
+            row_dic['blindLevel'] = sign_blind_level(line.get('blindLevel')['blinds'])
+            players = line.pop('players')
+            hero_index = int(line.get('heroIndex'))
+            outcome = line.pop('outcome')[hero_index] if hero_index == -1 else ''
+            ev = line.pop('ev')[hero_index] if hero_index == -1 else ''
+            row_dic.update({'outcome': outcome, 'ev': ev})
+            if hero_index != -1:
+                player = {k: v for k, v in players[hero_index] if k in player_key}
+                if plyer_limit == str(player.get('pId')):
+                    continue
+                card = player.get('cards', '')
+                a, b = max(card[0], card[2]), min(card[0], card[2])
+                player['card_num'] = '%s%s' % (a, b)
+                flop_insurance = players[hero_index].get('flopInsurance')
+                turn_insurance = players[hero_index].get('flopInsurance')
+                player['flop'] = flop_insurance[0].get('betStacks') if flop_insurance else ''
+                player['turn'] = turn_insurance[0].get('betStacks') if turn_insurance else ''
+                if flop_limit or turn_limit:
+                    if flop_limit and int(flop_limit) < player['flop']:
+                        continue
+                    if turn_limit and int(turn_limit) < player['turn']:
+                        continue
+                row_dic.update(player)
+            else:
+                row_dic.update(dict.fromkeys(player_key))
+
+            yield row_dic
 
 
 class NumpyReadDb:
@@ -100,10 +62,8 @@ class NumpyReadDb:
     def __init__(self):
         s = time.time()
         self.result_gen = init_query()
-        self.title = self.get_generator()
-        print('文件的格式{}'.format(self.title))
-        if self.title:
-            self.add_result()
+        self.title = next(self.result_gen)
+        self.add_result()
         print(time.time() - s)
 
     def get_generator(self):
@@ -121,10 +81,10 @@ class NumpyReadDb:
             nps = []
             page_row = 10000
             while page_row:
-                row = self.get_generator()
-                if row:
+                row_dic = self.get_generator()
+                if row_dic:
                     page_row -= 1
-                    nps.append(row)
+                    nps.append([row_dic[i] for i in self.title])
                 else:
                     final = 0
                     print('数据处理完毕！')
@@ -133,11 +93,6 @@ class NumpyReadDb:
                 page += 1
                 self.write_excel(nps, str(page))
                 nps.insert(0, self.title)
-                print(nps[1])
-                for i in nps:
-                    if len(i) != len(nps[1]):
-                        print('错误列{}'.format(i))
-                        break
                 np_apply = get_analysis(AvgStrategy(), np.array(nps))
                 self.write_excel(np_apply, str(page) + '_avg')
                 print('已完成处理数据第{}页'.format(page))
