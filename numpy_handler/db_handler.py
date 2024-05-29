@@ -95,6 +95,7 @@ class NumpyReadDb:
             gen_data = next(self.result_gen)
             return gen_data
         except StopIteration:
+            print('数据处理已完成~')
             return False
 
     def add_result(self):
@@ -115,7 +116,7 @@ class NumpyReadDb:
                         break
                 else:
                     page += 1
-                    # self.write_excel(nps, page)
+                    self.write_excel(nps, page)
         except Exception as e:
             print('已完成~共处理数据{}页'.format(page))
 
