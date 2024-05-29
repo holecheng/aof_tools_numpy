@@ -75,30 +75,26 @@ def init_query():
                 row_data += [dic['turn_insurance'], dic['flop_insurance'], ]
             else:
                 row_data += ['', '']
-            yield row_data
+            print(row_data)
 
 
 class NumpyReadDb:
 
     def __init__(self):
         s = time.time()
-        self.result_gen = init_query()
-        self.title = next(self.result_gen)
-        self.add_result()
+        init_query()
+        # self.title = next(self.result_gen)
+        # self.add_result()
         print(time.time()-s)
 
-    def add_result(self):
-        nps = []
-        i = 400000
-        while i:
-            try:
-                row = next(self.result_gen)
-                i -= 1
-                # nps.append(row)
-            except Exception as e:
-                print('已完成~')
-                break
-        # self.write_excel(nps)
+    # def add_result(self):
+    #     while i:
+    #         try:
+    #             row = next(self.result_gen)
+    #         except Exception as e:
+    #             print('已完成~')
+    #             break
+    #     # self.write_excel(nps)
 
     def write_excel(self, nps, types='whole'):
         print('正在写入处理文件~')
