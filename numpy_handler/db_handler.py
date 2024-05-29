@@ -132,6 +132,7 @@ class NumpyReadDb:
                 for i in nps:
                     if len(i) != len(nps[1]):
                         print('错误列{}'.format(len(i)))
+                        break
                 np_apply = get_analysis(AvgStrategy(), np.array(nps))
                 self.write_excel(np_apply, str(page)+'_avg')
                 print('已完成处理数据第{}页'.format(page))
