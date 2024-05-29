@@ -26,7 +26,7 @@ def init_query():
                                              'card_leader', 'ai_count', 'flop_insurance', 'turn_insurance']
                 numpy_data.append(title)  # 将列放入数组中，处理时候可以无视
             row_data = []
-            for i in list(line.keys()):
+            for i in line.keys():
                 ai_count = 0
                 if i == 'players':
                     players = line[i]
@@ -73,7 +73,6 @@ def init_query():
                 row_data += [dic['turn_insurance'], dic['flop_insurance'], ]
             else:
                 row_data += ['', '']
-            print('=====================================处理中===========================================')
             yield row_data
 
 
