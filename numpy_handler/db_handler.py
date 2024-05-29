@@ -96,8 +96,7 @@ class NumpyReadDb:
                 self.write_excel(nps, str(page))
                 nps.insert(0, self.title)
                 for i in nps:
-                    if len(i) != len(nps[0]):
-                        print(len(nps[0]))
+                    print(len(i))
                 np_apply = get_analysis(AvgStrategy(), np.array(nps))
                 self.write_excel(np_apply, str(page) + '_avg')
                 print('已完成处理数据第{}页'.format(page))
