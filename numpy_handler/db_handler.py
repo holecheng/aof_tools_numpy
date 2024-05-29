@@ -22,6 +22,7 @@ def init_query():
                'card_leader': False, 'pid': None, 'card': None}
         print('文件总长度{}'.format(result.count()))
         for line in result:
+            print(line.keys())
             if not title:
                 title = list(line.keys()) + ['card_num', 'card', 'ev_player', 'outcome_player', 'pid',
                                              'card_leader', 'ai_count', 'flop_insurance', 'turn_insurance']
