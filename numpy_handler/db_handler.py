@@ -93,7 +93,7 @@ class NumpyReadDb:
             try:
                 row = next(self.result_gen)
                 print(len(row))
-                nps.append(row)
+                # nps.append(row)
             except Exception as e:
                 print('已完成~')
                 break
