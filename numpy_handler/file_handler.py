@@ -3,18 +3,23 @@ import asyncio
 import json
 import datetime
 import numpy as np
+import pandas as pd
 from handler import TimeStrategy
-from utils import to_excel_numpy, sign_blind_level
+from utils import sign_blind_level
 
 
 class NumpyReadFile:
 
     def __init__(self, out_files):
+        loop = asyncio.get_event_loop()
+        asyncio.set_event_loop(loop)
+        self.tasks = []
         self.out_files = out_files
         self.whole_list = []
         self.get_whole_file()
         self.results = None
         self.result = None
+        self.results = loop.run_until_complete(asyncio.gather(*self.tasks))
 
     def get_whole_file(self):
         if os.path.exists(self.out_files):
@@ -52,10 +57,15 @@ class NumpyReadFile:
     def handler_to_strategy_apply(self, strategy):
         pass
 
-    @staticmethod
-    def write_numpy(result, df_path):
+    async def write_numpy(self, result, df_path):
         ans_data = result[1:]
-        to_excel_numpy(ans_data, df_path, result[0])
+        await self.to_excel_numpy(ans_data, df_path, result[0])
+
+    async def to_excel_numpy(self, nps, df_path, title, suffix='all'):
+        df = pd.DataFrame(nps)
+        df.columns = title
+        self.tasks.append(df.to_excel('./output/' + os.path.basename(df_path).split('.')[0] + '_'
+                                      + suffix + '.xlsx', sheet_name='data', index=False))
 
 
 async def read_numpy(file_path: str) -> np.ndarray:
