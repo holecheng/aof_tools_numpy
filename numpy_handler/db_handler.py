@@ -104,6 +104,7 @@ class NumpyReadDb:
             while final:
                 nps = []
                 page_row = 10000
+                print(final)
                 while page_row:
                     row = self.get_generator()
                     if row:
