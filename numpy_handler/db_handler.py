@@ -23,7 +23,7 @@ def init_query():
         for i in result:
             line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName']
             player_key = ['playerId', 'pId', 'straddle', 'flop', 'turn', 'card_num', 'cards', 'stack',
-                          'seat', 'action', 'ante', 'winner']
+                          'seat', 'action', 'ante', 'winner', 'ev', 'outcome']
             if not row_key:
                 row_key = line_key + player_key
                 yield row_key
