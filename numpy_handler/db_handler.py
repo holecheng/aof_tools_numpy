@@ -94,7 +94,6 @@ class NumpyReadDb:
             try:
                 row = next(self.result_gen)
                 i -= 1
-                print(len(row))
                 # nps.append(row)
             except Exception as e:
                 print('已完成~')
