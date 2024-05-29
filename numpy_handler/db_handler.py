@@ -1,5 +1,6 @@
 import logging
 import json
+import asyncio
 import datetime
 import time
 
@@ -86,6 +87,10 @@ class NumpyReadDb:
         self.result_gen = init_query()
         self.title = self.get_generator()
         print('文件的格式{}'.format(self.title))
+        loop = asyncio.get_event_loop()
+        asyncio.set_event_loop(loop)
+        self.tasks = []
+        self.results = loop.run_until_complete(asyncio.gather(*self.tasks))
         if self.title:
             self.add_result()
         print(time.time()-s)
@@ -116,12 +121,12 @@ class NumpyReadDb:
                     break
             else:
                 page += 1
-                self.write_excel(nps, page)
+                self.tasks.append(self.write_excel(nps, page))
                 print('已完成处理数据第{}页'.format(page))
 
-    def write_excel(self, nps, page):
+    async def write_excel(self, nps, page):
         print('正在写入处理文件~')
-        to_excel_numpy(nps, 'db', self.title, str(page))
+        await to_excel_numpy(nps, 'db', self.title, str(page))
 
 
 

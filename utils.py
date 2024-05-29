@@ -9,7 +9,7 @@ def resize_timestamp(result):
     return result
 
 
-def to_excel_numpy(nps, df_path, title, suffix='all'):
+async def to_excel_numpy(nps, df_path, title, suffix='all'):
     df = pd.DataFrame(nps)
     df.columns = title
     df.to_excel('./output/' + os.path.basename(df_path).split('.')[0] + '_'
