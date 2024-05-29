@@ -96,7 +96,7 @@ class NumpyReadDb:
             except Exception as e:
                 print('已完成~')
                 break
-        self.write_excel(nps)
+        # self.write_excel(nps)
 
     def write_excel(self, nps, types='whole'):
         print('正在写入处理文件~')
