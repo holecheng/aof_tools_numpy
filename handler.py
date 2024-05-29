@@ -50,7 +50,8 @@ class AvgStrategy(Strategy):
     def get_group_avg(nps):
         title = nps[0]
         nps = nps[1:]
-        group_i = nps.index(config.get_args('group'))
+        nps = np.array(nps)
+        group_i = title(config.get_args('group'))
         group_np = nps[: group_i]
         unique_values = np.unique(group_np)
         col = config.get_args('col').split(',')
