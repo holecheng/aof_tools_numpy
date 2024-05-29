@@ -19,12 +19,14 @@ def init_query():
         plyer_limit = config.get_args('player')
         flop_limit = config.get_args('flop')
         turn_limit = config.get_args('turn')
-
+        row_key = []
         for i in result:
             line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'winners', 'leagueName', 'nash_range']
             player_key = ['playerId', 'pId', 'straddle', 'flop', 'turn', 'card_num', 'cards', 'stack',
                           'seat', 'action', 'ante']
-            yield line_key + player_key
+            if not row_key:
+                row_key = line_key + player_key
+                yield row_key
             line = i.copy()
             row_dic = {k: v for k, v in line.items() if k in line_key}
             row_dic['timestamp'] = datetime.datetime.fromtimestamp(line.get('timestamp')).strftime('%Y-%m-%d %H:%M:%S')
