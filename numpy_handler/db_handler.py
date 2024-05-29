@@ -90,10 +90,10 @@ class NumpyReadDb:
         print(time.time()-s)
 
     def add_result(self):
+        page = 0
         try:
             while True:
                 nps = []
-                page = 0
                 page_row = 10000
                 while page_row:
                     try:
@@ -108,7 +108,7 @@ class NumpyReadDb:
                     page += 1
                     self.write_excel(nps, page)
         except Exception as e:
-            print('已完成~')
+            print('已完成~共处理数据{}页'.format(page))
 
     def write_excel(self, nps, page):
         print('正在写入处理文件~')
