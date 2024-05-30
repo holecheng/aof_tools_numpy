@@ -116,7 +116,7 @@ class NumpyReadDb:
                 # self.write_excel(nps, str(page))
                 npd = get_group_avg_nps(nps)
                 np_apply = get_analysis(AvgStrategy(), npd)
-                self.write_excel(np_apply, str(page) + '_avg')
+                self.write_excel(np_apply, str(page) + '_{}'.format(config.get_args('types')))
                 print('已完成处理数据第{}页'.format(page))
 
     @staticmethod

@@ -50,7 +50,7 @@ class AvgStrategy(Strategy):
         return self.get_group_avg(nps)
 
     @staticmethod
-    def get_group_avg(npd: np.ndarray, types='avg'):
+    def get_group_avg(npd: np.ndarray):
         npd = remove_null_data(npd)
         npt = npd[0]
         groups = npd[1:, 0].astype(str)
@@ -59,7 +59,10 @@ class AvgStrategy(Strategy):
         unique_g = np.unique(groups)
         mean_values = []
         for group in unique_g:
-            mean_values.append(np.mean(npd[groups == group], axis=0))
+            if config.get_args('types') == 'avg':
+                mean_values.append(np.mean(npd[groups == group], axis=0))
+            else:
+                mean_values.append(np.sum(npd[groups == group], axis=0))
         ans = np.vstack(mean_values).astype(str)
         print(unique_g.shape, ans.shape)
         ans = np.hstack((unique_g.reshape(-1, 1), ans))

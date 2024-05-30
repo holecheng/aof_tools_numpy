@@ -28,6 +28,7 @@ class Config(object):
         self._parser.add_argument('--flop', type=int, nargs='?', help='flop保险')
         self._parser.add_argument('--turn', type=int, nargs='?', help='turn保险')
         self._parser.add_argument('--path', type=str, nargs='?', help='文件路径')
+        self._parser.add_argument('--types', type=str, nargs='?', help='聚合类型', default='avg')
         self._parser.add_argument('--mode', type=str, nargs='?', help='数据库连接方式', default='cmd')
         self._parser.add_argument('--query-time', type=str, nargs='?', help='数据库连接筛选时段')
         self._parser.add_argument('--group', type=str, nargs='?', help='分组索引')
