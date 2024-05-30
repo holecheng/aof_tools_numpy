@@ -51,6 +51,7 @@ class AvgStrategy(Strategy):
         npt = npd[0].astype(str)
         groups = npd[1:, 0]
         unique_g = list(set(groups.tolist()))
+        unique_g = np.array(unique_g)
         npd = npd[1:, 1:].astype(float)
         npd = npd[~np.isnan(npd).any(axis=1)]
         mean_values = []
