@@ -51,12 +51,11 @@ class AvgStrategy(Strategy):
         npt = npd[0]
         npd = npd[1:]
         print(npd.shape)
-        print(npd[npd[:, 2] is None])
         npd = npd[~np.isnan(npd).any(axis=1)]
         groups = np.unique(npd[: 0])
         mean_values = []
         for group in groups:
-            values = npd[npd[:0] == group][:1].astype(float)
+            values = npd[npd[:0] == group][:1]
             mean_values.append(np.mean(values))
         return np.vstack((npt, np.array(mean_values)))
 
