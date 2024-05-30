@@ -49,16 +49,15 @@ class AvgStrategy(Strategy):
     @staticmethod
     def get_group_avg(npd: np.ndarray, types='avg'):
         npt = npd[0].astype(str)
-        npd = npd[1:].astype(float)
+        npd = npd[:, 1:].astype(float)
         npd = npd[~np.isnan(npd).any(axis=1)]
-        groups = np.unique(npd[: 0])
+        groups = np.unique(npd[:, 0])
         mean_values = []
         for group in groups:
-            values = npd[npd[:0] == group][:1]
-            mean_values.append(np.mean(values))
-        print(mean_values)
-        new_np = np.array(mean_values).astype(str)
-        return np.vstack((npt, new_np))
+            mean_values.append(np.mean(npd[groups == group][:, 1:], axis=0))
+        ans = np.vstack(mean_values).astype(str)
+        ans = np.hstack((groups, ans))
+        return np.vstack((npt, ans))
 
 
 class InsuranceStrategy(Strategy):
