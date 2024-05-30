@@ -45,7 +45,7 @@ def remove_null_data(npd):
         non_empty_rows = np.all(npd != '', axis=1)
         return str_data[non_empty_rows]
     except Exception as e:
-        print('无法去0处理')
+        print('无法去空处理')
         return npd
 
 
