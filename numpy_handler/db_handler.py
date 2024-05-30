@@ -32,7 +32,7 @@ def init_query():
             line = i.copy()
             row_dic = {k: v for k, v in line.items() if k in line_key}
             wait_update_list = player_key + IS_DIGIT_KEY
-            row_dic.update(dict.fromkeys(wait_update_list))
+            row_dic.update(dict.fromkeys(wait_update_list, np.nan))
             row_dic['timestamp'] = datetime.datetime.fromtimestamp(line.get('timestamp')).strftime('%Y-%m-%d %H:%M:%S')
             row_dic['blindLevel'] = sign_blind_level(line.get('blindLevel')['blinds'])
             hero_index = int(line.get('heroIndex'))
