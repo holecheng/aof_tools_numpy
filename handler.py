@@ -49,8 +49,8 @@ class AvgStrategy(Strategy):
     @staticmethod
     def get_group_avg(npd: np.ndarray, types='avg'):
         npt = npd[0]
-        npd = npd[1:]
-        npd = npd[~np.isnan(npd.astype(float)).any(axis=1)]
+        npd = npd[1:].astype(float)
+        npd = npd[~np.isnan(npd).any(axis=1)]
         groups = np.unique(npd[: 0])
         mean_values = []
         for group in groups:
