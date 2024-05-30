@@ -120,6 +120,6 @@ class NumpyReadDb:
                 print('已完成处理数据第{}页'.format(page))
 
     @staticmethod
-    def write_excel(self, nps, page):
+    def write_excel(nps, page):
         print('正在写入处理文件~')
         to_excel_numpy(nps, 'db', page)
