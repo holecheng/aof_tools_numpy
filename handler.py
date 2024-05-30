@@ -58,7 +58,7 @@ class AvgStrategy(Strategy):
         for group in unique_g:
             mean_values.append(np.mean(npd[groups == group], axis=0))
         ans = np.vstack(mean_values).astype(str)
-        print(unique_g.reshape(-1, 1).shape, ans.shape)
+        print(ans)
         ans = np.hstack((unique_g.reshape(-1, 1), ans))
         return np.vstack((npt, ans))
 
