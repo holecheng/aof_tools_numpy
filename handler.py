@@ -51,6 +51,7 @@ class AvgStrategy(Strategy):
         npt = npd[0]
         npd = npd[1:]
         print(npd.shape)
+        print(npd[npd[:, 1] is None])
         npd = npd[~np.isnan(npd).any(axis=1)]
         groups = np.unique(npd[: 0])
         mean_values = []
