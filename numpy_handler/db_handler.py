@@ -30,26 +30,28 @@ def init_query():
                 row_key = line_key + player_key + IS_DIGIT_KEY
                 yield row_key
             line = i.copy()
+            hero_index = int(line.get('heroIndex'))
+            if not config.get_args('hero_index') and hero_index == -1:
+                continue
             row_dic = {k: v for k, v in line.items() if k in line_key}
             wait_update_list = player_key + IS_DIGIT_KEY
-            row_dic.update(dict.fromkeys(wait_update_list, np.nan))
+            row_dic.update(dict.fromkeys(wait_update_list, ''))
             row_dic['timestamp'] = datetime.datetime.fromtimestamp(line.get('timestamp')).strftime('%Y-%m-%d %H:%M:%S')
             row_dic['blindLevel'] = sign_blind_level(line.get('blindLevel')['blinds'])
-            hero_index = int(line.get('heroIndex'))
             row_dic['is_seat'] = 1 if hero_index == -1 else 0
             row_dic['is_turn'] = 1 if line.get('turn') else 0
             row_dic['is_flop'] = 1 if line.get('flop') else 0
             players = line.pop('players')
-            outcome = float(line.pop('outcome')[hero_index]) if hero_index != -1 else np.nan
-            ev = float(line.pop('ev')[hero_index]) if hero_index != -1 else np.nan
+            outcome = float(line.pop('outcome')[hero_index]) if hero_index != -1 else 0
+            ev = float(line.pop('ev')[hero_index]) if hero_index != -1 else 0
             row_dic.update({'outcome_player': outcome, 'ev_player': ev})
             if hero_index != -1:
                 player = {k: v for k, v in players[hero_index].items() if k in wait_update_list}
                 row_dic['is_push'] = 1 if row_dic['action'] == 'Push' else 0
-                if plyer_limit == str(player.get('pId')):
+                if plyer_limit == str(player.get('pId'), ''):
                     continue
                 winners = line.get('winners')
-                if winners and str(player.get('pId')) in winners:
+                if winners and str(player.get('pId'), '') in winners:
                     row_dic['winner'] = 1
                 else:
                     row_dic['winner'] = 0
@@ -61,9 +63,9 @@ def init_query():
                     player['card_num'] = ''
                 flop_insurance = players[hero_index].get('flopInsurance')
                 turn_insurance = players[hero_index].get('turnInsurance')
-                player['flop_i'] = flop_insurance[0].get('betStacks') if flop_insurance else np.nan
-                player['turn_i'] = turn_insurance[0].get('betStacks') if turn_insurance else np.nan
-                if player['turn_i'] is not np.nan or player['turn_i'] is not np.nan:
+                player['flop_i'] = flop_insurance[0].get('betStacks', 0) if flop_insurance else 0
+                player['turn_i'] = turn_insurance[0].get('betStacks', 0) if turn_insurance else 0
+                if player['turn_i'] or player['turn_i']:
                     player['is_lead'] = 1
                 else:
                     player['is_lead'] = 0

@@ -3,6 +3,9 @@ from strategy import Strategy
 from config_parse import config
 import numpy as np
 
+from utils import remove_null_data
+
+
 # class GroupStrategy(Strategy):
 #     def cleaning(self, data: pd.DataFrame, group=0, args=None, group_type='mean') -> pd.DataFrame:
 #         # todo 建议暂时用一行分组，不然显示图片会出问题 暂时不用此策略
@@ -48,16 +51,16 @@ class AvgStrategy(Strategy):
 
     @staticmethod
     def get_group_avg(npd: np.ndarray, types='avg'):
-        npt = npd[0].astype(str)
-        npd = npd[~np.isnan(npd).any(axis=1)]
+        npd = remove_null_data(npd)
+        npt = npd[0]
         groups = npd[1:, 0].astype(str)
         npd = npd[1:, 1:].astype(float)
+        npd = npd[~np.isnan(npd).any(axis=1)]
         unique_g = np.unique(groups)
         mean_values = []
         for group in unique_g:
             mean_values.append(np.mean(npd[groups == group], axis=0))
         ans = np.vstack(mean_values).astype(str)
-        print(ans.shape, unique_g.shape)
         ans = np.hstack((unique_g.reshape(-1, 1), ans[0]))
         return np.vstack((npt, ans))
 
