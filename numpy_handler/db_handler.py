@@ -40,8 +40,8 @@ def init_query():
             row_dic['is_turn'] = 1 if line.get('turn') else 0
             row_dic['is_flop'] = 1 if line.get('flop') else 0
             players = line.pop('players')
-            outcome = int(line.pop('outcome')[hero_index]) if hero_index == -1 else np.nan
-            ev = int(line.pop('ev')[hero_index]) if hero_index == -1 else np.nan
+            outcome = int(line.pop('outcome')[hero_index]) if hero_index != -1 else np.nan
+            ev = int(line.pop('ev')[hero_index]) if hero_index != -1 else np.nan
             row_dic.update({'outcome_player': outcome, 'ev_player': ev})
             if hero_index != -1:
                 player = {k: v for k, v in players[hero_index].items() if k in wait_update_list}
