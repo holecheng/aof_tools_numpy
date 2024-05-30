@@ -35,8 +35,6 @@ def get_group_avg_nps(nps):
     group_i = title.index(config.get_args('group'))
     col_list = [group_i] + [title.index(i) for i in col]
     npd = np.array(nps)
-    print(col_list)
-    print(npd[:, [5, 12, 13]])
     return npd[:, col_list]
 
 
