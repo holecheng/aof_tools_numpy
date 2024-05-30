@@ -52,8 +52,11 @@ def init_query():
                 else:
                     row_dic['winner'] = 0
                 card = player.get('cards', '')
-                a, b = max(card[0], card[2]), min(card[0], card[2])
-                player['card_num'] = '%s%s' % (a, b)
+                if card:
+                    a, b = max(card[0], card[2]), min(card[0], card[2])
+                    player['card_num'] = '%s%s' % (a, b)
+                else:
+                    player['card_num'] = ''
                 flop_insurance = players[hero_index].get('flopInsurance')
                 turn_insurance = players[hero_index].get('turnInsurance')
                 player['flop_i'] = flop_insurance[0].get('betStacks') if flop_insurance else ''
