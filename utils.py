@@ -13,9 +13,9 @@ def resize_timestamp(result):
     return result
 
 
-def to_excel_numpy(nps, df_path, title, suffix='all'):
-    df = pd.DataFrame(nps)
-    df.columns = title
+def to_excel_numpy(nps, df_path, suffix='all'):
+    df = pd.DataFrame(nps[1:])
+    df.columns = nps[0]
     df.to_excel('./output/' + os.path.basename(df_path).split('.')[0] + '_'
                 + suffix + '.xlsx', sheet_name='data', index=False)
 

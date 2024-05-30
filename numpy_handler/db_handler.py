@@ -119,6 +119,7 @@ class NumpyReadDb:
                 self.write_excel(np_apply, str(page) + '_avg')
                 print('已完成处理数据第{}页'.format(page))
 
+    @staticmethod
     def write_excel(self, nps, page):
         print('正在写入处理文件~')
-        to_excel_numpy(nps, 'db', self.title, page)
+        to_excel_numpy(nps, 'db', page)
