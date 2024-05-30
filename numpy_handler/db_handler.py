@@ -3,7 +3,7 @@ import datetime
 import time
 
 from handler import get_analysis, AvgStrategy
-from utils import sign_blind_level, to_excel_numpy
+from utils import sign_blind_level, to_excel_numpy, get_group_avg_nps
 import numpy as np
 from config_parse import config
 
@@ -22,29 +22,33 @@ def init_query():
         row_key = []
         for i in result:
             line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName']
-            player_key = ['playerId', 'pId', 'straddle', 'flop', 'turn', 'card_num', 'cards', 'stack',
-                          'seat', 'action', 'ante', 'winner', 'ev', 'outcome']
+            player_key = ['pId', 'playerId', 'card_num', 'cards', 'stack', 'seat', 'action']
+            is_digit_value_key = ['stack', 'ev_player', 'outcome_player', 'flop', 'turn',
+                                  'straddle', 'ante', 'winner', 'is_seat']
             if not row_key:
-                row_key = line_key + player_key
+                row_key = line_key + player_key + is_digit_value_key
                 yield row_key
+            row_dic.update(dict.fromkeys(row_key))
             line = i.copy()
-            row_dic = {k: v for k, v in line.items() if k in line_key}
+            row_dic = {k: v for k, v in line.items() if k in row_key}
             row_dic['timestamp'] = datetime.datetime.fromtimestamp(line.get('timestamp')).strftime('%Y-%m-%d %H:%M:%S')
             row_dic['blindLevel'] = sign_blind_level(line.get('blindLevel')['blinds'])
+            row_dic['is_seat'] = 1 if hero_index == -1 else 0
             players = line.pop('players')
             hero_index = int(line.get('heroIndex'))
-            outcome = line.pop('outcome')[hero_index] if hero_index == -1 else ''
-            ev = line.pop('ev')[hero_index] if hero_index == -1 else ''
-            row_dic.update({'outcome': outcome, 'ev': ev})
+            outcome = int(line.pop('outcome')[hero_index]) if hero_index == -1 else np.nan
+            ev = int(line.pop('ev')[hero_index]) if hero_index == -1 else np.nan
+            row_dic.update({'outcome_player': outcome, 'ev_player': ev})
             if hero_index != -1:
                 player = {k: v for k, v in players[hero_index].items() if k in player_key}
+                row_dic['is_push'] = 1 if row_dic['action'] == 'Push' else 0
                 if plyer_limit == str(player.get('pId')):
                     continue
                 winners = line.get('winners')
                 if str(player.get('pId')) in winners:
-                    row_dic['winner'] = 'True'
+                    row_dic['winner'] = 1
                 else:
-                    row_dic['winner'] = 'False'
+                    row_dic['winner'] = 0
                 card = player.get('cards', '')
                 a, b = max(card[0], card[2]), min(card[0], card[2])
                 player['card_num'] = '%s%s' % (a, b)
@@ -58,8 +62,6 @@ def init_query():
                     if turn_limit and int(turn_limit) < player['turn']:
                         continue
                 row_dic.update(player)
-            else:
-                row_dic.update(dict.fromkeys(player_key))
 
             yield row_dic
 
@@ -99,7 +101,8 @@ class NumpyReadDb:
             else:
                 page += 1
                 self.write_excel(nps, str(page))
-                # np_apply = get_analysis(AvgStrategy(), np.array(nps, dtype=str))
+                npd = get_group_avg_nps(nps)
+                np_apply = get_analysis(AvgStrategy(), npd)
                 # self.write_excel(np_apply, str(page) + '_avg')
                 print('已完成处理数据第{}页'.format(page))
 

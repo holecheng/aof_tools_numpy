@@ -47,23 +47,16 @@ class AvgStrategy(Strategy):
         return self.get_group_avg(nps)
 
     @staticmethod
-    def get_group_avg(nps: np.ndarray):
-        title = nps[0].tolist()
-        col = config.get_args('col').split(',')
-        group_i = title.index(config.get_args('group'))
-        col_list = [group_i] + [title.index(i) for i in col]
-        nps = nps[1:]
-        group_np = nps[: group_i]
-        unique_values = np.unique(group_np)
-        grouped_avg = np.zeros((len(unique_values), len(col) + 1))
-        for i, val in enumerate(unique_values):
-            for j, index in enumerate(col_list):
-                if j == group_i:
-                    grouped_avg[i][j] = val
-                else:
-                    grouped_avg[i][j] = np.mean(nps[:, index].astype(int), axis=0)
-        grouped_avg = np.vstack((np.array(title), grouped_avg))
-        return grouped_avg
+    def get_group_avg(npd: np.ndarray, types='avg'):
+        npt = npd[0]
+        npd = npd[1:]
+        npd = npd[~np.isnan(npd).any(axis=1)]
+        groups = np.unique(npd[: 0])
+        mean_values = []
+        for group in groups:
+            values = npd[npd[:0] == group][:1].astype(float)
+            mean_values.append(np.mean(values))
+        return np.vstack((npt, np.array(mean_values)))
 
 
 class InsuranceStrategy(Strategy):
