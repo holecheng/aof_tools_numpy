@@ -91,7 +91,7 @@ class NpAnalysis:
         return self.strategy.cleaning(self.nps)
 
 
-def get_analysis(strategy: Strategy, nps):
+def get_analysis(strategy: Strategy, nps) -> np.ndarray:
     return NpAnalysis(strategy, nps).clean_pds()
 
 
