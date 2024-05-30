@@ -40,8 +40,8 @@ def init_query():
             row_dic['is_turn'] = 1 if line.get('turn') else 0
             row_dic['is_flop'] = 1 if line.get('flop') else 0
             players = line.pop('players')
-            outcome = int(line.pop('outcome')[hero_index]) if hero_index != -1 else np.nan
-            ev = int(line.pop('ev')[hero_index]) if hero_index != -1 else np.nan
+            outcome = float(line.pop('outcome')[hero_index]) if hero_index != -1 else np.nan
+            ev = float(line.pop('ev')[hero_index]) if hero_index != -1 else np.nan
             row_dic.update({'outcome_player': outcome, 'ev_player': ev})
             if hero_index != -1:
                 player = {k: v for k, v in players[hero_index].items() if k in wait_update_list}
@@ -68,9 +68,9 @@ def init_query():
                 else:
                     player['is_lead'] = 0
                 if flop_limit or turn_limit:
-                    if flop_limit and int(flop_limit) < player['flop']:
+                    if flop_limit and float(flop_limit) < player['flop']:
                         continue
-                    if turn_limit and int(turn_limit) < player['turn']:
+                    if turn_limit and float(turn_limit) < player['turn']:
                         continue
                 row_dic.update(player)
 
@@ -111,10 +111,10 @@ class NumpyReadDb:
                     break
             else:
                 page += 1
-                self.write_excel(nps, str(page))
+                # self.write_excel(nps, str(page))
                 npd = get_group_avg_nps(nps)
                 np_apply = get_analysis(AvgStrategy(), npd)
-                # self.write_excel(np_apply, str(page) + '_avg')
+                self.write_excel(np_apply, str(page) + '_avg')
                 print('已完成处理数据第{}页'.format(page))
 
     def write_excel(self, nps, page):

@@ -57,7 +57,7 @@ class AvgStrategy(Strategy):
             values = npd[npd[:0] == group][:1]
             mean_values.append(np.mean(values))
         new_np = np.array(mean_values).astype(str)
-        return np.vstack((npt, ))
+        return np.vstack((npt, new_np))
 
 
 class InsuranceStrategy(Strategy):
