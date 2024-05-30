@@ -11,6 +11,9 @@ from db.db_loader import db_col
 
 logger = logging.getLogger()
 
+IS_DIGIT_KEY = ['stack', 'ev_player', 'outcome_player', 'flop_i', 'turn_i',
+                'straddle', 'ante', 'winner', 'is_seat', 'is_turn', 'is_flop']  # 可统计数据（数字类型）
+
 
 def init_query():
     # todo此处可以对处理数据进行进一步query筛选
@@ -23,14 +26,14 @@ def init_query():
         for i in result:
             line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName', 'pId', 'cards']
             player_key = ['pId', 'card_num', 'stack', 'seat', 'action']
-            is_digit_value_key = ['stack', 'ev_player', 'outcome_player', 'flop_i', 'turn_i',
-                                  'straddle', 'ante', 'winner', 'is_seat', 'is_turn', 'is_flop']  # 可统计数据（数字类型）
+
             if not row_key:
-                row_key = line_key + player_key + is_digit_value_key
+                row_key = line_key + player_key + IS_DIGIT_KEY
                 yield row_key
             line = i.copy()
             row_dic = {k: v for k, v in line.items() if k in line_key}
-            row_dic.update(dict.fromkeys(player_key+is_digit_value_key))
+            wait_update_list = player_key + IS_DIGIT_KEY
+            row_dic.update(dict.fromkeys(wait_update_list))
             row_dic['timestamp'] = datetime.datetime.fromtimestamp(line.get('timestamp')).strftime('%Y-%m-%d %H:%M:%S')
             row_dic['blindLevel'] = sign_blind_level(line.get('blindLevel')['blinds'])
             hero_index = int(line.get('heroIndex'))
@@ -42,7 +45,7 @@ def init_query():
             ev = int(line.pop('ev')[hero_index]) if hero_index == -1 else np.nan
             row_dic.update({'outcome_player': outcome, 'ev_player': ev})
             if hero_index != -1:
-                player = {k: v for k, v in players[hero_index].items() if k in player_key+is_digit_value_key}
+                player = {k: v for k, v in players[hero_index].items() if k in wait_update_list}
                 row_dic['is_push'] = 1 if row_dic['action'] == 'Push' else 0
                 if plyer_limit == str(player.get('pId')):
                     continue
