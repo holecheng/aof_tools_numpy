@@ -24,7 +24,7 @@ def init_query():
             line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName', 'pId', 'cards']
             player_key = ['playerId', 'card_num', 'stack', 'seat', 'action']
             is_digit_value_key = ['stack', 'ev_player', 'outcome_player', 'flop_i', 'turn_i',
-                                  'straddle', 'ante', 'winner', 'is_seat', 'is_turn', 'is_flop']
+                                  'straddle', 'ante', 'winner', 'is_seat', 'is_turn', 'is_flop']  # 可统计数据（数字类型）
             if not row_key:
                 row_key = line_key + player_key + is_digit_value_key
                 yield row_key
