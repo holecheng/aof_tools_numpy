@@ -49,7 +49,7 @@ def init_query():
                 if plyer_limit == str(player.get('pId')):
                     continue
                 winners = line.get('winners')
-                if str(player.get('pId')) in winners:
+                if winners and str(player.get('pId')) in winners:
                     row_dic['winner'] = 1
                 else:
                     row_dic['winner'] = 0
