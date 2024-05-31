@@ -100,17 +100,21 @@ class NumpyReadDb:
             return False
 
     def apply_player_id(self):
+        cnt = 0
         try:
             while True:
                 row_dic = self.get_generator()
+                cnt += 1
                 player_id = row_dic['pId']
                 hand = Hand('pId', player_id, row_dic)
                 if player_id not in self.hand_dic:
                     self.hand_dic[player_id] = hand
                 else:
                     self.hand_dic[player_id] += hand
+                if cnt and cnt % 10000:
+                    print('已处理数据{} * 10000'.format(cnt))
         except Exception as e:
-            print('数据处理完成')
+            print('数据处理完成, 总计 {}'.format(cnt))
             title = list(Hand.__slots__)
             title.remove('row_dic')
             np_ans = np.array(title)
