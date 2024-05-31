@@ -1,8 +1,12 @@
 class Hand:
     __slots__ = ('group', 'group_key', 'avg_ev',
+                 'avg_flop_ev',  # 第一轮三张牌之后的期望（均值）
+                 'avg_turn_ev',  # turn牌发出来的期望（均值）
                  'avg_outcome', 'avg_flop_i', 'avg_turn_i', 'avg_leader_counts',
                  'avg_is_push', 'avg_is_turn', 'avg_is_flop', 'counts', 'row_dic',
                  'leader_counts', 'sum_flop_i', 'sum_turn_i', 'sum_ev',
+                 'sum_flop_ev',
+                 'sum_turn_ev',
                  'no_insurance', 'sum_outcome', 'sum_is_turn',
                  'sum_is_river', 'sum_is_push',
                  )
@@ -30,6 +34,13 @@ class Hand:
         self.avg_is_flop = self.avg_get(self.sum_is_river, self.counts)
         self.avg_is_turn = self.avg_get(self.sum_is_turn, self.counts)
         self.leader_counts += row_dic.get('is_leader')  # 领先总场次
+        if row_dic['is_turn']:
+            flop_ev_player = row_dic.get('flop_ev_player', 0)
+            turn_ev_player = row_dic.get('turn_ev_player', 0)
+            self.sum_flop_ev += round(float(flop_ev_player), 5)
+            self.sum_turn_ev += round(float(turn_ev_player), 5)
+            self.avg_flop_ev = self.avg_get(self.sum_ev, self.sum_is_turn)
+            self.avg_turn_ev = self.avg_get(self.sum_outcome, self.sum_is_turn)
         if row_dic.get('is_leader'):
             flop_i = row_dic.get('flop_i')
             turn_i = row_dic.get('turn_i')
