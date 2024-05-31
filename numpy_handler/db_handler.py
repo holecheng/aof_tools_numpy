@@ -86,6 +86,7 @@ class NumpyReadDb:
         self.hand_list = []
         self.hand_dic = {}
         self.apply_player_id()
+        print('总共用时{}分'.format((time.time() - s) // 60000))
         # self.add_result()
 
     def get_generator(self):
