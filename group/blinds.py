@@ -10,6 +10,8 @@ class Blinds:
                  'avg_compare_stack',  # 场内ai所持砝码对比对方所持砝码
                  # 'avg_stack', '',
                  'counts',  # 总对局数-同一局按AI出现次数计
+                 'turn_count',  # 分发到第一张牌的总场次  turn-counts 因为发了turn一定会继续下去所以计算一个
+                 # 'flop_count',  # 分发三张牌的场次  flop-counts
                  'sum_ev',
                  'sum_outcome',
                  'sum_flop_ev',
@@ -44,18 +46,21 @@ class Blinds:
         self.round_count += has_record
         if not row_dic.get('is_seat'):
             return self
+        if row_dic['is_turn']:
+            self.turn_count += 1
+            flop_ev_player = row_dic.get('flop_ev_player', 0)
+            turn_ev_player = row_dic.get('turn_ev_player', 0)
+            self.sum_flop_ev += round(float(flop_ev_player), 5)
+            self.sum_turn_ev += round(float(turn_ev_player), 5)
+            self.avg_flop_ev = self.avg_get(self.sum_ev, self.turn_count)
+            self.avg_turn_ev = self.avg_get(self.sum_outcome, self.turn_count)
         ev_player = row_dic.get('ev_player')
         outcome_player = row_dic.get('outcome_player')
-        flop_ev_player = row_dic.get('flop_ev_player', 0)
-        turn_ev_player = row_dic.get('turn_ev_player', 0)
         self.sum_ev += round(float(ev_player), 5)
         self.sum_outcome += round(float(outcome_player), 5)
-        self.sum_flop_ev += round(float(flop_ev_player), 5)
-        self.sum_turn_ev += round(float(turn_ev_player), 5)
+
         self.avg_ev = self.avg_get(self.sum_ev, self.counts)
         self.avg_outcome = self.avg_get(self.sum_outcome, self.counts)
-        self.avg_flop_ev= self.avg_get(self.sum_ev, self.counts)
-        self.avg_turn_ev = self.avg_get(self.sum_outcome, self.counts)
 
     @staticmethod
     def avg_get(sum_c, count):
