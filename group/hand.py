@@ -4,14 +4,13 @@ class Hand:
                  'sum_outcome', 'avg_outcome', 'counts', 'row_dic',
                  'sum_is_turn', 'avg_is_turn', 'sum_is_flop', 'avg_is_flop',
                  'sum_is_seat', 'avg_is_seat', 'sum_is_push', 'avg_is_push',
-                 'all_counts', 'leader_counts'
-
+                 'all_counts', 'leader_counts',
                  )
 
     def __init__(self, group, group_key, row_dic=None):
         self.sum_ev = self.avg_ev = self.sum_outcome = self.avg_outcome = self.counts = self.sum_is_turn = 0
         self.avg_is_turn = self.sum_is_flop = self.avg_is_flop = self.sum_is_seat = self.avg_is_seat = 0
-        self.sum_is_push = self.avg_is_push = self.all_counts = self.leader_counts
+        self.sum_is_push = self.avg_is_push = self.all_counts = self.leader_counts = 0
         self.group = group
         self.group_key = group_key
         self.row_dic = row_dic
