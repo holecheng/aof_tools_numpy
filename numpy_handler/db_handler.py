@@ -32,8 +32,6 @@ def init_query():
                 yield row_key
             line = i.copy()
             hero_index = int(line.get('heroIndex', -1))
-            if not config.get_args('hero_index') and hero_index == -1:
-                continue
             row_dic = {k: v for k, v in line.items() if k in line_key}
             wait_update_list = player_key + IS_DIGIT_KEY
             row_dic.update(dict.fromkeys(wait_update_list, ''))
