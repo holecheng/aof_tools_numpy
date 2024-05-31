@@ -13,7 +13,7 @@ from db.db_loader import db_col
 logger = logging.getLogger()
 
 IS_DIGIT_KEY = ['stack', 'ev_player', 'outcome_player', 'flop_i', 'turn_i',
-                'straddle', 'ante', 'winner', 'is_seat', 'is_turn', 'is_flop', 'is_lead']  # 可统计数据（数字类型）
+                'straddle', 'ante', 'winner', 'is_seat', 'is_turn', 'is_flop', 'is_leader']  # 可统计数据（数字类型）
 
 
 def init_query():
@@ -64,12 +64,9 @@ def init_query():
                     player['card_num'] = ''
                 flop_insurance = players[hero_index].get('flopInsurance')
                 turn_insurance = players[hero_index].get('turnInsurance')
+                row_dic['is_leader'] = 1 if flop_insurance or turn_insurance else 0
                 player['flop_i'] = flop_insurance[0].get('betStacks', 0) if flop_insurance else 0
                 player['turn_i'] = turn_insurance[0].get('betStacks', 0) if turn_insurance else 0
-                if player['turn_i'] or player['turn_i']:
-                    player['is_lead'] = 1
-                else:
-                    player['is_lead'] = 0
                 if flop_limit or turn_limit:
                     if flop_limit and float(flop_limit) < player['flop']:
                         continue
