@@ -88,7 +88,9 @@ class NumpyReadDb:
         self.title = next(self.result_gen)
         self.hand_list = []
         self.hand_dic = {}
-        self.apply_player_id()
+        group = config.get_args('group')
+        if group in ['card_num', 'pId', 'blindLevel']:
+            self.apply_player_id(group)
         print('总共用时{}分'.format((time.time() - s) // 60000))
         # self.add_result()
 
@@ -100,33 +102,32 @@ class NumpyReadDb:
             print('数据处理已完成~')
             return False
 
-    def apply_player_id(self):
+    def apply_player_id(self, group):
         cnt = 0
         try:
             while True:
                 row_dic = self.get_generator()
-                player_id = row_dic['pId']
+                player_id = row_dic[group]
                 if not player_id:
                     continue
                 if row_dic['ai_count'] == row_dic['player_count']:
                     continue
                 cnt += 1
-                hand = Hand('pId', player_id, row_dic)
+                hand = Hand(group, player_id, row_dic)
                 if player_id not in self.hand_dic:
                     self.hand_dic[player_id] = hand
                 else:
                     self.hand_dic[player_id] += hand
                 if cnt and cnt % 10000 == 0:
                     print('已处理数据{} * 10000'.format(cnt // 10000))
-        except Exception as e:
-            print(e)
+        except Exception:
             print('数据处理完成, 总计 {}'.format(cnt))
             title = list(Hand.__slots__)
             title.remove('row_dic')
             np_ans = np.array(title)
             for _, v in self.hand_dic.items():
                 np_ans = np.vstack((np_ans,np.array([getattr(v, i) for i in title])))
-            self.write_excel(np_ans, 'player_id')
+            self.write_excel(np_ans, config.get_args('query_time') + group)
 
     def add_result(self):
         page = 0

@@ -8,12 +8,8 @@ class Hand:
                  )
 
     def __init__(self, group, group_key, row_dic=None):
-        self.sum_ev = self.avg_ev = self.sum_outcome = self.avg_outcome = self.counts = self.sum_is_turn = 0
-        self.avg_is_turn = self.sum_is_river = self.avg_is_flop = 0
-        self.sum_is_push = self.avg_is_push = self.leader_counts = 0
-        self.sum_flop_i = self.sum_turn_i = self.avg_flop_i = self.avg_turn_i = self.no_insurance = 0
-        # self.sum_is_seat = self.avg_is_seat = self.all_counts = 0
-        self.avg_leader_counts = 0
+        for i in self.__slots__:
+            self.__setattr__(i, 0)
         self.group = group
         self.group_key = group_key
         self.row_dic = row_dic
