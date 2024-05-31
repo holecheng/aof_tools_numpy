@@ -17,24 +17,13 @@ IS_DIGIT_KEY = ['stack', 'ev_player', 'outcome_player', 'flop_i', 'turn_i', 'ai_
                 'straddle', 'ante', 'winner', 'is_seat', 'is_turn', 'is_flop', 'is_leader']  # 可统计数据（数字类型）
 
 
-def get_pid_set(result):
-    pid_set = set()
-    for i in result:
-        line = i.copy()
-        hero_index = int(line.get('heroIndex', -1))
-        if hero_index != -1:
-            players = line.pop('players')
-            p_id = players[hero_index].get('pId')
-            if p_id:
-                pid_set.add(p_id)
-    return pid_set
+
 
 
 def init_query():
     # todo此处可以对处理数据进行进一步query筛选
     with db_col:
-        result = db_col.run_query()
-        pid_set = get_pid_set(result)
+        pid_set, result = db_col.run_query()
         plyer_limit = config.get_args('player')
         flop_limit = config.get_args('flop')
         turn_limit = config.get_args('turn')

@@ -55,7 +55,21 @@ class DBLoader:
                                                                              "%Y-%m-%d").timestamp()})
 
     def run_query(self):
-        return self.db.find(self.query)
+        pid_set = get_pid_set(self.db.find(self.query))
+        return pid_set, self.db.find(self.query)
+
+
+def get_pid_set(result):
+    pid_set = set()
+    for i in result:
+        line = i.copy()
+        hero_index = int(line.get('heroIndex', -1))
+        if hero_index != -1:
+            players = line.pop('players')
+            p_id = players[hero_index].get('pId')
+            if p_id:
+                pid_set.add(p_id)
+    return pid_set
 
 
 db_col = DBLoader()
