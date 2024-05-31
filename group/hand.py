@@ -1,11 +1,11 @@
-
 class Hand:
     __slots__ = ('group', 'group_key', 'sum_ev', 'avg_ev',
-                 'sum_outcome', 'avg_outcome', 'counts', 'row_dic',
-                 'sum_is_turn', 'avg_is_turn', 'sum_is_river', 'avg_is_flop',
-                 'sum_is_seat', 'avg_is_seat', 'sum_is_push', 'avg_is_push',
+                 'avg_outcome', 'counts', 'row_dic',
+                 'avg_flop_i', 'avg_turn_i', 'avg_is_seat',
+                 'avg_is_push', 'avg_is_turn', 'avg_is_flop',
                  'all_counts', 'leader_counts', 'sum_flop_i', 'sum_turn_i',
-                 'avg_flop_i', 'avg_turn_i', 'no_insurance'
+                 'no_insurance', 'sum_outcome', 'sum_is_turn', 'sum_is_seat',
+                 'sum_is_river', 'sum_is_push',
                  )
 
     def __init__(self, group, group_key, row_dic=None):
@@ -54,8 +54,4 @@ class Hand:
 
     @staticmethod
     def avg_get(sum_c, count):
-        return float(sum_c/ count)
-
-
-
-
+        return float(sum_c / count)

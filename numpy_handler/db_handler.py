@@ -102,6 +102,8 @@ class NumpyReadDb:
                 row_dic = self.get_generator()
                 cnt += 1
                 player_id = row_dic['pId']
+                if not player_id:
+                    continue
                 hand = Hand('pId', player_id, row_dic)
                 if player_id not in self.hand_dic:
                     self.hand_dic[player_id] = hand
