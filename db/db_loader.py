@@ -7,7 +7,7 @@ from datetime import datetime
 
 logger = logging.getLogger()
 
-COLUMNS = ['river', 'nash_range', 'players', 'turn', 'reqid', 'version', 'command', 'winners', 'ev'
+COLUMNS = ['river', 'nash_range', 'players', 'turn', 'reqid', 'version', 'command', 'winners', 'ev',
            'outcome', 'blindLevel', 'handNumber', 'leagueName']
 
 
@@ -65,15 +65,7 @@ class DBLoader:
         dic_zero = dict.fromkeys(list(set(COLUMNS) - pid_columns), 0)
         dic_one = dict.fromkeys(pid_columns, 1)
         dic_zero.update(dic_one)
-        print(dic_zero, type(dic_zero))
-        result = self.db.find(self.query, {'evoutcome': 0, 'turn': 0, 'handNumber': 0, 'reqid': 0, 'winners': 0, 'nash_range': 0,
-                                  'blindLevel': 0, 'version': 0, 'river': 0, 'leagueName': 0, 'command': 0,
-                                  'players': 1, 'heroIndex': 1}
-                     )
-        for i in result:
-            print(i)
-        pid_set = {}
-        return pid_set
+        return get_pid_set(self.db.find(self.query, dic_zero))
 
 
 def get_pid_set(result):
