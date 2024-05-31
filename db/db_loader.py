@@ -73,7 +73,6 @@ class DBLoader:
 
 def get_pid_set(result):
     pid_set = set()
-    print(len(result))
     for i in result:
         line = i.copy()
         hero_index = int(line.get('heroIndex', -1))
