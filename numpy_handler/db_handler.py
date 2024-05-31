@@ -20,7 +20,8 @@ IS_DIGIT_KEY = ['stack', 'ev_player', 'outcome_player', 'flop_i', 'turn_i', 'ai_
 def init_query():
     # todo此处可以对处理数据进行进一步query筛选
     with db_col:
-        pid_set, result = db_col.run_query()
+        pid_set = db_col.run_pid_set()
+        result = db_col.run_query()
         plyer_limit = config.get_args('player')
         flop_limit = config.get_args('flop')
         turn_limit = config.get_args('turn')
@@ -87,7 +88,6 @@ class NumpyReadDb:
         self.title = next(self.result_gen)
         self.hand_list = []
         self.hand_dic = {}
-        self.query_ai_count = collections.defaultdict(int)
         self.apply_player_id()
         print('总共用时{}分'.format((time.time() - s) // 60000))
         # self.add_result()

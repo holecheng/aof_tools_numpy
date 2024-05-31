@@ -59,12 +59,15 @@ class DBLoader:
 
     def run_query(self, columns=None):
         if not columns:
-            columns = COLUMNS
+            columns = {}
         else:
             columns = list(set(COLUMNS) - set(columns))
+        return self.db.find(self.query, dict.fromkeys(columns, 0))
+
+    def run_pid_set(self):
         pid_columns = {'heroIndex', 'players'}
         pid_set = get_pid_set(self.db.find(self.query, list(set(COLUMNS) - pid_columns)))
-        return pid_set, self.db.find(self.query, dict.fromkeys(columns, 0))
+        return pid_set
 
 
 def get_pid_set(result):
