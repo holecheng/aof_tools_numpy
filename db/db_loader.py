@@ -57,12 +57,8 @@ class DBLoader:
                     self.query['timestamp'].update({'$lt': datetime.strptime(end_timestamp.strip(),
                                                                              "%Y-%m-%d").timestamp()})
 
-    def run_query(self, columns=None):
-        if not columns:
-            columns = {}
-        else:
-            columns = list(set(COLUMNS) - set(columns))
-        return self.db.find(self.query, dict.fromkeys(columns, 0))
+    def run_query(self):
+        return self.db.find(self.query)
 
     def run_pid_set(self):
         pid_columns = {'heroIndex', 'players'}
