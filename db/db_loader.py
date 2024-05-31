@@ -70,7 +70,8 @@ class DBLoader:
                                   'blindLevel': 0, 'version': 0, 'river': 0, 'leagueName': 0, 'command': 0,
                                   'players': 1, 'heroIndex': 1}
                      )
-        get_pid_set(result)
+        for i in result:
+            print(i)
         pid_set = {}
         return pid_set
 
