@@ -14,7 +14,7 @@ from db.db_loader import db_col
 logger = logging.getLogger()
 
 IS_DIGIT_KEY = ['stack', 'ev_player', 'outcome_player', 'flop_i', 'turn_i', 'ai_count', 'player_count',
-                'straddle', 'ante', 'winner', 'is_seat', 'is_turn', 'is_flop', 'is_leader']  # 可统计数据（数字类型）
+                'straddle', 'ante', 'winner', 'is_seat', 'is_turn', 'is_flop', 'is_leader', 'flop_ev', 'turn_ev']  # 可统计数据（数字类型）
 
 
 def init_query():
@@ -26,7 +26,12 @@ def init_query():
         flop_limit = config.get_args('flop')
         turn_limit = config.get_args('turn')
         row_key = []
+        cnt = 0
         for i in result:
+            if cnt == 3:
+                print(i)
+            else:
+                cnt += 1
             line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName']
             player_key = ['pId', 'card_num', 'stack', 'seat', 'action', 'cards']
             if not row_key:
@@ -89,10 +94,39 @@ class NumpyReadDb:
         self.hand_list = []
         self.hand_dic = {}
         group = config.get_args('group')
-        if group in ['card_num', 'pId', 'blindLevel']:
+        if group in ['card_num', 'pId']:
             self.apply_player_id(group)
+        elif group == 'blindLevel':
+            self.apply_blinds_id(group)
         print('总共用时{}分'.format((time.time() - s) // 60000))
         # self.add_result()
+
+    def apply_blinds_id(self, group):
+        cnt = 0
+        try:
+            while True:
+                row_dic = self.get_generator()
+                blind_level = row_dic['blindLevel']
+                if not blind_level:
+                    continue
+                if row_dic['ai_count'] == row_dic['player_count']:
+                    continue
+                cnt += 1
+                hand = Hand(group, blind_level, row_dic)
+                if blind_level not in self.hand_dic:
+                    self.hand_dic[blind_level] = hand
+                else:
+                    self.hand_dic[blind_level] += hand
+                if cnt and cnt % 10000 == 0:
+                    print('已处理数据{} * 10000'.format(cnt // 10000))
+        except Exception:
+            print('数据处理完成, 总计 {}'.format(cnt))
+            title = list(Hand.__slots__)
+            title.remove('row_dic')
+            np_ans = np.array(title)
+            for _, v in self.hand_dic.items():
+                np_ans = np.vstack((np_ans, np.array([getattr(v, i) for i in title])))
+            self.write_excel(np_ans, config.get_args('query_time') + group)
 
     def get_generator(self):
         try:

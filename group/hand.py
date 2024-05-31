@@ -1,8 +1,8 @@
 class Hand:
-    __slots__ = ('group', 'group_key', 'sum_ev', 'avg_ev',
+    __slots__ = ('group', 'group_key', 'avg_ev',
                  'avg_outcome', 'avg_flop_i', 'avg_turn_i', 'avg_leader_counts',
                  'avg_is_push', 'avg_is_turn', 'avg_is_flop', 'counts', 'row_dic',
-                 'leader_counts', 'sum_flop_i', 'sum_turn_i',
+                 'leader_counts', 'sum_flop_i', 'sum_turn_i', 'sum_ev',
                  'no_insurance', 'sum_outcome', 'sum_is_turn',
                  'sum_is_river', 'sum_is_push',
                  )
