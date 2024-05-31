@@ -10,13 +10,6 @@ class Hand:
     def __eq__(self, other):
         return self.group == other.group
 
-    def __add__(self, other):
-        self.count += 1
-        row_dic = other.row_dic
-        self.sum_ev += row_dic.get('ev_player')
-        self.sum_outcome += row_dic.get('outcome_player')
-        self.avg_ev = float(self.sum_ev / self.count)
-        self.avg_outcome = float(self.sum_ev / self.count)
 
 
 li = [Hand({'play_id': 99909}, {}), Hand({'play_id': 10000}, {})]

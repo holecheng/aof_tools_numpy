@@ -14,8 +14,8 @@ class Hand:
     def __add__(self, other):
         self.counts += 1
         row_dic = other.row_dic
-        self.sum_ev += row_dic.get('ev_player')
-        self.sum_outcome += row_dic.get('outcome_player')
+        self.sum_ev += float(row_dic.get('ev_player', 0))
+        self.sum_outcome += float(row_dic.get('outcome_player', 0))
         self.avg_ev = float(self.sum_ev / self.counts)
         self.avg_outcome = float(self.sum_ev / self.counts)
         
