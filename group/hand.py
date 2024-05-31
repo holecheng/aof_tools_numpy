@@ -18,6 +18,7 @@ class Hand:
         self.sum_outcome += float(row_dic.get('outcome_player', 0))
         self.avg_ev = float(self.sum_ev / self.counts)
         self.avg_outcome = float(self.sum_ev / self.counts)
+        return self
         
 
 
