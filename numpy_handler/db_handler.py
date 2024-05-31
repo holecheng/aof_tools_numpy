@@ -17,9 +17,6 @@ IS_DIGIT_KEY = ['stack', 'ev_player', 'outcome_player', 'flop_i', 'turn_i', 'ai_
                 'straddle', 'ante', 'winner', 'is_seat', 'is_turn', 'is_flop', 'is_leader']  # 可统计数据（数字类型）
 
 
-
-
-
 def init_query():
     # todo此处可以对处理数据进行进一步query筛选
     with db_col:

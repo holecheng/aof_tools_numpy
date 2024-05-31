@@ -57,7 +57,7 @@ class DBLoader:
                     self.query['timestamp'].update({'$lt': datetime.strptime(end_timestamp.strip(),
                                                                              "%Y-%m-%d").timestamp()})
 
-    def run_query(self, columns):
+    def run_query(self, columns=None):
         if not columns:
             columns = COLUMNS
         else:
