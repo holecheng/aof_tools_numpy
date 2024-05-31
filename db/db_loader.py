@@ -66,6 +66,7 @@ class DBLoader:
         dic_one = dict.fromkeys(pid_columns)
         dic_zero.update(dic_one)
         pid_set = get_pid_set(self.db.find(self.query, dic_zero))
+        print(pid_set)
         return pid_set
 
 
