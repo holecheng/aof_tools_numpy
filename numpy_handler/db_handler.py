@@ -101,6 +101,7 @@ class NumpyReadDb:
 
     def apply_player_id(self):
         try:
+            print(11111111111111, '运行中')
             row_dic = self.get_generator()
             player_id = row_dic['pId']
             hand = Hand('pId', player_id, row_dic)
