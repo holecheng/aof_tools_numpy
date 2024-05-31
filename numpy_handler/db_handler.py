@@ -111,9 +111,7 @@ class NumpyReadDb:
             while True:
                 row_dic = self.get_generator()
                 blind_level = row_dic['blindLevel']
-                if not blind_level:
-                    continue
-                if row_dic['ai_count'] == row_dic['player_count']:
+                if not blind_level or row_dic['ai_count'] == row_dic['player_count']:
                     continue
                 cnt += 1
                 blinds = Blinds(group, blind_level, row_dic)
@@ -146,9 +144,7 @@ class NumpyReadDb:
             while True:
                 row_dic = self.get_generator()
                 player_id = row_dic[group]
-                if not player_id:
-                    continue
-                if row_dic['ai_count'] == row_dic['player_count']:
+                if not player_id or row_dic['ai_count'] == row_dic['player_count']:
                     continue
                 cnt += 1
                 hand = Hand(group, player_id, row_dic)

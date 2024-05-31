@@ -60,6 +60,7 @@ class Blinds:
         self.sum_outcome += round(float(outcome_player), 5)
         self.avg_ev = self.avg_get(self.sum_ev, self.counts)
         self.avg_outcome = self.avg_get(self.sum_outcome, self.counts)
+        return self
 
     @staticmethod
     def avg_get(sum_c, count):
