@@ -46,7 +46,7 @@ def init_query():
             row_dic.update({'outcome_player': outcome, 'ev_player': ev})
             if hero_index != -1:
                 player = {k: v for k, v in players[hero_index].items() if k in wait_update_list}
-                row_dic['is_push'] = 1 if row_dic['action'] == 'Push' else 0
+                row_dic['is_push'] = 1 if player['action'] == 'Push' else 0
                 if plyer_limit == str(player.get('pId', '')):
                     continue
                 winners = line.get('winners')
