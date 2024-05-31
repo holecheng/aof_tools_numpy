@@ -4,7 +4,7 @@ class Hand:
                  'avg_is_push', 'avg_is_turn', 'avg_is_flop', 'counts', 'row_dic',
                  'leader_counts', 'sum_flop_i', 'sum_turn_i',
                  'no_insurance', 'sum_outcome', 'sum_is_turn',
-                 'sum_is_river', 'sum_is_push', 'sum_turn',
+                 'sum_is_river', 'sum_is_push',
                  )
 
     def __init__(self, group, group_key, row_dic=None):
