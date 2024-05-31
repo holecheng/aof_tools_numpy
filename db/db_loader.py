@@ -7,6 +7,9 @@ from datetime import datetime
 
 logger = logging.getLogger()
 
+COLUMNS = ['river', 'nash_range', 'players', 'turn', 'reqid', 'version', 'command', 'winners', 'ev'
+           'outcome', 'blindLevel', 'handNumber', 'leagueName']
+
 
 class DBLoader:
 
@@ -54,9 +57,14 @@ class DBLoader:
                     self.query['timestamp'].update({'$lt': datetime.strptime(end_timestamp.strip(),
                                                                              "%Y-%m-%d").timestamp()})
 
-    def run_query(self):
-        pid_set = get_pid_set(self.db.find(self.query))
-        return pid_set, self.db.find(self.query)
+    def run_query(self, columns):
+        if not columns:
+            columns = COLUMNS
+        else:
+            columns = list(set(COLUMNS) - set(columns))
+        pid_columns = {'heroIndex', 'players'}
+        pid_set = get_pid_set(self.db.find(self.query, list(set(COLUMNS) - pid_columns)))
+        return pid_set, self.db.find(self.query, dict.fromkeys(columns, 0))
 
 
 def get_pid_set(result):

@@ -12,12 +12,12 @@ class Hand:
 
 
 
-li = [Hand({'play_id': 99909}, {}), Hand({'play_id': 10000}, {})]
-c = Hand({'play_id': 99909}, {'ev_player':2, 'outcome_player': 3})
 
 
-print(Hand(1, 2).group)
 
+a = [1, 2, 4]
+b = [1, 2]
+print()
 
 
 
