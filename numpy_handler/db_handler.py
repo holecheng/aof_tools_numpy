@@ -46,8 +46,8 @@ def init_query():
             players = line.pop('players')
             outcome = float(line.pop('outcome')[hero_index]) if hero_index != -1 else 0
             ev = float(line.pop('ev')[hero_index]) if hero_index != -1 else 0
-            flop_ev_list = line.pop('flop_ev')
-            turn_ev_list = line.pop('turn_ev')
+            flop_ev_list = line.get('flop_ev')
+            turn_ev_list = line.get('turn_ev')
             if flop_ev_list and turn_ev_list:
                 row_dic['flop_ev'] = float(line.pop('flop_ev')[hero_index]) if hero_index != -1 else 0
                 row_dic['turn_ev'] = float(line.pop('turn_ev')[hero_index]) if hero_index != -1 else 0
