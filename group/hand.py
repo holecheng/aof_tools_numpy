@@ -21,6 +21,10 @@ class Hand:
     def __add__(self, other):
         self.all_counts += 1  # 总场次
         row_dic = other.row_dic
+        self.sum_is_seat += row_dic.get('is_seat')
+        self.avg_is_seat = self.avg_get(self.sum_is_seat, self.all_counts)
+        if row_dic.get('is_seat'):
+            return self
         self.leader_counts += row_dic.get('is_leader')  # 领先总场次
         self.sum_is_turn += row_dic.get('sum_is_turn')
         self.sum_is_flop += row_dic.get('sum_is_flop')
@@ -28,10 +32,6 @@ class Hand:
         self.avg_is_turn = self.avg_get(self.sum_is_turn, self.leader_counts)
         ev_player = row_dic.get('ev_player')
         outcome_player = row_dic.get('outcome_player')
-        self.sum_is_seat += row_dic.get('is_seat')
-        self.avg_is_seat = self.avg_get(self.sum_is_seat, self.all_counts)
-        if ev_player or outcome_player:
-            return self
         self.counts += 1  # 有效落座场次
         self.sum_ev += float(ev_player)
         self.sum_is_push += row_dic.get('is_push')
