@@ -38,8 +38,8 @@ def init_query():
             row_dic['timestamp'] = datetime.datetime.fromtimestamp(line.get('timestamp')).strftime('%Y-%m-%d %H:%M:%S')
             row_dic['blindLevel'] = sign_blind_level(line.get('blindLevel')['blinds'])
             row_dic['is_seat'] = 1 if hero_index != -1 else 0
-            row_dic['is_turn'] = 1 if line.get('turn') else 0
-            row_dic['is_flop'] = 1 if line.get('flop') else 0
+            row_dic['is_turn'] = 1 if line.get('turn') else 0  # 是否turn
+            row_dic['is_river'] = 1 if line.get('river') else 0  # 是否存在river
             players = line.pop('players')
             outcome = float(line.pop('outcome')[hero_index]) if hero_index != -1 else 0
             ev = float(line.pop('ev')[hero_index]) if hero_index != -1 else 0
