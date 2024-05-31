@@ -1,3 +1,4 @@
+import collections
 import logging
 import datetime
 import time
@@ -12,14 +13,28 @@ from db.db_loader import db_col
 
 logger = logging.getLogger()
 
-IS_DIGIT_KEY = ['stack', 'ev_player', 'outcome_player', 'flop_i', 'turn_i',
+IS_DIGIT_KEY = ['stack', 'ev_player', 'outcome_player', 'flop_i', 'turn_i', 'ai_count', 'player_count',
                 'straddle', 'ante', 'winner', 'is_seat', 'is_turn', 'is_flop', 'is_leader']  # 可统计数据（数字类型）
+
+
+def get_pid_set(result):
+    pid_set = set()
+    for i in result:
+        line = i.copy()
+        hero_index = int(line.get('heroIndex', -1))
+        if hero_index != -1:
+            players = line.pop('players')
+            p_id = players[hero_index].get('pId')
+            if p_id:
+                pid_set.add(p_id)
+    return pid_set
 
 
 def init_query():
     # todo此处可以对处理数据进行进一步query筛选
     with db_col:
         result = db_col.run_query()
+        pid_set = get_pid_set(result)
         plyer_limit = config.get_args('player')
         flop_limit = config.get_args('flop')
         turn_limit = config.get_args('turn')
@@ -46,9 +61,12 @@ def init_query():
             row_dic.update({'outcome_player': outcome, 'ev_player': ev})
             if hero_index != -1:
                 player = {k: v for k, v in players[hero_index].items() if k in wait_update_list}
-                row_dic['is_push'] = 1 if player['action'] == 'Push' else 0
-                if plyer_limit == str(player.get('pId', '')):
+                player_id = player.get('pId', '')
+                if plyer_limit == player_id:
                     continue
+                row_dic['ai_count'] = sum(1 if i.get('pId') in pid_set else 0 for i in players)
+                row_dic['player_count'] = len(players)
+                row_dic['is_push'] = 1 if player['action'] == 'Push' else 0
                 winners = line.get('winners')
                 if winners and str(player.get('pId', '')) in winners:
                     row_dic['winner'] = 1
@@ -83,6 +101,7 @@ class NumpyReadDb:
         self.title = next(self.result_gen)
         self.hand_list = []
         self.hand_dic = {}
+        self.query_ai_count = collections.defaultdict(int)
         self.apply_player_id()
         print('总共用时{}分'.format((time.time() - s) // 60000))
         # self.add_result()
@@ -103,6 +122,8 @@ class NumpyReadDb:
                 cnt += 1
                 player_id = row_dic['pId']
                 if not player_id:
+                    continue
+                if row_dic['ai_count'] == row_dic['player_count']:
                     continue
                 hand = Hand('pId', player_id, row_dic)
                 if player_id not in self.hand_dic:
