@@ -62,7 +62,10 @@ class DBLoader:
 
     def run_pid_set(self):
         pid_columns = {'heroIndex', 'players'}
-        pid_set = get_pid_set(self.db.find(self.query, list(set(COLUMNS) - pid_columns)))
+        dic_zero = dict.fromkeys(list(set(COLUMNS) - pid_columns))
+        dic_one = dict.fromkeys(pid_columns)
+        dic_zero.update(dic_one)
+        pid_set = get_pid_set(self.db.find(self.query, dic_zero))
         return pid_set
 
 

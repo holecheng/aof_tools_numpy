@@ -17,7 +17,9 @@ class Hand:
 
 a = [1, 2, 4]
 b = [1, 2]
-print()
+c = dict.fromkeys(list(set(a)-set(b)), 0)
+c.update(dict.fromkeys(b, 1))
+print(c)
 
 
 
