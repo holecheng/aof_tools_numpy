@@ -4,13 +4,15 @@ class Hand:
                  'sum_outcome', 'avg_outcome', 'counts', 'row_dic',
                  'sum_is_turn', 'avg_is_turn', 'sum_is_flop', 'avg_is_flop',
                  'sum_is_seat', 'avg_is_seat', 'sum_is_push', 'avg_is_push',
-                 'all_counts', 'leader_counts',
+                 'all_counts', 'leader_counts', 'sum_flop_i', 'sum_turn_i',
+                 'avg_flop_i', 'avg_turn_i'
                  )
 
     def __init__(self, group, group_key, row_dic=None):
         self.sum_ev = self.avg_ev = self.sum_outcome = self.avg_outcome = self.counts = self.sum_is_turn = 0
         self.avg_is_turn = self.sum_is_flop = self.avg_is_flop = self.sum_is_seat = self.avg_is_seat = 0
         self.sum_is_push = self.avg_is_push = self.all_counts = self.leader_counts = 0
+        self.sum_flop_i = self.sum_turn_i = self.avg_flop_i = self.avg_turn_i = 0
         self.group = group
         self.group_key = group_key
         self.row_dic = row_dic
@@ -26,8 +28,13 @@ class Hand:
         if not row_dic.get('is_seat'):
             return self
         self.leader_counts += row_dic.get('is_leader')  # 领先总场次
-        self.sum_is_turn += row_dic.get('sum_is_turn')
-        self.sum_is_flop += row_dic.get('sum_is_flop')
+        if row_dic.get('is_leader'):
+            self.sum_flop_i += row_dic.get('flop_i')
+            self.sum_turn_i += row_dic.get('turn_i')
+            self.avg_flop_i = self.avg_get(self.sum_flop_i, self.leader_counts)
+            self.avg_turn_i = self.avg_get(self.sum_turn_i, self.leader_counts)
+        self.sum_is_turn += row_dic.get('is_turn')
+        self.sum_is_flop += row_dic.get('is_flop')
         self.avg_is_flop = self.avg_get(self.sum_is_flop, self.leader_counts)
         self.avg_is_turn = self.avg_get(self.sum_is_turn, self.leader_counts)
         ev_player = row_dic.get('ev_player')

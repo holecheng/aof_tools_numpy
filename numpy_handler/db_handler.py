@@ -66,9 +66,9 @@ def init_query():
                 player['flop_i'] = flop_insurance[0].get('betStacks', 0) if flop_insurance else 0
                 player['turn_i'] = turn_insurance[0].get('betStacks', 0) if turn_insurance else 0
                 if flop_limit or turn_limit:
-                    if flop_limit and float(flop_limit) < player['flop']:
+                    if flop_limit and float(flop_limit) < player['flop_i']:
                         continue
-                    if turn_limit and float(turn_limit) < player['turn']:
+                    if turn_limit and float(turn_limit) < player['turn_i']:
                         continue
                 row_dic.update(player)
 
