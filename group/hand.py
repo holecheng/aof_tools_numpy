@@ -23,7 +23,7 @@ class Hand:
         row_dic = other.row_dic
         self.sum_is_seat += row_dic.get('is_seat')
         self.avg_is_seat = self.avg_get(self.sum_is_seat, self.all_counts)
-        if row_dic.get('is_seat'):
+        if not row_dic.get('is_seat'):
             return self
         self.leader_counts += row_dic.get('is_leader')  # 领先总场次
         self.sum_is_turn += row_dic.get('sum_is_turn')
