@@ -123,7 +123,7 @@ class NumpyReadDb:
                     print('已处理数据{} * 10000'.format(cnt // 10000))
         except Exception:
             print('数据处理完成, 总计 {}'.format(cnt))
-            title = list(Hand.__slots__)
+            title = list(Blinds.__slots__)
             title.remove('row_dic')
             np_ans = np.array(title)
             for _, v in self.group_dic.items():
