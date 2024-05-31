@@ -2,6 +2,7 @@ import logging
 import datetime
 import time
 
+from group.hand import Hand
 from handler import get_analysis, AvgStrategy
 from utils import sign_blind_level, to_excel_numpy, get_group_avg_nps
 import numpy as np
@@ -85,8 +86,10 @@ class NumpyReadDb:
         s = time.time()
         self.result_gen = init_query()
         self.title = next(self.result_gen)
-        self.add_result()
-        print(time.time() - s)
+        self.hand_list = []
+        self.hand_dic = {}
+        self.apply_player_id()
+        # self.add_result()
 
     def get_generator(self):
         try:
@@ -96,51 +99,52 @@ class NumpyReadDb:
             print('数据处理已完成~')
             return False
 
+    def apply_player_id(self):
+        try:
+            row_dic = self.get_generator()
+            player_id = row_dic['pId']
+            hand = Hand('pId', player_id, row_dic)
+            if player_id not in self.hand_dic:
+                self.hand_dic[player_id] = hand
+            else:
+                self.hand_dic[player_id] += hand
+        except Exception as e:
+            print('数据处理完成')
+            title = list(Hand.__slots__)
+            title.remove('row_dic')
+            np_ans = np.array(title)
+            for _, v in self.hand_dic.items():
+                title = list(v.__slots__)
+                np_ans = np.vstack((np_ans,np.array([getattr(v, i) for i in title])))
+            self.write_excel(np_ans, 'player_id')
+
     def add_result(self):
-        final = 1
-        np_apply = np.array(self.title)
-        page_row = 0
         page = 0
+        final = 1
+        np_apply = []
         while final:
-            try:
+            nps = [self.title]
+            page_row = 10000
+            while page_row:
                 row_dic = self.get_generator()
-                np_apply = np.vstack((np_apply, np.array([row_dic[i] for i in self.title])))
-                page_row += 1
-                if page_row % 10000 == 0 and page:
-                    page += 1
-                    print('处理数据 {}*10000'.format(page))
-            except Exception as e:
-                print('数据处理完毕！')
-        np_apply = get_analysis(AvgStrategy(), np_apply)
-        self.write_excel(np_apply, str(page) + str(page_row) + '_{}'.format(config.get_args('types')))
-
-        # while final:
-        #     nps = [self.title]
-        #     page_row = 10000
-        #     while page_row:
-        #         row_dic = self.get_generator()
-        #         if row_dic:
-        #             page_row -= 1
-        #             nps.append([row_dic[i] for i in self.title])
-        #         else:
-        #             final = 0
-        #             print('数据处理完毕！')
-        #             break
-        #     else:
-        #         page += 1
-        #         # self.write_excel(nps, str(page))
-        #         npd = get_group_avg_nps(nps)
-        #         np_apply.append(get_analysis(AvgStrategy(), npd))
-        #         print('已完成处理数据第{}页'.format(page))
-        #         if len(np_apply) > 30:
-        #             title = np_apply[0]
-        #             nps = np.vstack([title]+[c[1:,] for c in np_apply])
-        #             new_npd = get_group_avg_nps(nps)
-        #             np_apply.append(new_npd)
-
-
-
-
+                if row_dic:
+                    page_row -= 1
+                    nps.append([row_dic[i] for i in self.title])
+                else:
+                    final = 0
+                    print('数据处理完毕！')
+                    break
+            else:
+                page += 1
+                # self.write_excel(nps, str(page))
+                npd = get_group_avg_nps(nps)
+                np_apply.append(get_analysis(AvgStrategy(), npd))
+                print('已完成处理数据第{}页'.format(page))
+                if len(np_apply) > 30:
+                    title = np_apply[0]
+                    nps = np.vstack([title]+[c[1:,] for c in np_apply])
+                    new_npd = get_group_avg_nps(nps)
+                    np_apply.append(new_npd)
                 # self.write_excel(np_apply, str(page) + '_{}'.format(config.get_args('types')))
 
     @staticmethod
