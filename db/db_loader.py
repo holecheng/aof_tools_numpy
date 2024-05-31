@@ -65,6 +65,7 @@ class DBLoader:
         dic_zero = dict.fromkeys(list(set(COLUMNS) - pid_columns))
         dic_one = dict.fromkeys(pid_columns)
         dic_zero.update(dic_one)
+        print(dic_zero)
         pid_set = get_pid_set(self.db.find(self.query, dic_zero))
         print(pid_set)
         return pid_set
@@ -72,6 +73,7 @@ class DBLoader:
 
 def get_pid_set(result):
     pid_set = set()
+    print(len(result))
     for i in result:
         line = i.copy()
         hero_index = int(line.get('heroIndex', -1))
