@@ -101,14 +101,14 @@ class NumpyReadDb:
 
     def apply_player_id(self):
         try:
-            print(11111111111111, '运行中')
-            row_dic = self.get_generator()
-            player_id = row_dic['pId']
-            hand = Hand('pId', player_id, row_dic)
-            if player_id not in self.hand_dic:
-                self.hand_dic[player_id] = hand
-            else:
-                self.hand_dic[player_id] += hand
+            while True:
+                row_dic = self.get_generator()
+                player_id = row_dic['pId']
+                hand = Hand('pId', player_id, row_dic)
+                if player_id not in self.hand_dic:
+                    self.hand_dic[player_id] = hand
+                else:
+                    self.hand_dic[player_id] += hand
         except Exception as e:
             print('数据处理完成')
             title = list(Hand.__slots__)
