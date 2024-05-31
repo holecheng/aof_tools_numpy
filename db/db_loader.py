@@ -72,7 +72,6 @@ class DBLoader:
 def get_pid_set(result):
     pid_set = set()
     for i in result:
-        print(i)
         hero_index = int(i.get('heroIndex', -1))
         if hero_index != -1:
             players = i.pop('players')
