@@ -58,7 +58,6 @@ class Blinds:
         outcome_player = row_dic.get('outcome_player')
         self.sum_ev += round(float(ev_player), 5)
         self.sum_outcome += round(float(outcome_player), 5)
-
         self.avg_ev = self.avg_get(self.sum_ev, self.counts)
         self.avg_outcome = self.avg_get(self.sum_outcome, self.counts)
 

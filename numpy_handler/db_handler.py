@@ -28,10 +28,6 @@ def init_query():
         row_key = []
         cnt = 0
         for i in result:
-            if cnt == 3:
-                print(i)
-            else:
-                cnt += 1
             line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName']
             player_key = ['pId', 'card_num', 'stack', 'seat', 'action', 'cards']
             if not row_key:
@@ -50,6 +46,13 @@ def init_query():
             players = line.pop('players')
             outcome = float(line.pop('outcome')[hero_index]) if hero_index != -1 else 0
             ev = float(line.pop('ev')[hero_index]) if hero_index != -1 else 0
+            flop_ev_list = line.pop('flop_ev')
+            turn_ev_list = line.pop('turn_ev')
+            if flop_ev_list and turn_ev_list:
+                row_dic['flop_ev'] = float(line.pop('flop_ev')[hero_index]) if hero_index != -1 else 0
+                row_dic['turn_ev'] = float(line.pop('turn_ev')[hero_index]) if hero_index != -1 else 0
+            else:
+                row_dic['flop_ev'] = row_dic['turn_ev'] = 0
             row_dic.update({'outcome_player': outcome, 'ev_player': ev})
             if hero_index != -1:
                 player = {k: v for k, v in players[hero_index].items() if k in wait_update_list}
