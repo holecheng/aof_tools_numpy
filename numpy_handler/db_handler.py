@@ -119,7 +119,6 @@ class NumpyReadDb:
             title.remove('row_dic')
             np_ans = np.array(title)
             for _, v in self.hand_dic.items():
-                title = list(v.__slots__)
                 np_ans = np.vstack((np_ans,np.array([getattr(v, i) for i in title])))
             self.write_excel(np_ans, 'player_id')
 
