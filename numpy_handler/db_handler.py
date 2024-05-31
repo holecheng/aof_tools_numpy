@@ -105,12 +105,12 @@ class NumpyReadDb:
         try:
             while True:
                 row_dic = self.get_generator()
-                cnt += 1
                 player_id = row_dic['pId']
                 if not player_id:
                     continue
                 if row_dic['ai_count'] == row_dic['player_count']:
                     continue
+                cnt += 1
                 hand = Hand('pId', player_id, row_dic)
                 if player_id not in self.hand_dic:
                     self.hand_dic[player_id] = hand
