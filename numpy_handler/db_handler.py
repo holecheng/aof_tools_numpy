@@ -32,7 +32,7 @@ def init_query():
             player_key = ['pId', 'card_num', 'action', 'cards']
             if not row_key:
                 row_key = line_key + player_key + IS_DIGIT_KEY
-                yield [row_key]
+                yield row_key
             line = i.copy()
             hand_num = line.get('handNumber')
             if hand_num in query_round:
@@ -46,6 +46,7 @@ def init_query():
                 continue  # 表演赛不计入统计
             row_list = []
             for hero_index, player in enumerate(players):
+                print(11111111111111)
                 row_dic = collections.defaultdict(str)
                 if player.get('pid') not in pid_set:
                     continue  # 非AI玩家暂不分析
@@ -93,7 +94,7 @@ class NumpyReadDb:
     def __init__(self):
         s = time.time()
         self.result_gen = init_query()
-        self.title = next(self.result_gen)[0]
+        self.title = next(self.result_gen)
         self.format_list = [Blinds, Hand]
         self.group_dic = {}
         self.group = config.get_args('group')
