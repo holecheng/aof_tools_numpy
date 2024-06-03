@@ -104,6 +104,8 @@ class NumpyReadDb:
         if config.get_args('all'):
             file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'db_file', config.get_args('query_time') + 'all.csv')
             self.f = open(file_path, 'a+', encoding='utf-8')
+            if os.path.exists(file_path):
+                self.f.truncate(0)
             self.f.write(','.join(self.title) + '\n')
         if self.group in ['card_num', 'pId']:
             self.get_row_result(0)
