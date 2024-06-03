@@ -120,7 +120,7 @@ class NumpyReadDb:
                 if config.get_args('all'):
                     self.write_to_all_excel(row_dic)
                 if config.get_args('hand_detail'):
-                    self.write_to_head_detail_excel(row_dic)
+                    self.write_to_hand_detail_excel(row_dic)
                 if cnt and cnt % 10000 == 0:
                     print('已处理数据{} * 10000'.format(cnt // 10000))
         except Exception as e:
@@ -164,7 +164,7 @@ class NumpyReadDb:
         row = [str(row_dic[k]) for k in self.title]
         self.f.write(','.join(row) + '\n')
 
-    def write_to_head_detail_excel(self, row_dic):
+    def write_to_hand_detail_excel(self, row_dic):
         group = row_dic[self.group]
         if not group or row_dic['ai_count'] == row_dic['player_count'] and row_dic['is_seat'] == 1:
             return
