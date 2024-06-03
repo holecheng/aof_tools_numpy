@@ -135,10 +135,11 @@ class NumpyReadDb:
         if not group or row_dic['ai_count'] == row_dic['player_count']:
             return
         groups = data_format(self.group, group, row_dic)
-        if groups not in self.group_dic:
-            self.group_dic[group] = groups
+        group_key = groups.group_key
+        if group_key not in self.group_dic:
+            self.group_dic[group_key] = groups
         else:
-            self.group_dic[group] += groups
+            self.group_dic[group_key] += groups
 
     def get_generator(self):
         try:
