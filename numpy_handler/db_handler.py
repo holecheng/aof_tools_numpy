@@ -92,7 +92,6 @@ class NumpyReadDb:
         s = time.time()
         self.result_gen = init_query()
         self.title = next(self.result_gen)
-        print('数据key如下{}'.format(self.title))
         self.format_list = [Blinds, Hand]
         self.group_dic = {}
         self.group = config.get_args('group')
