@@ -60,4 +60,4 @@ class Hand:
 
     @staticmethod
     def avg_get(sum_c, count):
-        return round(float(sum_c / count), 5)
+        return float(sum_c / count)
