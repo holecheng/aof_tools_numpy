@@ -101,6 +101,10 @@ class NumpyReadDb:
         self.format_list = [Blinds, Hand]
         self.group_dic = {}
         self.group = config.get_args('group')
+        if config.get_args('all'):
+            file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'db_file', config.get_args('query_time') + 'all.csv')
+            self.f = open(file_path, 'a+', encoding='utf-8')
+            self.f.write(','.join(self.title) + '\n')
         if self.group in ['card_num', 'pId']:
             self.get_row_result(0)
         if self.group == 'blindLevel':
@@ -121,6 +125,8 @@ class NumpyReadDb:
                     print('已处理数据{} * 10000'.format(cnt // 10000))
         except Exception:
             print('数据处理完成, 总计 {}'.format(cnt))
+            if self.f:
+                self.f.close()
             title = list(data_format.__slots__)
             title.remove('row_dic')
             self.title = title
@@ -155,14 +161,7 @@ class NumpyReadDb:
         to_excel_numpy(nps, 'db', page)
 
     def write_to_all_excel(self, row_dic):
-        file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'db_file',
-                                      config.get_args('query_time') + 'all.csv',
-                                      )
-        with open(file_path, 'a+', encoding='utf-8') as f:
-            if not os.path.exists(file_path):
-                print(111111111)
-                f.write(','.join(self.title) + '\n')
-            f.write(','.join(row_dic) + '\n')
+        self.f.write(','.join(row_dic) + '\n')
 
     # def add_result(self):
     #     page = 0
