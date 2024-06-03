@@ -40,11 +40,11 @@ def init_query():
             else:
                 query_round.add(hand_num)
             players = line.pop('players')
-            ai_count = sum(1 if i.get('pId') in pid_set else 0 for i in players)
-            player_count = len(players)
+            players_copy = players.copy()
+            ai_count = sum(1 if i.get('pId') in pid_set else 0 for i in players_copy)
+            player_count = len(players_copy)
             if ai_count == player_count:
                 continue  # 表演赛不计入统计
-            print(111111111111111,players)
             for hero_index, player in enumerate(players):
                 row_dic = collections.defaultdict(str)
                 if player.get('pid') not in pid_set:
