@@ -46,7 +46,7 @@ def init_query():
                 continue  # 表演赛不计入统计
             for hero_index, player in enumerate(players):
                 row_dic = collections.defaultdict(str)
-                p_id = player.get('pid')
+                p_id = player.get('pId')
                 if not p_id or p_id not in pid_set:
                     print(p_id)
                     continue  # 非AI玩家暂不分析
