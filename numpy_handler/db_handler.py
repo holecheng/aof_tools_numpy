@@ -163,7 +163,7 @@ class NumpyReadDb:
         with pd.ExcelWriter(str(file_path), engine='openpyxl', mode='a', if_sheet_exists='overlay') as writer:
             df1 = pd.DataFrame(pd.read_excel(str(file_path), sheet_name='sheet1'))
             df_rows = df1.shape[0]
-            df_data = pd.DataFrame(row_dic)
+            df_data = pd.DataFrame(row_dic, index=[0])
             df_data.to_excel(writer, 'sheet1', startrow=df_rows + 1,
                              header=False, index=False, )
 
