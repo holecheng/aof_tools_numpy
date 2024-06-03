@@ -130,6 +130,7 @@ class NumpyReadDb:
                 if cnt and cnt % 10000 == 0:
                     print('已处理数据{} * 10000'.format(cnt // 10000))
         except Exception as e:
+            print(e)
             print('数据处理完成, 总计 {}'.format(cnt))
             if self.f:
                 self.f.close()
