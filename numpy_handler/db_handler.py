@@ -166,7 +166,7 @@ class NumpyReadDb:
 
     def write_to_hand_detail_excel(self, row_dic):
         group = row_dic[self.group]
-        if not group or row_dic['ai_count'] == row_dic['player_count'] and row_dic['is_seat'] == 1:
+        if not group or row_dic['ai_count'] == row_dic['player_count'] or row_dic['is_seat'] == 0:
             return
         row = [str(row_dic[k]) for k in ['pId', 'handNumber']]
         self.f.write(','.join(row) + '\n')
