@@ -193,12 +193,11 @@ class NumpyReadDb:
         print('写入信息为{}'.format(str(file_path)))
         if not os.path.exists(file_path):
             print(self.title, type(self.title))
-            df_data = pd.DataFrame(self.title, index=[0])
+            df_data = pd.DataFrame(self.title, index=self.title)
             df_data.to_excel(str(file_path), 'sheet1', index=False)
         with pd.ExcelWriter(str(file_path), engine='openpyxl', mode='a') as writer:
             df1 = pd.DataFrame(pd.read_excel(str(file_path), sheet_name='sheet1'))
             df_rows = df1.shape[0]
-            df_data = pd.DataFrame(self.title, index=[0])
-            print(df_data.shape, df_rows)
+            df_data = pd.DataFrame(row_dic, index=self.title)
             df_data.to_excel(writer, 'sheet1', startrow=df_rows + 1,
                              header=False, index=False)
