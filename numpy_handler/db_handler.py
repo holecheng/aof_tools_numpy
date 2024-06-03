@@ -84,9 +84,7 @@ def init_query():
                 player['turn_i'] = turn_insurance[0].get('betStacks', '0') if turn_insurance else ''
                 row_dic.update({i: player.get(i) if not row_dic.get(i) else row_dic.get(i) for i in row_key})
                 row_dic.update({i: float(row_dic.get(i) if row_dic.get(i) else 0) for i in IS_DIGIT_KEY})
-                new_row = {key: row_dic.get(key, '') for key in row_key}
-                print(new_row)
-                yield new_row
+                yield {key: row_dic.get(key, '') for key in row_key}
 
 
 class NumpyReadDb:
