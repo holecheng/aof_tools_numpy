@@ -126,8 +126,9 @@ class NumpyReadDb:
                     self.write_to_all_excel(row_dic)
                 if cnt and cnt % 10000 == 0:
                     print('已处理数据{} * 10000'.format(cnt // 10000))
-        except Exception:
+        except Exception as e:
             print('数据处理完成, 总计 {}'.format(cnt))
+            print(e)
             if self.f:
                 self.f.close()
             title = list(data_format.__slots__)
