@@ -200,4 +200,4 @@ class NumpyReadDb:
             df_rows = df1.shape[0]
             df_data = pd.DataFrame(row_dic, index=self.title)
             df_data.to_excel(writer, 'sheet1', startrow=df_rows + 1,
-                             header=False, index=False)
+                             header=False, index=False, if_sheet_exists='overlay')
