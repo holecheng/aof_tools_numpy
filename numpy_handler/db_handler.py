@@ -187,9 +187,9 @@ class NumpyReadDb:
         to_excel_numpy(nps, 'db', page)
 
     def write_to_all_excel(self, row_dic):
-        file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)),
-                                 config.get_args('query_time'),
-                                 'all.xlsx')
+        file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'db_file',
+                                 config.get_args('query_time') + 'all.xlsx',
+                                 )
         if not os.path.exists(file_path):
             df_data = pd.DataFrame(self.title)
             df_data.to_excel(str(file_path), 'sheet1', index=False)
