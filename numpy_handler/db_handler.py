@@ -190,7 +190,6 @@ class NumpyReadDb:
         file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'db_file',
                                  config.get_args('query_time') + 'all.xlsx',
                                  )
-        print('写入信息为{}'.format(str(file_path)))
         if not os.path.exists(file_path):
             print(self.title, type(self.title))
             df_data = pd.DataFrame(self.title, index=self.title)
