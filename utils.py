@@ -49,9 +49,8 @@ def remove_null_data(npd):
         return npd
 
 
-def np_stack_v(np_list):
-    title = np_list[0][0]
-    nps = np.vstack([title] + [c[1:, ] for c in np_list])
+def time_format_time(formats='%Y-%m-%d %H:%M:%S'):
+    return datetime.datetime.fromtimestamp(1711929600.0).strftime(formats)
 
 
 
