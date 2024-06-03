@@ -120,6 +120,7 @@ class NumpyReadDb:
         try:
             while True:
                 row_dic = self.get_generator()
+                print(row_dic)
                 self.apply_blinds_id(row_dic, data_format)
                 if config.get_args('all'):
                     self.write_to_all_excel(row_dic)
