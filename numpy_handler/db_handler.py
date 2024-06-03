@@ -82,6 +82,7 @@ def init_query():
                 row_dic['is_turn'] = '1' if line.get('turn') else ''  # 是否turn
                 row_dic['is_river'] = '1' if line.get('river') else ''  # 是否存在river
                 row_dic.update({i: float(row_dic.get(i, 0)) for i in IS_DIGIT_KEY})
+                print({i: row_dic.get(i, '') for i in row_key})
                 yield {i: row_dic.get(i, '') for i in row_key}
 
 
