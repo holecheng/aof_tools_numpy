@@ -28,8 +28,8 @@ def init_query():
         row_key = []
         query_round = set()  # 用于统计是否该局号已被计入
         for i in result:
-            line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName']
-            player_key = ['pId', 'card_num', 'action', 'cards', 'blindLevel']
+            line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName', 'timestamp']
+            player_key = ['pId', 'card_num', 'action', 'cards', 'blindLevel', ]
             if not row_key:
                 row_key = line_key + player_key + IS_DIGIT_KEY
                 yield row_key
@@ -54,14 +54,19 @@ def init_query():
                 ev = line.pop('ev')[hero_index]
                 flop_ev_list = line.get('flop_ev')
                 turn_ev_list = line.get('turn_ev')
+                winners = line.get('winners')
+                row_dic['timestamp'] = datetime.datetime.fromtimestamp(line.get('timestamp')).strftime(
+                    '%Y-%m-%d %H:%M:%S')
+                row_dic['is_turn'] = '1' if line.get('turn') else ''  # 是否turn
+                row_dic['is_river'] = '1' if line.get('river') else ''  # 是否存在river
+                row_dic['blindLevel'] = sign_blind_level(line.get('blindLevel')['blinds'])
                 if flop_ev_list and turn_ev_list:
-                    row_dic['flop_ev'] = line.pop('flop_ev')[hero_index]
-                    row_dic['turn_ev'] = line.pop('turn_ev')[hero_index]
+                    row_dic['flop_ev'] = flop_ev_list[hero_index]
+                    row_dic['turn_ev'] = turn_ev_list[hero_index]
                 else:
                     row_dic['flop_ev'] = row_dic['turn_ev'] = ''
                 row_dic.update({'outcome_player': outcome, 'ev_player': ev})
                 row_dic['is_push'] = '1' if player['action'] == 'Push' else ''
-                winners = line.get('winners')
                 if winners and str(player.get('pId', '')) in winners:
                     row_dic['winner'] = '1'
                 else:
@@ -78,11 +83,6 @@ def init_query():
                 player['flop_i'] = flop_insurance[0].get('betStacks', '0') if flop_insurance else ''
                 player['turn_i'] = turn_insurance[0].get('betStacks', '0') if turn_insurance else ''
                 row_dic.update({i: player.get(i) if not row_dic.get(i) else row_dic.get(i) for i in row_key})
-                row_dic['timestamp'] = datetime.datetime.fromtimestamp(line.get('timestamp')).strftime(
-                    '%Y-%m-%d %H:%M:%S')
-                row_dic['blindLevel'] = sign_blind_level(line.get('blindLevel')['blinds'])
-                row_dic['is_turn'] = '1' if line.get('turn') else ''  # 是否turn
-                row_dic['is_river'] = '1' if line.get('river') else ''  # 是否存在river
                 row_dic.update({i: float(row_dic.get(i) if row_dic.get(i) else 0) for i in IS_DIGIT_KEY})
                 new_row = {key: row_dic.get(key, '') for key in row_key}
                 yield new_row
