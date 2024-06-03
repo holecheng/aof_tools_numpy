@@ -44,11 +44,9 @@ def init_query():
             player_count = len(players)
             if ai_count == player_count:
                 continue  # 表演赛不计入统计
-            row_list = []
             for hero_index, player in enumerate(players):
                 row_dic = collections.defaultdict(str)
-                if player.get('pid') not in pid_set:
-                    print(pid_set)
+                if str(player.get('pid')) not in pid_set:
                     continue  # 非AI玩家暂不分析
                 outcome = line.pop('outcome')[hero_index] if hero_index != -1 else ''
                 ev = line.pop('ev')[hero_index] if hero_index != -1 else ''
@@ -84,8 +82,7 @@ def init_query():
                 row_dic['is_turn'] = '1' if line.get('turn') else ''  # 是否turn
                 row_dic['is_river'] = '1' if line.get('river') else ''  # 是否存在river
                 row_dic.update({i: float(row_dic.get(i, 0)) for i in IS_DIGIT_KEY})
-                row_list.append({key: row_dic.get(key, '') for key in row_key})
-            yield row_list
+                yield {key: row_dic.get(key, '') for key in row_key}
 
 
 class NumpyReadDb:
@@ -122,14 +119,13 @@ class NumpyReadDb:
         data_format = self.format_list[index]
         try:
             while True:
-                row_list = self.get_generator()
-                for row_dic in row_list:
-                    self.apply_blinds_id(row_dic, data_format)
-                    if config.get_args('all'):
-                        self.write_to_all_excel(row_dic)
-                    if config.get_args('hand_detail'):
-                        self.write_to_hand_detail_excel(row_dic)
-                    cnt += 1
+                row_dic = self.get_generator()
+                self.apply_blinds_id(row_dic, data_format)
+                if config.get_args('all'):
+                    self.write_to_all_excel(row_dic)
+                if config.get_args('hand_detail'):
+                    self.write_to_hand_detail_excel(row_dic)
+                cnt += 1
                 if cnt and cnt % 10000 == 0:
                     print('已处理数据{} * 10000'.format(cnt // 10000))
         except Exception as e:
