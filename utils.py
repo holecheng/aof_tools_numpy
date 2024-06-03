@@ -14,10 +14,10 @@ def resize_timestamp(result):
 
 
 def to_excel_numpy(nps, df_path, suffix='all'):
-    df = pd.DataFrame(nps[1:])
-    df.columns = nps[0]
-    df.to_excel('./output/' + os.path.basename(df_path).split('.')[0] + '_'
-                + suffix + '.xlsx', sheet_name='data', index=False)
+    with open('./output/' + os.path.basename(df_path).split('.')[0] + '_'
+                + suffix + '.csv') as f:
+        for i in nps:
+            f.write(','.join(i))
 
 
 def sign_blind_level(blinds: list) -> str:

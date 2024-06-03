@@ -156,17 +156,12 @@ class NumpyReadDb:
 
     def write_to_all_excel(self, row_dic):
         file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'db_file',
-                                 config.get_args('query_time') + 'all.xlsx',
+                                 config.get_args('query_time') + 'all.csv',
                                  )
-        if not os.path.exists(file_path):
-            df_data = pd.DataFrame(np.array([self.title]))
-            df_data.to_excel(str(file_path), 'sheet1', index=False)
-        with pd.ExcelWriter(str(file_path), engine='openpyxl', mode='a', if_sheet_exists='overlay') as writer:
-            df1 = pd.DataFrame(pd.read_excel(str(file_path), sheet_name='sheet1'))
-            df_rows = df1.shape[0]
-            df_data = pd.DataFrame(row_dic, index=[0])
-            df_data.to_excel(writer, 'sheet1', startrow=df_rows + 1,
-                             header=False, index=False, )
+        with open(file_path, 'a+', encoding='utf-8') as f:
+            if not os.path.exists(file_path):
+                f.write(','.join(self.title))
+            f.write(','.join(row_dic))
 
     # def add_result(self):
     #     page = 0
