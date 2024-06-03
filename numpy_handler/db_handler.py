@@ -90,8 +90,15 @@ class NumpyReadDb:
         self.format_list = [Blinds, Hand]
         self.group_dic = {}
         self.group = config.get_args('group')
+        file_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'db_file',)
         if config.get_args('all'):
-            file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'db_file', config.get_args('query_time') + 'all.csv')
+            file_path = os.path.join(file_dir, config.get_args('query_time') + 'all.csv')
+            self.f = open(file_path, 'a+', encoding='utf-8')
+            if os.path.exists(file_path):
+                self.f.truncate(0)
+            self.f.write(','.join(self.title) + '\n')
+        if config.get_args('hand_detail'):
+            file_path = os.path.join(file_dir, config.get_args('query_time') + 'hand_detail.csv')
             self.f = open(file_path, 'a+', encoding='utf-8')
             if os.path.exists(file_path):
                 self.f.truncate(0)
@@ -112,6 +119,8 @@ class NumpyReadDb:
                 self.apply_blinds_id(row_dic, data_format)
                 if config.get_args('all'):
                     self.write_to_all_excel(row_dic)
+                if config.get_args('hand_detail'):
+                    self.write_to_head_detail_excel(row_dic)
                 if cnt and cnt % 10000 == 0:
                     print('已处理数据{} * 10000'.format(cnt // 10000))
         except Exception as e:
@@ -155,6 +164,13 @@ class NumpyReadDb:
         row = [str(row_dic[k]) for k in self.title]
         self.f.write(','.join(row) + '\n')
 
+    def write_to_head_detail_excel(self, row_dic):
+        group = row_dic[self.group]
+        if not group or row_dic['ai_count'] == row_dic['player_count'] and row_dic['is_seat'] == 1:
+            return
+        row = [str(row_dic[k]) for k in ['pId', 'handNumber']]
+        self.f.write(','.join(row) + '\n')
+
     # def add_result(self):
     #     page = 0
     #     final = 1
@@ -183,3 +199,4 @@ class NumpyReadDb:
     #                 new_npd = get_group_avg_nps(nps)
     #                 np_apply.append(new_npd)
     #             # self.write_excel(np_apply, str(page) + '_{}'.format(config.get_args('types')))
+
