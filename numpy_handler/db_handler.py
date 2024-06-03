@@ -49,6 +49,7 @@ def init_query():
                 row_dic = collections.defaultdict(str)
                 if player.get('pid') not in pid_set:
                     continue  # 非AI玩家暂不分析
+                print(11111)
                 outcome = line.pop('outcome')[hero_index] if hero_index != -1 else ''
                 ev = line.pop('ev')[hero_index] if hero_index != -1 else ''
                 flop_ev_list = line.get('flop_ev')
@@ -83,7 +84,6 @@ def init_query():
                 row_dic['is_turn'] = '1' if line.get('turn') else ''  # 是否turn
                 row_dic['is_river'] = '1' if line.get('river') else ''  # 是否存在river
                 row_dic.update({i: float(row_dic.get(i, 0)) for i in IS_DIGIT_KEY})
-                print({key: row_dic.get(key, '') for key in row_key})
                 row_list.append({key: row_dic.get(key, '') for key in row_key})
             yield row_list
 
