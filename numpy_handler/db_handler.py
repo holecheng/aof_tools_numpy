@@ -161,7 +161,8 @@ class NumpyReadDb:
         to_excel_numpy(nps, 'db', page)
 
     def write_to_all_excel(self, row_dic):
-        self.f.write(','.join(row_dic) + '\n')
+        row = [row_dic[k] for k in self.title]
+        self.f.write(','.join(row) + '\n')
 
     # def add_result(self):
     #     page = 0
