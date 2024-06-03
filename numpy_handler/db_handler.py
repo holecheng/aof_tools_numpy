@@ -48,7 +48,6 @@ def init_query():
                 row_dic = collections.defaultdict(str)
                 p_id = player.get('pid')
                 if not p_id or p_id not in pid_set:
-                    print(player.get('pid'), pid_set)
                     continue  # 非AI玩家暂不分析
                 outcome = line.pop('outcome')[hero_index] if hero_index != -1 else ''
                 ev = line.pop('ev')[hero_index] if hero_index != -1 else ''
