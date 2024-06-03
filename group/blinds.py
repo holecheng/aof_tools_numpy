@@ -48,14 +48,14 @@ class Blinds:
             self.turn_count += 1
             flop_ev_player = row_dic.get('flop_ev_player', 0)
             turn_ev_player = row_dic.get('turn_ev_player', 0)
-            self.sum_flop_ev += round(float(flop_ev_player), 5)
-            self.sum_turn_ev += round(float(turn_ev_player), 5)
+            self.sum_flop_ev += float(flop_ev_player), 5
+            self.sum_turn_ev += float(turn_ev_player), 5
             self.avg_flop_ev = self.avg_get(self.sum_ev, self.turn_count)
             self.avg_turn_ev = self.avg_get(self.sum_outcome, self.turn_count)
         ev_player = row_dic.get('ev_player')
         outcome_player = row_dic.get('outcome_player')
-        self.sum_ev += round(float(ev_player), 5)
-        self.sum_outcome += round(float(outcome_player), 5)
+        self.sum_ev += float(ev_player)
+        self.sum_outcome += float(outcome_player)
         self.avg_ev = self.avg_get(self.sum_ev, self.counts)
         self.avg_outcome = self.avg_get(self.sum_outcome, self.counts)
         return self
