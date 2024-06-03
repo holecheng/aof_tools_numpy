@@ -85,7 +85,7 @@ def init_query():
                 row_dic.update({i: float(row_dic.get(i, 0)) for i in IS_DIGIT_KEY})
                 new_row = {key: row_dic.get(key, '') for key in row_key}
                 print(new_row)
-                yield
+                yield new_row
 
 
 class NumpyReadDb:
