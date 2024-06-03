@@ -50,9 +50,8 @@ def init_query():
                 if not p_id or p_id not in pid_set:
                     continue  # 非AI玩家暂不分析
                 row_dic.update({i: line.get(i) for i in row_key})
-                print(line)
-                outcome = line.pop('outcome')[hero_index]
-                ev = line.pop('ev')[hero_index]
+                outcome = line.get('outcome')[hero_index]
+                ev = line.get('ev')[hero_index]
                 flop_ev_list = line.get('flop_ev')
                 turn_ev_list = line.get('turn_ev')
                 winners = line.get('winners')
