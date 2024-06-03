@@ -50,8 +50,8 @@ def init_query():
                 if not p_id or p_id not in pid_set:
                     print(p_id)
                     continue  # 非AI玩家暂不分析
-                outcome = line.pop('outcome')[hero_index] if hero_index != -1 else ''
-                ev = line.pop('ev')[hero_index] if hero_index != -1 else ''
+                outcome = line.pop('outcome')[hero_index]
+                ev = line.pop('ev')[hero_index]
                 flop_ev_list = line.get('flop_ev')
                 turn_ev_list = line.get('turn_ev')
                 if flop_ev_list and turn_ev_list:
