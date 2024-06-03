@@ -83,7 +83,6 @@ def init_query():
                 row_dic['blindLevel'] = sign_blind_level(line.get('blindLevel')['blinds'])
                 row_dic['is_turn'] = '1' if line.get('turn') else ''  # 是否turn
                 row_dic['is_river'] = '1' if line.get('river') else ''  # 是否存在river
-                print(row_dic)
                 row_dic.update({i: float(row_dic.get(i) if row_dic.get(i) else 0) for i in IS_DIGIT_KEY})
                 new_row = {key: row_dic.get(key, '') for key in row_key}
                 yield new_row
@@ -147,6 +146,7 @@ class NumpyReadDb:
         #     return
 
     def apply_blinds_id(self, row_dic, data_format):
+        print(row_dic)
         group = row_dic[self.group]
         groups = data_format(self.group, group, row_dic)
         group_key = groups.group_key
