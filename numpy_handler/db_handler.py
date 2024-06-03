@@ -84,7 +84,7 @@ def init_query():
                 row_dic['is_river'] = '1' if line.get('river') else ''  # 是否存在river
                 row_dic.update({i: float(row_dic.get(i, 0)) for i in IS_DIGIT_KEY})
                 print('这事个啥'.format({i: row_dic.get(i, '') for i in row_key}))
-                row_list.append({i: row_dic.get(i, '') for i in row_key})
+                row_list.append({key: row_dic.get(key, '') for key in row_key})
             yield row_list
 
 
