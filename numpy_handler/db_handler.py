@@ -120,7 +120,6 @@ class NumpyReadDb:
         try:
             while True:
                 row_dic = self.get_generator()
-                print(row_dic)
                 self.apply_blinds_id(row_dic, data_format)
                 if config.get_args('all'):
                     self.write_to_all_excel(row_dic)
@@ -128,7 +127,6 @@ class NumpyReadDb:
                     print('已处理数据{} * 10000'.format(cnt // 10000))
         except Exception as e:
             print('数据处理完成, 总计 {}'.format(cnt))
-            print(e)
             if self.f:
                 self.f.close()
             title = list(data_format.__slots__)
