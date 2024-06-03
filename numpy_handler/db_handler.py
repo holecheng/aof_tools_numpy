@@ -191,7 +191,6 @@ class NumpyReadDb:
                                  config.get_args('query_time') + 'all.xlsx',
                                  )
         if not os.path.exists(file_path):
-            print(self.title, type(self.title))
             df_data = pd.DataFrame(self.title, index=self.title)
             df_data.to_excel(str(file_path), 'sheet1', index=False)
         with pd.ExcelWriter(str(file_path), engine='openpyxl', mode='a', if_sheet_exists='overlay') as writer:
