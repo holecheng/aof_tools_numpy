@@ -44,7 +44,7 @@ def init_query():
             player_count = len(players)
             if ai_count == player_count:
                 continue  # 表演赛不计入统计
-            print(111111111111111,2 players)
+            print(111111111111111,players)
             for hero_index, player in enumerate(players):
                 row_dic = collections.defaultdict(str)
                 if player.get('pid') not in pid_set:
