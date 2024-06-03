@@ -46,7 +46,6 @@ def init_query():
                 continue  # 表演赛不计入统计
             row_list = []
             for hero_index, player in enumerate(players):
-                print(11111111111111)
                 row_dic = collections.defaultdict(str)
                 if player.get('pid') not in pid_set:
                     continue  # 非AI玩家暂不分析
@@ -84,8 +83,8 @@ def init_query():
                 row_dic['is_turn'] = '1' if line.get('turn') else ''  # 是否turn
                 row_dic['is_river'] = '1' if line.get('river') else ''  # 是否存在river
                 row_dic.update({i: float(row_dic.get(i, 0)) for i in IS_DIGIT_KEY})
-                print('这事个啥'.format({i: row_dic.get(i, '') for i in row_key}))
                 row_list.append({key: row_dic.get(key, '') for key in row_key})
+            print(row_list)
             yield row_list
 
 
