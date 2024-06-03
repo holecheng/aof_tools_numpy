@@ -83,7 +83,9 @@ def init_query():
                 row_dic['is_turn'] = '1' if line.get('turn') else ''  # 是否turn
                 row_dic['is_river'] = '1' if line.get('river') else ''  # 是否存在river
                 row_dic.update({i: float(row_dic.get(i, 0)) for i in IS_DIGIT_KEY})
-                yield {key: row_dic.get(key, '') for key in row_key}
+                new_row = {key: row_dic.get(key, '') for key in row_key}
+                print(new_row)
+                yield
 
 
 class NumpyReadDb:
