@@ -199,5 +199,6 @@ class NumpyReadDb:
             df1 = pd.DataFrame(pd.read_excel(str(file_path), sheet_name='sheet1'))
             df_rows = df1.shape[0]
             df_data = pd.DataFrame(self.title, index=[0])
+            print(df_data.shape, df_rows)
             df_data.to_excel(writer, 'sheet1', startrow=df_rows + 1,
                              header=False, index=False)
