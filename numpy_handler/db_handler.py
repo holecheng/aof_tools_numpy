@@ -29,7 +29,7 @@ def init_query():
         query_round = set()  # 用于统计是否该局号已被计入
         for i in result:
             line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName']
-            player_key = ['pId', 'card_num', 'action', 'cards']
+            player_key = ['pId', 'card_num', 'action', 'cards', 'blindLevel']
             if not row_key:
                 row_key = line_key + player_key + IS_DIGIT_KEY
                 yield row_key
