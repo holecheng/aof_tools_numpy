@@ -195,9 +195,9 @@ class NumpyReadDb:
             print(self.title, type(self.title))
             df_data = pd.DataFrame(self.title, index=self.title)
             df_data.to_excel(str(file_path), 'sheet1', index=False)
-        with pd.ExcelWriter(str(file_path), engine='openpyxl', mode='a') as writer:
+        with pd.ExcelWriter(str(file_path), engine='openpyxl', mode='a', if_sheet_exists='overlay') as writer:
             df1 = pd.DataFrame(pd.read_excel(str(file_path), sheet_name='sheet1'))
             df_rows = df1.shape[0]
             df_data = pd.DataFrame(row_dic, index=self.title)
             df_data.to_excel(writer, 'sheet1', startrow=df_rows + 1,
-                             header=False, index=False, if_sheet_exists='overlay')
+                             header=False, index=False, )
