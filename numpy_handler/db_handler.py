@@ -148,9 +148,24 @@ class NumpyReadDb:
             print('数据处理已完成~')
             return False
 
-    def to_excel_append_all(self, nps):
-        if not config.get_args('all'):
-            return
+    @staticmethod
+    def write_excel(nps, page):
+        print('正在写入处理文件~')
+        to_excel_numpy(nps, 'db', page)
+
+    def write_to_all_excel(self, row_dic):
+        file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'db_file',
+                                 config.get_args('query_time') + 'all.xlsx',
+                                 )
+        if not os.path.exists(file_path):
+            df_data = pd.DataFrame(np.array([self.title]))
+            df_data.to_excel(str(file_path), 'sheet1', index=False)
+        with pd.ExcelWriter(str(file_path), engine='openpyxl', mode='a', if_sheet_exists='overlay') as writer:
+            df1 = pd.DataFrame(pd.read_excel(str(file_path), sheet_name='sheet1'))
+            df_rows = df1.shape[0]
+            df_data = pd.DataFrame(row_dic)
+            df_data.to_excel(writer, 'sheet1', startrow=df_rows + 1,
+                             header=False, index=False, )
 
     # def add_result(self):
     #     page = 0
@@ -180,22 +195,3 @@ class NumpyReadDb:
     #                 new_npd = get_group_avg_nps(nps)
     #                 np_apply.append(new_npd)
     #             # self.write_excel(np_apply, str(page) + '_{}'.format(config.get_args('types')))
-
-    @staticmethod
-    def write_excel(nps, page):
-        print('正在写入处理文件~')
-        to_excel_numpy(nps, 'db', page)
-
-    def write_to_all_excel(self, row_dic):
-        file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'db_file',
-                                 config.get_args('query_time') + 'all.xlsx',
-                                 )
-        if not os.path.exists(file_path):
-            df_data = pd.DataFrame(self.title, index=self.title)
-            df_data.to_excel(str(file_path), 'sheet1', index=False)
-        with pd.ExcelWriter(str(file_path), engine='openpyxl', mode='a', if_sheet_exists='overlay') as writer:
-            df1 = pd.DataFrame(pd.read_excel(str(file_path), sheet_name='sheet1'))
-            df_rows = df1.shape[0]
-            df_data = pd.DataFrame(row_dic, index=self.title)
-            df_data.to_excel(writer, 'sheet1', startrow=df_rows + 1,
-                             header=False, index=False, )
