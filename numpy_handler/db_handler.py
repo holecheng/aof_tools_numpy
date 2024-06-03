@@ -145,7 +145,6 @@ class NumpyReadDb:
             return
 
     def apply_blinds_id(self, row_dic, data_format):
-        print(row_dic)
         group = row_dic[self.group]
         groups = data_format(self.group, group, row_dic)
         group_key = groups.group_key
