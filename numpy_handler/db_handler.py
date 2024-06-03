@@ -27,7 +27,6 @@ def init_query():
         pid_set = db_col.run_pid_set()
         result = db_col.run_query()
         row_key = []
-        print(len(list(result)))
         for i in result:
             line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName']
             player_key = ['pId', 'card_num', 'stack', 'seat', 'action', 'cards']
