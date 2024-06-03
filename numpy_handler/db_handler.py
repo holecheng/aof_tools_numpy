@@ -101,11 +101,6 @@ class NumpyReadDb:
         self.format_list = [Blinds, Hand]
         self.group_dic = {}
         self.group = config.get_args('group')
-        self.file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'db_file',
-                                      config.get_args('query_time') + 'all.csv',
-                                      )
-        with open(self.file_path, 'a+', encoding='utf-8') as f:
-            self.f = f
         if self.group in ['card_num', 'pId']:
             self.get_row_result(0)
         if self.group == 'blindLevel':
@@ -160,9 +155,14 @@ class NumpyReadDb:
         to_excel_numpy(nps, 'db', page)
 
     def write_to_all_excel(self, row_dic):
-        if not os.path.exists(self.file_path):
-            self.f.write(','.join(self.title) + '\n')
-        self.f.write(','.join(row_dic) + '\n')
+        file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'db_file',
+                                      config.get_args('query_time') + 'all.csv',
+                                      )
+        with open(file_path, 'a+', encoding='utf-8') as f:
+            if not os.path.exists(file_path):
+                print(111111111)
+                f.write(','.join(self.title) + '\n')
+            f.write(','.join(row_dic) + '\n')
 
     # def add_result(self):
     #     page = 0

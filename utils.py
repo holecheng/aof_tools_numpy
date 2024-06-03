@@ -14,8 +14,7 @@ def resize_timestamp(result):
 
 
 def to_excel_numpy(nps, df_path, suffix='all'):
-    with open('./output/' + os.path.basename(df_path).split('.')[0] + '_'
-                + suffix + '.csv', 'w+', encoding='utf-8') as f:
+    with open('./output/' + os.path.basename(df_path).split('.')[0] + '_' + suffix + '.csv', 'w+', encoding='utf-8') as f:
         for i in nps:
             f.write(','.join(i))
 
