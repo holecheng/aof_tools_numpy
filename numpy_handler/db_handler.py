@@ -17,7 +17,8 @@ from db.db_loader import db_col
 logger = logging.getLogger()
 
 IS_DIGIT_KEY = ['stack', 'ev_player', 'outcome_player', 'flop_i', 'turn_i', 'ai_count', 'player_count',
-                'straddle', 'ante', 'winner', 'is_seat', 'is_turn', 'is_flop', 'is_leader', 'flop_ev', 'turn_ev']  # 可统计数据（数字类型）
+                'straddle', 'ante', 'winner', 'is_seat', 'is_turn', 'is_flop', 'is_leader', 'flop_ev',
+                'turn_ev']  # 可统计数据（数字类型）
 
 
 def init_query():
@@ -151,7 +152,6 @@ class NumpyReadDb:
         if not config.get_args('all'):
             return
 
-
     # def add_result(self):
     #     page = 0
     #     final = 1
@@ -199,7 +199,5 @@ class NumpyReadDb:
             df1 = pd.DataFrame(pd.read_excel(str(file_path), sheet_name='sheet1'))
             df_rows = df1.shape[0]
             df_data = pd.DataFrame(self.title, index=[0])
-            df_data.to_excel(writer, 'sheet1', startrow=df_rows+1,
-                                           header=False, index=False)
-
-
+            df_data.to_excel(writer, 'sheet1', startrow=df_rows + 1,
+                             header=False, index=False)
