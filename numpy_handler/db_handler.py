@@ -76,7 +76,7 @@ def init_query():
                 row_dic['is_leader'] = '1' if flop_insurance or turn_insurance else ''
                 player['flop_i'] = flop_insurance[0].get('betStacks', '0') if flop_insurance else ''
                 player['turn_i'] = turn_insurance[0].get('betStacks', '0') if turn_insurance else ''
-                row_dic.update({i: player.get(i) for i in row_key})
+                row_dic.update({i: player.get(i) if not row_dic.get(i) else row_dic.get(i) for i in row_key})
                 row_dic['timestamp'] = datetime.datetime.fromtimestamp(line.get('timestamp')).strftime(
                     '%Y-%m-%d %H:%M:%S')
                 row_dic['blindLevel'] = sign_blind_level(line.get('blindLevel')['blinds'])
