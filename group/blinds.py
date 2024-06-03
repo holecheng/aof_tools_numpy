@@ -44,8 +44,6 @@ class Blinds:
             has_record = 0  # 代表本次局内数据已经被记录。在统计部分数据时候不需要处理
         self.counts += 1
         self.round_count += has_record
-        if not row_dic.get('is_seat'):
-            return self
         if row_dic['is_turn']:
             self.turn_count += 1
             flop_ev_player = row_dic.get('flop_ev_player', 0)
