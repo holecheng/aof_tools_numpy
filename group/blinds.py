@@ -17,15 +17,12 @@ class Blinds:
                  'sum_flop_ev',
                  'sum_turn_ev',
                  'sum_rounds',
-                 'query_round',
                  'row_dic',
-                 'round_count',  # 总对局数---同一对局计算一次
                  )
 
     def __init__(self, group, group_key, row_dic=None):
         for i in self.__slots__:
             self.__setattr__(i, 0)
-        self.query_round = set()  # 用于统计是否该局号已被计入
         self.group = group
         self.group_key = group_key
         self.row_dic = row_dic
@@ -35,15 +32,7 @@ class Blinds:
 
     def __add__(self, other):
         row_dic = other.row_dic
-        if not row_dic.get('is_seat'):
-            return self
-        hand_number = row_dic['handNumber']
-        has_record = 1
-        if hand_number not in self.query_round:
-            self.query_round.add(hand_number)
-            has_record = 0  # 代表本次局内数据已经被记录。在统计部分数据时候不需要处理
         self.counts += 1
-        self.round_count += has_record
         if row_dic['is_turn']:
             self.turn_count += 1
             flop_ev_player = row_dic.get('flop_ev_player', 0)

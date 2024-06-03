@@ -23,8 +23,6 @@ class Hand:
 
     def __add__(self, other):
         row_dic = other.row_dic
-        if not row_dic.get('is_seat'):
-            return self
         self.counts += 1  # 有效落座场次
         self.sum_is_turn += row_dic.get('is_turn')  # 是否turn
         self.sum_is_river += row_dic.get('is_river')  # 是否存在river

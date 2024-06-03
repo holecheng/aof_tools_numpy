@@ -6,18 +6,17 @@ import time
 
 from group.blinds import Blinds
 from group.hand import Hand
+from collections import defaultdict
 # from handler import get_analysis, AvgStrategy
-import pandas as pd
 from utils import sign_blind_level, to_excel_numpy, get_group_avg_nps
-import numpy as np
 from config_parse import config
 
 from db.db_loader import db_col
 
 logger = logging.getLogger()
 
-IS_DIGIT_KEY = ['stack', 'ev_player', 'outcome_player', 'flop_i', 'turn_i', 'ai_count', 'player_count',
-                'straddle', 'ante', 'winner', 'is_seat', 'is_turn', 'is_flop', 'is_leader', 'flop_ev',
+IS_DIGIT_KEY = ['stack', 'ev_player', 'outcome_player', 'flop_i', 'turn_i', 'player_count',
+                'straddle', 'ante', 'winner', 'is_turn', 'is_flop', 'is_leader', 'flop_ev',
                 'turn_ev']  # 可统计数据（数字类型）
 
 
@@ -27,43 +26,44 @@ def init_query():
         pid_set = db_col.run_pid_set()
         result = db_col.run_query()
         row_key = []
+        query_round = set()  # 用于统计是否该局号已被计入
         for i in result:
             line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName']
-            player_key = ['pId', 'card_num', 'stack', 'seat', 'action', 'cards']
+            player_key = ['pId', 'card_num', 'action', 'cards']
             if not row_key:
                 row_key = line_key + player_key + IS_DIGIT_KEY
                 yield row_key
             line = i.copy()
-            hero_index = int(line.get('heroIndex', -1))
-            row_dic = {k: v for k, v in line.items() if k in line_key}
-            wait_update_list = player_key + IS_DIGIT_KEY
-            row_dic.update(dict.fromkeys(wait_update_list, ''))
-            row_dic['timestamp'] = datetime.datetime.fromtimestamp(line.get('timestamp')).strftime('%Y-%m-%d %H:%M:%S')
-            row_dic['blindLevel'] = sign_blind_level(line.get('blindLevel')['blinds'])
-            row_dic['is_seat'] = 1 if hero_index != -1 else 0
-            row_dic['is_turn'] = 1 if line.get('turn') else 0  # 是否turn
-            row_dic['is_river'] = 1 if line.get('river') else 0  # 是否存在river
-            players = line.pop('players')
-            outcome = float(line.pop('outcome')[hero_index]) if hero_index != -1 else 0
-            ev = float(line.pop('ev')[hero_index]) if hero_index != -1 else 0
-            flop_ev_list = line.get('flop_ev')
-            turn_ev_list = line.get('turn_ev')
-            if flop_ev_list and turn_ev_list:
-                row_dic['flop_ev'] = float(line.pop('flop_ev')[hero_index]) if hero_index != -1 else 0
-                row_dic['turn_ev'] = float(line.pop('turn_ev')[hero_index]) if hero_index != -1 else 0
+            hand_num = line.get('handNumber')
+            if hand_num in query_round:
+                continue
             else:
-                row_dic['flop_ev'] = row_dic['turn_ev'] = 0
-            row_dic.update({'outcome_player': outcome, 'ev_player': ev})
-            if hero_index != -1:
-                player = {k: v for k, v in players[hero_index].items() if k in wait_update_list}
-                row_dic['ai_count'] = sum(1 if i.get('pId') in pid_set else 0 for i in players)
-                row_dic['player_count'] = len(players)
-                row_dic['is_push'] = 1 if player['action'] == 'Push' else 0
+                query_round.add(hand_num)
+            players = line.pop('players')
+            ai_count = sum(1 if i.get('pId') in pid_set else 0 for i in players)
+            player_count = len(players)
+            if ai_count == player_count:
+                continue  # 表演赛不计入统计
+            for hero_index, player in enumerate(players):
+                row_dic = collections.defaultdict(str)
+                if player.get('pid') not in pid_set:
+                    continue  # 非AI玩家暂不分析
+                outcome = line.pop('outcome')[hero_index] if hero_index != -1 else ''
+                ev = line.pop('ev')[hero_index] if hero_index != -1 else ''
+                flop_ev_list = line.get('flop_ev')
+                turn_ev_list = line.get('turn_ev')
+                if flop_ev_list and turn_ev_list:
+                    row_dic['flop_ev'] = line.pop('flop_ev')[hero_index]
+                    row_dic['turn_ev'] = line.pop('turn_ev')[hero_index]
+                else:
+                    row_dic['flop_ev'] = row_dic['turn_ev'] = ''
+                row_dic.update({'outcome_player': outcome, 'ev_player': ev})
+                row_dic['is_push'] = '1' if player['action'] == 'Push' else ''
                 winners = line.get('winners')
                 if winners and str(player.get('pId', '')) in winners:
-                    row_dic['winner'] = 1
+                    row_dic['winner'] = '1'
                 else:
-                    row_dic['winner'] = 0
+                    row_dic['winner'] = ''
                 card = player.get('cards', '')
                 if card:
                     a, b = max(card[0], card[2]), min(card[0], card[2])
@@ -72,12 +72,17 @@ def init_query():
                     player['card_num'] = ''
                 flop_insurance = players[hero_index].get('flopInsurance')
                 turn_insurance = players[hero_index].get('turnInsurance')
-                row_dic['is_leader'] = 1 if flop_insurance or turn_insurance else 0
-                player['flop_i'] = flop_insurance[0].get('betStacks', 0) if flop_insurance else 0
-                player['turn_i'] = turn_insurance[0].get('betStacks', 0) if turn_insurance else 0
-                row_dic.update(player)
-
-            yield row_dic
+                row_dic['is_leader'] = '1' if flop_insurance or turn_insurance else ''
+                player['flop_i'] = flop_insurance[0].get('betStacks', '0') if flop_insurance else ''
+                player['turn_i'] = turn_insurance[0].get('betStacks', '0') if turn_insurance else ''
+                row_dic.update({i: player.get(i) for i in row_key})
+                row_dic['timestamp'] = datetime.datetime.fromtimestamp(line.get('timestamp')).strftime(
+                    '%Y-%m-%d %H:%M:%S')
+                row_dic['blindLevel'] = sign_blind_level(line.get('blindLevel')['blinds'])
+                row_dic['is_turn'] = '1' if line.get('turn') else ''  # 是否turn
+                row_dic['is_river'] = '1' if line.get('river') else ''  # 是否存在river
+                row_dic.update({i: float(row_dic.get(i, 0)) for i in IS_DIGIT_KEY})
+                yield {i: row_dic.get(i, '') for i in row_key}
 
 
 class NumpyReadDb:
@@ -138,8 +143,6 @@ class NumpyReadDb:
 
     def apply_blinds_id(self, row_dic, data_format):
         group = row_dic[self.group]
-        if not group or row_dic['ai_count'] == row_dic['player_count']:
-            return
         groups = data_format(self.group, group, row_dic)
         group_key = groups.group_key
         if group_key not in self.group_dic:
@@ -165,9 +168,6 @@ class NumpyReadDb:
         self.f.write(','.join(row) + '\n')
 
     def write_to_hand_detail_excel(self, row_dic):
-        group = row_dic[self.group]
-        if not group or row_dic['ai_count'] == row_dic['player_count'] or row_dic['is_seat'] == 0:
-            return
         row = [str(row_dic[k]) for k in ['pId', 'handNumber']]
         self.f.write(','.join(row) + '\n')
 
