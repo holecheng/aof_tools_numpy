@@ -192,6 +192,7 @@ class NumpyReadDb:
                                  )
         print('写入信息为{}'.format(str(file_path)))
         if not os.path.exists(file_path):
+            print(self.title)
             df_data = pd.DataFrame(self.title, index=[0])
             df_data.to_excel(str(file_path), 'sheet1', index=False)
         with pd.ExcelWriter(str(file_path), engine='openpyxl', mode='a') as writer:
