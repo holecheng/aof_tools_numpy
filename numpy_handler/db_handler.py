@@ -65,7 +65,7 @@ def init_query():
                 if winners and str(player.get('pId', '')) in winners:
                     row_dic['winner'] = '1'
                 else:
-                    row_dic['winner'] = ''
+                    row_dic['winner'] = '0'
                 card = player.get('cards', '')
                 if card:
                     a, b = max(card[0], card[2]), min(card[0], card[2])
@@ -84,7 +84,7 @@ def init_query():
                 row_dic['is_turn'] = '1' if line.get('turn') else ''  # 是否turn
                 row_dic['is_river'] = '1' if line.get('river') else ''  # 是否存在river
                 print(row_dic)
-                row_dic.update({i: float(row_dic.get(i, 0)) for i in IS_DIGIT_KEY})
+                row_dic.update({i: float(row_dic.get(i) if row_dic.get(i) else 0) for i in IS_DIGIT_KEY})
                 new_row = {key: row_dic.get(key, '') for key in row_key}
                 yield new_row
 
