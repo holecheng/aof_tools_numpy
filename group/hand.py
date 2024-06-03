@@ -22,10 +22,7 @@ class Hand:
         return self.group == other.group and self.group_key == other.group_key
 
     def __add__(self, other):
-        # self.all_counts += 1  # 总场次
         row_dic = other.row_dic
-        # self.sum_is_seat += row_dic.get('is_seat')
-        # self.avg_is_seat = self.avg_get(self.sum_is_seat, self.all_counts)
         if not row_dic.get('is_seat'):
             return self
         self.counts += 1  # 有效落座场次

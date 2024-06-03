@@ -26,10 +26,8 @@ def init_query():
     with db_col:
         pid_set = db_col.run_pid_set()
         result = db_col.run_query()
-        plyer_limit = config.get_args('player')
-        flop_limit = config.get_args('flop')
-        turn_limit = config.get_args('turn')
         row_key = []
+        print(len(list(result)))
         for i in result:
             line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName']
             player_key = ['pId', 'card_num', 'stack', 'seat', 'action', 'cards']
@@ -59,9 +57,6 @@ def init_query():
             row_dic.update({'outcome_player': outcome, 'ev_player': ev})
             if hero_index != -1:
                 player = {k: v for k, v in players[hero_index].items() if k in wait_update_list}
-                player_id = player.get('pId', '')
-                if plyer_limit == player_id:
-                    continue
                 row_dic['ai_count'] = sum(1 if i.get('pId') in pid_set else 0 for i in players)
                 row_dic['player_count'] = len(players)
                 row_dic['is_push'] = 1 if player['action'] == 'Push' else 0
@@ -81,11 +76,6 @@ def init_query():
                 row_dic['is_leader'] = 1 if flop_insurance or turn_insurance else 0
                 player['flop_i'] = flop_insurance[0].get('betStacks', 0) if flop_insurance else 0
                 player['turn_i'] = turn_insurance[0].get('betStacks', 0) if turn_insurance else 0
-                if flop_limit or turn_limit:
-                    if flop_limit and float(flop_limit) < player['flop_i']:
-                        continue
-                    if turn_limit and float(turn_limit) < player['turn_i']:
-                        continue
                 row_dic.update(player)
 
             yield row_dic
@@ -131,11 +121,10 @@ class NumpyReadDb:
                 self.f.close()
             title = list(data_format.__slots__)
             title.remove('row_dic')
-            self.title = title
-            np_ans = np.array(title)
+            ans = [title]
             for _, v in self.group_dic.items():
-                np_ans = np.vstack((np_ans, np.array([getattr(v, i) for i in title])))
-            self.write_excel(np_ans, config.get_args('query_time') + self.group)
+                ans.append([getattr(v, i) for i in title])
+            self.write_excel(ans, config.get_args('query_time') + self.group)
             return
 
     def apply_blinds_id(self, row_dic, data_format):
