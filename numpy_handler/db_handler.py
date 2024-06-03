@@ -49,6 +49,7 @@ def init_query():
                 p_id = player.get('pId')
                 if not p_id or p_id not in pid_set:
                     continue  # 非AI玩家暂不分析
+                row_dic.update({i: line.get(i) for i in row_key})
                 outcome = line.pop('outcome')[hero_index]
                 ev = line.pop('ev')[hero_index]
                 flop_ev_list = line.get('flop_ev')
