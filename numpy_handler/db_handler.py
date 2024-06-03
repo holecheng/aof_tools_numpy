@@ -47,9 +47,9 @@ def init_query():
             row_list = []
             for hero_index, player in enumerate(players):
                 row_dic = collections.defaultdict(str)
+                print(11111)
                 if player.get('pid') not in pid_set:
                     continue  # 非AI玩家暂不分析
-                print(11111)
                 outcome = line.pop('outcome')[hero_index] if hero_index != -1 else ''
                 ev = line.pop('ev')[hero_index] if hero_index != -1 else ''
                 flop_ev_list = line.get('flop_ev')
