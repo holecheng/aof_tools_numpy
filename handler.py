@@ -82,17 +82,17 @@ class InsuranceStrategy(Strategy):
         return data
 
 
-class NpAnalysis:
-    def __init__(self, strategy: Strategy, nps):
-        self.strategy = strategy
-        self.nps = nps
+# class NpAnalysis:
+#     def __init__(self, strategy: Strategy, nps):
+#         self.strategy = strategy
+#         self.nps = nps
+#
+#     def clean_pds(self):
+#         return self.strategy.cleaning(self.nps)
 
-    def clean_pds(self):
-        return self.strategy.cleaning(self.nps)
 
-
-def get_analysis(strategy: Strategy, nps) -> np.ndarray:
-    return NpAnalysis(strategy, nps).clean_pds()
+# def get_analysis(strategy: Strategy, nps) -> np.ndarray:
+#     return NpAnalysis(strategy, nps).clean_pds()
 
 
 

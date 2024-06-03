@@ -1,11 +1,13 @@
 import collections
 import logging
 import datetime
+import os.path
 import time
 
 from group.blinds import Blinds
 from group.hand import Hand
-from handler import get_analysis, AvgStrategy
+# from handler import get_analysis, AvgStrategy
+import pandas as pd
 from utils import sign_blind_level, to_excel_numpy, get_group_avg_nps
 import numpy as np
 from config_parse import config
@@ -27,7 +29,6 @@ def init_query():
         flop_limit = config.get_args('flop')
         turn_limit = config.get_args('turn')
         row_key = []
-        cnt = 0
         for i in result:
             line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName']
             player_key = ['pId', 'card_num', 'stack', 'seat', 'action', 'cards']
@@ -95,40 +96,48 @@ class NumpyReadDb:
         s = time.time()
         self.result_gen = init_query()
         self.title = next(self.result_gen)
-        self.hand_list = []
+        print('数据key如下{}'.format(self.title))
+        self.format_list = [Blinds, Hand]
         self.group_dic = {}
-        group = config.get_args('group')
-        if group in ['card_num', 'pId']:
-            self.apply_player_id(group)
-        elif group == 'blindLevel':
-            self.apply_blinds_id(group)
+        self.group = config.get_args('group')
+        if self.group in ['card_num', 'pId']:
+            self.get_row_result(0)
+        if self.group == 'blindLevel':
+            self.get_row_result(1)
         print('总共用时{}分'.format((time.time() - s) // 60000))
         # self.add_result()
 
-    def apply_blinds_id(self, group):
+    def get_row_result(self, index):
         cnt = 0
+        data_format = self.format_list[index]
         try:
             while True:
                 row_dic = self.get_generator()
-                blind_level = row_dic['blindLevel']
-                if not blind_level or row_dic['ai_count'] == row_dic['player_count']:
-                    continue
-                cnt += 1
-                blinds = Blinds(group, blind_level, row_dic)
-                if blind_level not in self.group_dic:
-                    self.group_dic[blind_level] = blinds
-                else:
-                    self.group_dic[blind_level] += blinds
+                self.apply_blinds_id(row_dic, data_format)
+                if config.get_args('all'):
+                    self.write_to_all_excel(row_dic)
                 if cnt and cnt % 10000 == 0:
                     print('已处理数据{} * 10000'.format(cnt // 10000))
         except Exception:
             print('数据处理完成, 总计 {}'.format(cnt))
-            title = list(Blinds.__slots__)
+            title = list(data_format.__slots__)
             title.remove('row_dic')
+            self.title = title
             np_ans = np.array(title)
             for _, v in self.group_dic.items():
                 np_ans = np.vstack((np_ans, np.array([getattr(v, i) for i in title])))
-            self.write_excel(np_ans, config.get_args('query_time') + group)
+            self.write_excel(np_ans, config.get_args('query_time') + self.group)
+            return
+
+    def apply_blinds_id(self, row_dic, data_format):
+        group = row_dic[self.group]
+        if not group or row_dic['ai_count'] == row_dic['player_count']:
+            return
+        groups = data_format(self.group, group, row_dic)
+        if groups not in self.group_dic:
+            self.group_dic[group] = groups
+        else:
+            self.group_dic[group] += groups
 
     def get_generator(self):
         try:
@@ -138,61 +147,56 @@ class NumpyReadDb:
             print('数据处理已完成~')
             return False
 
-    def apply_player_id(self, group):
-        cnt = 0
-        try:
-            while True:
-                row_dic = self.get_generator()
-                player_id = row_dic[group]
-                if not player_id or row_dic['ai_count'] == row_dic['player_count']:
-                    continue
-                cnt += 1
-                hand = Hand(group, player_id, row_dic)
-                if player_id not in self.group_dic:
-                    self.group_dic[player_id] = hand
-                else:
-                    self.group_dic[player_id] += hand
-                if cnt and cnt % 10000 == 0:
-                    print('已处理数据{} * 10000'.format(cnt // 10000))
-        except Exception:
-            print('数据处理完成, 总计 {}'.format(cnt))
-            title = list(Hand.__slots__)
-            title.remove('row_dic')
-            np_ans = np.array(title)
-            for _, v in self.group_dic.items():
-                np_ans = np.vstack((np_ans,np.array([getattr(v, i) for i in title])))
-            self.write_excel(np_ans, config.get_args('query_time') + group)
+    def to_excel_append_all(self, nps):
+        if not config.get_args('all'):
+            return
 
-    def add_result(self):
-        page = 0
-        final = 1
-        np_apply = []
-        while final:
-            nps = [self.title]
-            page_row = 10000
-            while page_row:
-                row_dic = self.get_generator()
-                if row_dic:
-                    page_row -= 1
-                    nps.append([row_dic[i] for i in self.title])
-                else:
-                    final = 0
-                    print('数据处理完毕！')
-                    break
-            else:
-                page += 1
-                # self.write_excel(nps, str(page))
-                npd = get_group_avg_nps(nps)
-                np_apply.append(get_analysis(AvgStrategy(), npd))
-                print('已完成处理数据第{}页'.format(page))
-                if len(np_apply) > 30:
-                    title = np_apply[0]
-                    nps = np.vstack([title]+[c[1:,] for c in np_apply])
-                    new_npd = get_group_avg_nps(nps)
-                    np_apply.append(new_npd)
-                # self.write_excel(np_apply, str(page) + '_{}'.format(config.get_args('types')))
+
+    # def add_result(self):
+    #     page = 0
+    #     final = 1
+    #     np_apply = []
+    #     while final:
+    #         nps = [self.title]
+    #         page_row = 10000
+    #         while page_row:
+    #             row_dic = self.get_generator()
+    #             if row_dic:
+    #                 page_row -= 1
+    #                 nps.append([row_dic[i] for i in self.title])
+    #             else:
+    #                 final = 0
+    #                 print('数据处理完毕！')
+    #                 break
+    #         else:
+    #             page += 1
+    #             # self.write_excel(nps, str(page))
+    #             npd = get_group_avg_nps(nps)
+    #             np_apply.append(get_analysis(AvgStrategy(), npd))
+    #             print('已完成处理数据第{}页'.format(page))
+    #             if len(np_apply) > 30:
+    #                 title = np_apply[0]
+    #                 nps = np.vstack([title]+[c[1:,] for c in np_apply])
+    #                 new_npd = get_group_avg_nps(nps)
+    #                 np_apply.append(new_npd)
+    #             # self.write_excel(np_apply, str(page) + '_{}'.format(config.get_args('types')))
 
     @staticmethod
     def write_excel(nps, page):
         print('正在写入处理文件~')
         to_excel_numpy(nps, 'db', page)
+
+    def write_to_all_excel(self, row_dic):
+        file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)),
+                                 config.get_args('query_time'),
+                                 'all.xlsx')
+        if not os.path.exists(file_path):
+            df_data = pd.DataFrame(self.title)
+            df_data.to_excel(str(file_path), 'sheet1', index=False)
+        with pd.ExcelWriter(str(file_path), engine='openpyxl', mode='a') as writer:
+            df1 = pd.DataFrame(pd.read_excel(str(file_path), sheet_name='sheet1'))
+            df_rows = df1.shape[0]
+            pd.DataFrame(row_dic).to_excel(writer, 'sheet1', startrow=df_rows+1,
+                                           header=False, index=False)
+
+

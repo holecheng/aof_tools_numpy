@@ -34,6 +34,7 @@ class Config(object):
         self._parser.add_argument('--group', type=str, nargs='?', help='分组索引')
         self._parser.add_argument('--col', type=str, nargs='?', help='分组列')
         self._parser.add_argument('--hero-index', type=int, nargs='?', help='是否落场', default=0)
+        self._parser.add_argument('--all', type=int, nargs='?', help='是否全部数据写入', default=0 )
         self._args = self._parser.parse_args()
 
     def get_args(self, key):
