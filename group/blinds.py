@@ -33,17 +33,7 @@ class Blinds:
     def _init_row_dic(self):
         row_dic = self.row_dic
         self.counts = 1
-        if row_dic['is_turn']:
-            self.turn_count = 1
-            flop_ev_player = row_dic.get('flop_ev_player', 0)
-            turn_ev_player = row_dic.get('turn_ev_player', 0)
-            self.avg_flop_ev = self.sum_flop_ev = float(flop_ev_player)
-            self.avg_turn_ev = self.sum_turn_ev = float(turn_ev_player)
-        ev_player = row_dic.get('ev_player')
-        outcome_player = row_dic.get('outcome_player')
-        self.avg_ev = self.sum_ev = float(ev_player)
-        self.avg_outcome = self.sum_outcome = float(outcome_player)
-        self.diff_ev_outcome = self.avg_outcome - self.avg_ev
+        self.covert(row_dic, 'init')
         return self
 
     def __eq__(self, other):
@@ -52,22 +42,33 @@ class Blinds:
     def __add__(self, other):
         row_dic = other.row_dic
         self.counts += 1
+        self.covert(row_dic)
+        return self
+
+    def covert(self, row_dic, types='add'):
+        ev_player = row_dic.get('ev_player')
+        outcome_player = row_dic.get('outcome_player')
         if row_dic['is_turn']:
             self.turn_count += 1
             flop_ev_player = row_dic.get('flop_ev_player', 0)
             turn_ev_player = row_dic.get('turn_ev_player', 0)
-            self.sum_flop_ev += float(flop_ev_player)
-            self.sum_turn_ev += float(turn_ev_player)
-            self.avg_flop_ev = self.avg_get(self.sum_ev, self.turn_count)
-            self.avg_turn_ev = self.avg_get(self.sum_outcome, self.turn_count)
-        ev_player = row_dic.get('ev_player')
-        outcome_player = row_dic.get('outcome_player')
-        self.sum_ev += float(ev_player)
-        self.sum_outcome += float(outcome_player)
-        self.avg_ev = self.avg_get(self.sum_ev, self.counts)
-        self.avg_outcome = self.avg_get(self.sum_outcome, self.counts)
+            if types == 'add':
+                self.sum_flop_ev += float(flop_ev_player)
+                self.sum_turn_ev += float(turn_ev_player)
+                self.avg_flop_ev = self.avg_get(self.sum_ev, self.turn_count)
+                self.avg_turn_ev = self.avg_get(self.sum_outcome, self.turn_count)
+            else:
+                self.avg_flop_ev = self.sum_flop_ev = float(flop_ev_player)
+                self.avg_turn_ev = self.sum_turn_ev = float(turn_ev_player)
+        if types == 'add':
+            self.sum_ev += float(ev_player)
+            self.sum_outcome += float(outcome_player)
+            self.avg_ev = self.avg_get(self.sum_ev, self.counts)
+            self.avg_outcome = self.avg_get(self.sum_outcome, self.counts)
+        else:
+            self.avg_ev = self.sum_ev = float(ev_player)
+            self.avg_outcome = self.sum_outcome = float(outcome_player)
         self.diff_ev_outcome = self.avg_outcome - self.avg_ev
-        return self
 
     @staticmethod
     def avg_get(sum_c, count):
