@@ -58,6 +58,7 @@ class Hand:
         self.avg_is_turn = self.avg_get(self.sum_is_turn, self.counts)
         self.leader_counts += row_dic.get('is_leader')  # 领先总场次
         if row_dic['is_turn']:
+            self.sum_is_turn += 1
             flop_ev_player = row_dic.get('flop_ev_player', 0)
             turn_ev_player = row_dic.get('turn_ev_player', 0)
             self.sum_flop_ev += float(flop_ev_player)
@@ -87,4 +88,4 @@ class Hand:
 
     @staticmethod
     def avg_get(sum_c, count):
-        return float(sum_c / count)
+        return float(sum_c) / float(count)
