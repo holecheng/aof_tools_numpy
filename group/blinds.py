@@ -4,6 +4,7 @@ class Blinds:
                  'group_key',  # 分组值
                  'avg_ev',   # 平均的期望
                  'avg_outcome',  # 实际期望
+                 'diff_ev_outcome', # 结果期望差
                  'avg_flop_ev',  # 第一轮三张牌之后的期望（均值）
                  'avg_turn_ev',  # turn牌发出来的期望（均值）
                  'avg_sum_stack',  # 场内ai所持砝码
@@ -42,6 +43,7 @@ class Blinds:
         outcome_player = row_dic.get('outcome_player')
         self.avg_ev = self.sum_ev = float(ev_player)
         self.avg_outcome = self.sum_outcome = float(outcome_player)
+        self.diff_ev_outcome = self.avg_outcome - self.avg_ev
         return self
 
     def __eq__(self, other):
@@ -64,6 +66,7 @@ class Blinds:
         self.sum_outcome += float(outcome_player)
         self.avg_ev = self.avg_get(self.sum_ev, self.counts)
         self.avg_outcome = self.avg_get(self.sum_outcome, self.counts)
+        self.diff_ev_outcome = self.avg_outcome - self.avg_ev
         return self
 
     @staticmethod

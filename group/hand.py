@@ -2,7 +2,9 @@ class Hand:
     __slots__ = ('group', 'group_key', 'avg_ev',
                  'avg_flop_ev',  # 第一轮三张牌之后的期望（均值）
                  'avg_turn_ev',  # turn牌发出来的期望（均值）
-                 'avg_outcome', 'avg_flop_i', 'avg_turn_i', 'avg_leader_counts',
+                 'avg_outcome',
+                 'diff_ev_outcome',
+                 'avg_flop_i', 'avg_turn_i', 'avg_leader_counts',
                  'avg_is_push', 'avg_is_turn', 'avg_is_flop', 'counts', 'row_dic',
                  'leader_counts', 'sum_flop_i', 'sum_turn_i', 'sum_ev',
                  'sum_flop_ev',
@@ -42,6 +44,7 @@ class Hand:
         self.avg_is_push = self.sum_is_push = self.row_dic.get('is_push')
         self.avg_ev = self.sum_ev = float(ev_player)
         self.avg_outcome = self.sum_outcome = float(outcome_player)
+        self.diff_ev_outcome = self.avg_outcome - self.avg_ev
 
     def __eq__(self, other):
         return self.group == other.group and self.group_key == other.group_key
@@ -79,6 +82,7 @@ class Hand:
         self.avg_is_push = self.avg_get(self.sum_is_push, self.counts)
         self.avg_ev = self.avg_get(self.sum_ev, self.counts)
         self.avg_outcome = self.avg_get(self.sum_outcome, self.counts)
+        self.diff_ev_outcome = self.avg_outcome - self.avg_ev
         return self
 
     @staticmethod
