@@ -34,7 +34,7 @@ def init_query():
             pid_set = set(json.loads(pid_set))
         else:
             pid_set = db_col.run_pid_set()
-            r.set('pid_set', json.dumps(list(pid_set)), ex=60*60*24)
+            r.set('pid_set', json.dumps(list(pid_set)), ex=60*1000*60*24)
         result = db_col.run_query()
         row_key = []
         query_round = set()  # 用于统计是否该局号已被计入
