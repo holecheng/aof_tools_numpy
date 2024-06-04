@@ -27,6 +27,22 @@ class Blinds:
         self.group = group
         self.group_key = group_key
         self.row_dic = row_dic
+        self._init_row_dic()
+
+    def _init_row_dic(self):
+        row_dic = self.row_dic
+        self.counts = 1
+        if row_dic['is_turn']:
+            self.turn_count = 1
+            flop_ev_player = row_dic.get('flop_ev_player', 0)
+            turn_ev_player = row_dic.get('turn_ev_player', 0)
+            self.avg_flop_ev = self.sum_flop_ev = float(flop_ev_player)
+            self.avg_turn_ev = self.sum_turn_ev = float(turn_ev_player)
+        ev_player = row_dic.get('ev_player')
+        outcome_player = row_dic.get('outcome_player')
+        self.avg_ev = self.sum_ev = float(ev_player)
+        self.avg_outcome = self.sum_outcome = float(outcome_player)
+        return self
 
     def __eq__(self, other):
         return self.group == other.group and self.group_key == other.group_key
@@ -38,8 +54,8 @@ class Blinds:
             self.turn_count += 1
             flop_ev_player = row_dic.get('flop_ev_player', 0)
             turn_ev_player = row_dic.get('turn_ev_player', 0)
-            self.sum_flop_ev += float(flop_ev_player), 5
-            self.sum_turn_ev += float(turn_ev_player), 5
+            self.sum_flop_ev += float(flop_ev_player)
+            self.sum_turn_ev += float(turn_ev_player)
             self.avg_flop_ev = self.avg_get(self.sum_ev, self.turn_count)
             self.avg_turn_ev = self.avg_get(self.sum_outcome, self.turn_count)
         ev_player = row_dic.get('ev_player')

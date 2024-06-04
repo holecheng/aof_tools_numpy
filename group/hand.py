@@ -17,6 +17,31 @@ class Hand:
         self.group = group
         self.group_key = group_key
         self.row_dic = row_dic
+        self._init_row_dic()
+
+    def _init_row_dic(self):
+        self.counts = 1
+        if self.row_dic['is_turn']:
+            flop_ev_player = self.row_dic.get('flop_ev_player', 0)
+            turn_ev_player = self.row_dic.get('turn_ev_player', 0)
+            self.sum_flop_ev = float(flop_ev_player)
+            self.sum_turn_ev = float(turn_ev_player)
+            self.avg_flop_ev = self.avg_get(self.sum_ev, self.sum_is_turn)
+            self.avg_turn_ev = self.avg_get(self.sum_outcome, self.sum_is_turn)
+        if self.row_dic.get('is_leader'):
+            flop_i = self.row_dic.get('flop_i')
+            turn_i = self.row_dic.get('turn_i')
+            self.sum_flop_i = flop_i
+            self.avg_flop_i = flop_i
+            self.avg_turn_i = turn_i
+            self.sum_turn_i = turn_i
+            if not any([turn_i, flop_i]):
+                self.no_insurance += 1  # 未买保险场次
+        ev_player = self.row_dic.get('ev_player')
+        outcome_player = self.row_dic.get('outcome_player')
+        self.avg_is_push = self.sum_is_push = self.row_dic.get('is_push')
+        self.avg_ev = self.sum_ev = float(ev_player)
+        self.avg_outcome = self.sum_outcome = float(outcome_player)
 
     def __eq__(self, other):
         return self.group == other.group and self.group_key == other.group_key
