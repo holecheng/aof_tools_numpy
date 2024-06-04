@@ -37,6 +37,7 @@ def init_query():
             print('正在设置AI PID信息')
             pid_set = db_col.run_pid_set()
             r.set('pid_set', json.dumps(list(pid_set)), ex=60*1000*60*24)
+            print('设置完毕！！！！！！')
         result = db_col.run_query()
         row_key = []
         query_round = set()  # 用于统计是否该局号已被计入
