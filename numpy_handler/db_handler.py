@@ -30,10 +30,12 @@ def init_query():
         pool = redis.ConnectionPool(host='localhost', port=6379, db=0, decode_responses=True)
         r = redis.Redis(connection_pool=pool)
         if not r.get('re_flush'):
+            print('已获取AI PID信息')
             pid_set = r.get('pid_set')
             pid_set = set(json.loads(pid_set))
         else:
             pid_set = db_col.run_pid_set()
+            print('正在设置AI PID信息')
             r.set('pid_set', json.dumps(list(pid_set)), ex=60*1000*60*24)
         result = db_col.run_query()
         row_key = []
