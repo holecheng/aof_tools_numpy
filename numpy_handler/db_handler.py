@@ -11,7 +11,6 @@ from group.blinds import Blinds
 from group.hand import Hand
 
 from util_lib.assert_effective import RowHand
-from util_lib.redis_pool import RedisHandler
 # from handler import get_analysis, AvgStrategy
 from utils import sign_blind_level, to_excel_numpy, get_group_avg_nps
 from config_parse import config
@@ -31,75 +30,77 @@ def init_query():
         pool = redis.ConnectionPool(host='localhost', port=6379, db=0, decode_responses=True)
         r = redis.Redis(connection_pool=pool)
         if not r.get('re_flush'):
-            r.delete('pid_set')
-            db_col.run_pid_set()
+            pid_set = r.get('pid_set')
+            pid_set = set(json.loads(pid_set))
+        else:
+            pid_set = db_col.run_pid_set()
+            r.set('pid_set', json.dumps(list(pid_set)), ex=60*60*24)
         result = db_col.run_query()
         row_key = []
         query_round = set()  # 用于统计是否该局号已被计入
-        with RedisHandler() as r:
-            for i in result:
-                is_success, _ = RowHand().convert(i)
-                if not is_success:
-                    continue
-                if i.get('heroIndex') == -1:
-                    continue
-                line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName', 'timestamp']
-                player_key = ['pId', 'card_num', 'action', 'cards', 'blindLevel', ]
-                if not row_key:
-                    row_key = line_key + player_key + IS_DIGIT_KEY
-                    yield row_key
-                line = i.copy()
-                hand_num = line.get('handNumber')
-                if hand_num in query_round:
-                    continue
+        for i in result:
+            is_success, _ = RowHand().convert(i)
+            if not is_success:
+                continue
+            if i.get('heroIndex') == -1:
+                continue
+            line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName', 'timestamp']
+            player_key = ['pId', 'card_num', 'action', 'cards', 'blindLevel', ]
+            if not row_key:
+                row_key = line_key + player_key + IS_DIGIT_KEY
+                yield row_key
+            line = i.copy()
+            hand_num = line.get('handNumber')
+            if hand_num in query_round:
+                continue
+            else:
+                query_round.add(hand_num)
+            players = line.pop('players')
+            ai_count = sum(1 if i.get('pId') in pid_set else 0 for i in players)
+            player_count = len(players)
+            if ai_count == player_count:
+                continue  # 表演赛不计入统计
+            for hero_index, player in enumerate(players):
+                row_dic = collections.defaultdict(str)
+                p_id = player.get('pId')
+                if not p_id or p_id not in pid_set:
+                    continue  # 非AI玩家暂不分析
+                row_dic.update({i: line.get(i) for i in row_key})
+                outcome = line.get('outcome')[hero_index]
+                ev = line.get('ev')[hero_index]
+                flop_ev_list = line.get('flop_ev')
+                turn_ev_list = line.get('turn_ev')
+                winners = line.get('winners')
+                row_dic['timestamp'] = datetime.datetime.fromtimestamp(line.get('timestamp')).strftime(
+                    '%Y-%m-%d %H:%M:%S')
+                row_dic['is_turn'] = '1' if line.get('turn') else ''  # 是否turn
+                row_dic['is_river'] = '1' if line.get('river') else ''  # 是否存在river
+                row_dic['blindLevel'] = sign_blind_level(line.get('blindLevel')['blinds'])
+                if flop_ev_list and turn_ev_list:
+                    row_dic['flop_ev'] = flop_ev_list[hero_index]
+                    row_dic['turn_ev'] = turn_ev_list[hero_index]
                 else:
-                    query_round.add(hand_num)
-                players = line.pop('players')
-                ai_count = sum(1 if r.s_exist('pid_set', i.get('pId')) else 0 for i in players)
-                player_count = len(players)
-                if ai_count == player_count:
-                    continue  # 表演赛不计入统计
-                for hero_index, player in enumerate(players):
-                    row_dic = collections.defaultdict(str)
-                    p_id = player.get('pId')
-                    if not p_id or r.s_exist('pid_set', p_id):
-                        continue  # 非AI玩家暂不分析
-                    row_dic.update({i: line.get(i) for i in row_key})
-                    outcome = line.get('outcome')[hero_index]
-                    ev = line.get('ev')[hero_index]
-                    flop_ev_list = line.get('flop_ev')
-                    turn_ev_list = line.get('turn_ev')
-                    winners = line.get('winners')
-                    row_dic['timestamp'] = datetime.datetime.fromtimestamp(line.get('timestamp')).strftime(
-                        '%Y-%m-%d %H:%M:%S')
-                    row_dic['is_turn'] = '1' if line.get('turn') else ''  # 是否turn
-                    row_dic['is_river'] = '1' if line.get('river') else ''  # 是否存在river
-                    row_dic['blindLevel'] = sign_blind_level(line.get('blindLevel')['blinds'])
-                    if flop_ev_list and turn_ev_list:
-                        row_dic['flop_ev'] = flop_ev_list[hero_index]
-                        row_dic['turn_ev'] = turn_ev_list[hero_index]
-                    else:
-                        row_dic['flop_ev'] = row_dic['turn_ev'] = ''
-                    row_dic.update({'outcome_player': outcome, 'ev_player': ev})
-                    row_dic['is_push'] = '1' if player['action'] == 'Push' else ''
-                    if winners and str(player.get('pId', '')) in winners:
-                        row_dic['winner'] = '1'
-                    else:
-                        row_dic['winner'] = '0'
-                    card = player.get('cards', '')
-                    if card:
-                        a, b = max(card[0], card[2]), min(card[0], card[2])
-                        player['card_num'] = '%s%s' % (a, b)
-                    else:
-                        player['card_num'] = ''
-                    flop_insurance = players[hero_index].get('flopInsurance')
-                    turn_insurance = players[hero_index].get('turnInsurance')
-                    row_dic['is_leader'] = '1' if flop_insurance or turn_insurance else ''
-                    player['flop_i'] = flop_insurance[0].get('betStacks', '0') if flop_insurance else ''
-                    player['turn_i'] = turn_insurance[0].get('betStacks', '0') if turn_insurance else ''
-                    row_dic.update({i: player.get(i) if not row_dic.get(i) else row_dic.get(i) for i in row_key})
-                    row_dic.update({i: float(row_dic.get(i) if row_dic.get(i) else 0) for i in IS_DIGIT_KEY})
-                    yield {key: row_dic.get(key, '') for key in row_key}
+                    row_dic['flop_ev'] = row_dic['turn_ev'] = ''
+                row_dic.update({'outcome_player': outcome, 'ev_player': ev})
+                row_dic['is_push'] = '1' if player['action'] == 'Push' else ''
+                if winners and str(player.get('pId', '')) in winners:
+                    row_dic['winner'] = '1'
+                else:
+                    row_dic['winner'] = '0'
+                card = player.get('cards', '')
+                if card:
+                    a, b = max(card[0], card[2]), min(card[0], card[2])
+                    player['card_num'] = '%s%s' % (a, b)
+                else:
+                    player['card_num'] = ''
+                flop_insurance = players[hero_index].get('flopInsurance')
+                turn_insurance = players[hero_index].get('turnInsurance')
+                row_dic['is_leader'] = '1' if flop_insurance or turn_insurance else ''
+                player['flop_i'] = flop_insurance[0].get('betStacks', '0') if flop_insurance else ''
+                player['turn_i'] = turn_insurance[0].get('betStacks', '0') if turn_insurance else ''
+                row_dic.update({i: player.get(i) if not row_dic.get(i) else row_dic.get(i) for i in row_key})
+                row_dic.update({i: float(row_dic.get(i) if row_dic.get(i) else 0) for i in IS_DIGIT_KEY})
+                yield {key: row_dic.get(key, '') for key in row_key}
 
 
 class NumpyReadDb:
