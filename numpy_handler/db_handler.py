@@ -1,4 +1,5 @@
 import collections
+import json
 import logging
 import datetime
 import os.path
@@ -6,6 +7,7 @@ import time
 
 from group.blinds import Blinds
 from group.hand import Hand
+import redis
 
 from util_lib.assert_effective import RowHand
 # from handler import get_analysis, AvgStrategy
@@ -24,7 +26,14 @@ IS_DIGIT_KEY = ['stack', 'ev_player', 'outcome_player', 'flop_i', 'turn_i', 'pla
 def init_query():
     # todo此处可以对处理数据进行进一步query筛选
     with db_col:
-        pid_set = db_col.run_pid_set()
+        pool = redis.ConnectionPool(host='localhost', port=6379, decode_responses=True)
+        r = redis.Redis(connection_pool=pool)
+        if r.get('pid_set'):
+            pid_set = r.get('pid_set')
+            pid_set = set(json.loads(pid_set))
+        else:
+            pid_set = db_col.run_pid_set()
+            r.set('pid_set', json.dumps(pid_set))
         result = db_col.run_query()
         row_key = []
         query_round = set()  # 用于统计是否该局号已被计入
