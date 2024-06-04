@@ -8,7 +8,7 @@ from group.blinds import Blinds
 from group.hand import Hand
 from collections import defaultdict
 
-from utils.assert_effective import RowHand
+from util_lib.assert_effective import RowHand
 # from handler import get_analysis, AvgStrategy
 from utils import sign_blind_level, to_excel_numpy, get_group_avg_nps
 from config_parse import config
