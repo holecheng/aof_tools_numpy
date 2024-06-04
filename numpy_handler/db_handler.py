@@ -28,6 +28,8 @@ def init_query():
         row_key = []
         query_round = set()  # 用于统计是否该局号已被计入
         for i in result:
+            if i.get('handNumber') == '101652144-75':
+                print(i)
             line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName', 'timestamp']
             player_key = ['pId', 'card_num', 'action', 'cards', 'blindLevel', ]
             if not row_key:
