@@ -29,7 +29,7 @@ def init_query():
     with db_col:
         pool = redis.ConnectionPool(host='localhost', port=6379, db=0, decode_responses=True)
         r = redis.Redis(connection_pool=pool)
-        if not r.get('re_flush'):
+        if not r.get('pid_set'):
             print('已获取AI PID信息')
             pid_set = r.get('pid_set')
             pid_set = set(json.loads(pid_set))
