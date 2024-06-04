@@ -1,5 +1,3 @@
-import datetime
-
-
-
-print('11.2'.isdigit())
+a = {'river': None, 'nash_range': [0.413, 0.834, 0.359, 0.0, 0.0, 0.0], 'players': [{'isSb': False, 'playerId': '暗夜孙行者', 'pId': '5345603753', 'straddle': 0, 'isBb': False, 'flopInsurance': [], 'turnInsurance': [], 'cards': '2h8s', 'stack': 100000.0, 'seat': 3, 'isButton': True, 'action': 'Fold', 'ante': 10000.0}, {'isSb': True, 'playerId': 'shskfdhs', 'pId': '1325296413', 'straddle': 0, 'isBb': False, 'flopInsurance': [], 'turnInsurance': [], 'cards': '', 'stack': 203301.0, 'seat': 4, 'isButton': False, 'action': 'Push', 'ante': 10000.0}, {'isSb': False, 'playerId': '辣蚕豆', 'pId': '5797714781', 'straddle': 0, 'isBb': True, 'flopInsurance': [], 'turnInsurance': [], 'cards': '', 'stack': 90000.0, 'seat': 6, 'isButton': False, 'action': 'Fold', 'ante': 10000.0}], 'timestamp': 1711991208.452086, 'flop': '', 'heroIndex': 0, 'blindLevel': {'blinds': [500.0, 1000.0, 10000.0], 'straddle': 1}, 'turn': None, 'reqid': 354100054, 'version': 1.0, 'command': 'aofhistory', 'winners': ['1325296413'], 'ev': [-1.0, 2.1, -1.1, 0.0, 0.0, 0.0], 'outcome': [-1.0, 2.1, -1.1, 0.0, 0.0, 0.0], 'handNumber': '101668049-2', 'leagueName': '熊猫联盟'}
+import json
+print(json.dumps(a))

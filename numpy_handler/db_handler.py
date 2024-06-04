@@ -30,10 +30,9 @@ def init_query():
         query_round = set()  # 用于统计是否该局号已被计入
         for i in result:
             is_success, _ = RowHand().convert(i)
-            if i.get('handNumber') == '101668049-2':
-                print(is_success, i.get('handNumber'))
-                print(i)
             if not is_success:
+                continue
+            if line.get('heroIndex') == -1:
                 continue
             line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName', 'timestamp']
             player_key = ['pId', 'card_num', 'action', 'cards', 'blindLevel', ]
