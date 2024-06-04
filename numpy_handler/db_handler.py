@@ -6,7 +6,6 @@ import time
 
 from group.blinds import Blinds
 from group.hand import Hand
-from collections import defaultdict
 
 from util_lib.assert_effective import RowHand
 # from handler import get_analysis, AvgStrategy
@@ -31,6 +30,9 @@ def init_query():
         query_round = set()  # 用于统计是否该局号已被计入
         for i in result:
             is_success, _ = RowHand().convert(i)
+            if i.get('handNumber') == '101668049-2':
+                print(is_success, i.get('handNumber'))
+                print(i.get('players'))
             if not is_success:
                 continue
             line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName', 'timestamp']
