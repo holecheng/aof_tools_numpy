@@ -3,7 +3,7 @@ from strategy import Strategy
 from config_parse import config
 import numpy as np
 
-from util_lib import remove_null_data
+from utils import remove_null_data
 
 
 # class GroupStrategy(Strategy):
