@@ -7,6 +7,8 @@ import time
 from group.blinds import Blinds
 from group.hand import Hand
 from collections import defaultdict
+
+from lib.assert_effective import RowHand
 # from handler import get_analysis, AvgStrategy
 from utils import sign_blind_level, to_excel_numpy, get_group_avg_nps
 from config_parse import config
@@ -28,8 +30,9 @@ def init_query():
         row_key = []
         query_round = set()  # 用于统计是否该局号已被计入
         for i in result:
-            if i.get('handNumber') == '101652144-75':
-                print(i)
+            is_success, _ = RowHand().convert(i)
+            if not is_success:
+                continue
             line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName', 'timestamp']
             player_key = ['pId', 'card_num', 'action', 'cards', 'blindLevel', ]
             if not row_key:
