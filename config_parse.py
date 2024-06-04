@@ -36,6 +36,7 @@ class Config(object):
         self._parser.add_argument('--hero-index', type=int, nargs='?', help='是否落场', default=0)
         self._parser.add_argument('--all', type=int, nargs='?', help='是否全部数据写入', default=0)
         self._parser.add_argument('--hand-detail', type=int, nargs='?', help='打印所有处理数据的pid详情', default=0)
+        self._parser.add_argument('--enable-r', type=int, nargs='?', help='是否弃用redis数据', default=0)
         self._args = self._parser.parse_args()
 
     def get_args(self, key):
