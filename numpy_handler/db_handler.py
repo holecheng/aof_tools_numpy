@@ -131,7 +131,7 @@ class NumpyReadDb:
             self.f.write(','.join(self.title) + '\n')
         if self.group in ['card_num', 'pId']:
             self.get_row_result(0)
-        if self.group == 'blindLevel':
+        else:
             self.get_row_result(1)
         print('总共用时{}分'.format((time.time() - s) // 60000))
         # self.add_result()
