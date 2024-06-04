@@ -23,6 +23,7 @@ class Blinds:
     def __init__(self, group, group_key, row_dic=None):
         for i in self.__slots__:
             self.__setattr__(i, 0)
+        self.counts = 1
         self.group = group
         self.group_key = group_key
         self.row_dic = row_dic
