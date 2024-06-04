@@ -22,13 +22,13 @@ class Hand:
     def _init_row_dic(self):
         self.counts = 1
         if self.row_dic['is_turn']:
+            self.sum_is_turn = 1
             flop_ev_player = self.row_dic.get('flop_ev_player', 0)
             turn_ev_player = self.row_dic.get('turn_ev_player', 0)
-            self.sum_flop_ev = float(flop_ev_player)
-            self.sum_turn_ev = float(turn_ev_player)
-            self.avg_flop_ev = self.avg_get(self.sum_ev, self.sum_is_turn)
-            self.avg_turn_ev = self.avg_get(self.sum_outcome, self.sum_is_turn)
+            self.avg_flop_ev = self.sum_flop_ev = float(flop_ev_player)
+            self.avg_turn_ev = self.sum_turn_ev = float(turn_ev_player)
         if self.row_dic.get('is_leader'):
+            self.leader_counts = 1
             flop_i = self.row_dic.get('flop_i')
             turn_i = self.row_dic.get('turn_i')
             self.sum_flop_i = flop_i
