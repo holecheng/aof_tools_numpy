@@ -71,4 +71,4 @@ class Blinds:
 
     @staticmethod
     def avg_get(sum_c, count):
-        return float(sum_c / count)
+        return float(sum_c) / float(count)
