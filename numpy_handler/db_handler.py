@@ -127,16 +127,16 @@ class NumpyReadDb:
         cnt = 0
         data_format = self.format_list[index]
         # try:
-            while True:
-                row_dic = self.get_generator()
-                self.apply_blinds_id(row_dic, data_format)
-                if config.get_args('all'):
-                    self.write_to_all_excel(row_dic)
-                if config.get_args('hand_detail'):
-                    self.write_to_hand_detail_excel(row_dic)
-                cnt += 1
-                if cnt and cnt % 10000 == 0:
-                    print('已处理数据{} * 10000'.format(cnt // 10000))
+        while True:
+            row_dic = self.get_generator()
+            self.apply_blinds_id(row_dic, data_format)
+            if config.get_args('all'):
+                self.write_to_all_excel(row_dic)
+            if config.get_args('hand_detail'):
+                self.write_to_hand_detail_excel(row_dic)
+            cnt += 1
+            if cnt and cnt % 10000 == 0:
+                print('已处理数据{} * 10000'.format(cnt // 10000))
         # except Exception as e:
         #     print(e)
         #     print('数据处理完成, 总计 {}'.format(cnt))
