@@ -102,6 +102,7 @@ class NumpyReadDb:
         self.format_list = [Blinds, Hand]
         self.group_dic = {}
         self.group = config.get_args('group')
+        self.f = None
         file_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'db_file',)
         if config.get_args('all'):
             file_path = os.path.join(file_dir, config.get_args('query_time') + 'all.csv')
