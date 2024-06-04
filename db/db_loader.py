@@ -5,6 +5,8 @@ import logging
 from config_parse import config
 from datetime import datetime
 
+from util_lib.redis_pool import RedisHandler
+
 logger = logging.getLogger()
 
 COLUMNS = ['river', 'nash_range', 'players', 'turn', 'reqid', 'version', 'command', 'winners', 'ev',
@@ -61,23 +63,20 @@ class DBLoader:
         return self.db.find(self.query)
 
     def run_pid_set(self):
-        pid_columns = {'heroIndex', 'players'}
-        dic_zero = dict.fromkeys(list(set(COLUMNS) - pid_columns), 0)
-        dic_one = dict.fromkeys(pid_columns, 1)
-        dic_zero.update(dic_one)
-        return get_pid_set(self.db.find(self.query))
+        get_pid_set(self.db.find(self.query))
 
 
 def get_pid_set(result):
-    pid_set = set()
-    for i in result:
-        hero_index = int(i.get('heroIndex', -1))
-        if hero_index != -1:
-            players = i.pop('players')
-            p_id = players[hero_index].get('pId')
-            if p_id:
-                pid_set.add(p_id)
-    return pid_set
+    with RedisHandler() as r:
+        for i in result:
+            hero_index = int(i.get('heroIndex', -1))
+            if hero_index != -1:
+                players = i.pop('players')
+                p_id = players[hero_index].get('pId')
+                if p_id:
+                    r.add('pid_set', 'value1')
+
+    r.set('re_flush', 1, ex=60 * 60 * 24)
 
 
 db_col = DBLoader()
