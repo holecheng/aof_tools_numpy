@@ -32,7 +32,7 @@ def init_query():
             is_success, _ = RowHand().convert(i)
             if i.get('handNumber') == '101668049-2':
                 print(is_success, i.get('handNumber'))
-                print(i.get('players'))
+                print(i)
             if not is_success:
                 continue
             line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName', 'timestamp']
