@@ -72,7 +72,7 @@ class Hand:
             self.sum_turn_i += turn_i
             if not any([turn_i, flop_i]):
                 self.no_insurance += 1  # 未买保险场次
-                self.avg_leader_counts = self.avg_get(self.no_insurance, self.sum_is_turn)
+                self.avg_leader_counts = self.avg_get(self.no_insurance, self.leader_counts)
             self.avg_flop_i = self.avg_get(self.sum_flop_i, self.leader_counts)
             self.avg_turn_i = self.avg_get(self.sum_turn_i, self.leader_counts)
         ev_player = row_dic.get('ev_player')
