@@ -1,7 +1,11 @@
+from config_parse import config
+
+
 class Blinds:
 
     __slots__ = ('group',  # 组
                  'group_key',  # 分组值
+                 'allowance',
                  'avg_ev',   # 平均的期望
                  'avg_outcome',  # 实际期望
                  'diff_ev_outcome', # 结果期望差
@@ -28,6 +32,7 @@ class Blinds:
         self.group = group
         self.group_key = group_key
         self.row_dic = row_dic
+        self.allowance = config.get_args('allowance')
         self._init_row_dic()
 
     def _init_row_dic(self):
@@ -37,7 +42,11 @@ class Blinds:
         return self
 
     def __eq__(self, other):
-        return self.group == other.group and self.group_key == other.group_key
+        if self.allowance:
+            return self.group == other.group and self.group_key in range(other.group_key,
+                                                                         other.group_key + self.allowance)
+        else:
+            return self.group == other.group and self.group_key == other.group_key
 
     def __add__(self, other):
         row_dic = other.row_dic

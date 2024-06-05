@@ -1,5 +1,8 @@
+from config_parse import config
+
+
 class Hand:
-    __slots__ = ('group', 'group_key', 'avg_ev',
+    __slots__ = ('group', 'group_key', 'allowance', 'avg_ev',
                  'avg_flop_ev',  # 第一轮三张牌之后的期望（均值）
                  'avg_turn_ev',  # turn牌发出来的期望（均值）
                  'avg_outcome',
@@ -19,6 +22,7 @@ class Hand:
         self.group = group
         self.group_key = group_key
         self.row_dic = row_dic
+        self.allowance = config.get_args('allowance')
         self._init_row_dic()
 
     def _init_row_dic(self):
@@ -47,7 +51,11 @@ class Hand:
         self.diff_ev_outcome = self.avg_outcome - self.avg_ev
 
     def __eq__(self, other):
-        return self.group == other.group and self.group_key == other.group_key
+        if self.allowance:
+            return self.group == other.group and self.group_key in range(other.group_key,
+                                                                       other.group_key + self.allowance)
+        else:
+            return self.group == other.group and self.group_key == other.group_key
 
     def __add__(self, other):
         row_dic = other.row_dic
