@@ -134,7 +134,7 @@ class NumpyReadDb:
         else:
             self.get_row_result(1)
         print((time.time() - s))
-        print('总共用时{}分'.format((time.time() - s) // 60000))
+        print('总共用时{}分'.format((time.time() - s) // 60))
         # self.add_result()
 
     def get_row_result(self, index):
