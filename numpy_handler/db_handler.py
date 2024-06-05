@@ -21,7 +21,7 @@ logger = logging.getLogger()
 
 IS_DIGIT_KEY = ['stack', 'ev_player', 'outcome_player', 'flop_i', 'turn_i', 'player_count', 'is_push',
                 'straddle', 'ante', 'winner', 'is_turn', 'is_flop', 'is_leader', 'flop_ev', 'is_river',
-                'turn_ev']  # 可统计数据（数字类型）
+                'turn_ev', 'seat']  # 可统计数据（数字类型）
 
 
 def init_query():
