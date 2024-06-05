@@ -52,8 +52,7 @@ class Hand:
 
     def __eq__(self, other):
         if self.allowance:
-            return self.group == other.group and self.group_key in range(other.group_key,
-                                                                       other.group_key + self.allowance)
+            return self.group == other.group and self.group_key // self.allowance
         else:
             return self.group == other.group and self.group_key == other.group_key
 
