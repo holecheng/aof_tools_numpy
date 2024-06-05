@@ -133,6 +133,7 @@ class NumpyReadDb:
             self.get_row_result(0)
         else:
             self.get_row_result(1)
+        print((time.time() - s))
         print('总共用时{}分'.format((time.time() - s) // 60000))
         # self.add_result()
 
@@ -142,7 +143,8 @@ class NumpyReadDb:
         try:
             while True:
                 row_dic = self.get_generator()
-                self.apply_blinds_id(row_dic, data_format)
+                if config.get_args('group'):
+                    self.apply_blinds_id(row_dic, data_format)
                 if config.get_args('all'):
                     self.write_to_all_excel(row_dic)
                 if config.get_args('hand_detail'):

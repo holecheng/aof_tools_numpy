@@ -23,7 +23,6 @@ class Config(object):
             self.config = json.load(file)
 
     def _init_parser(self):
-        self._parser.add_argument('--select-time', type=str, nargs='?', help='起始时间')
         self._parser.add_argument('--player', type=str, nargs='?', help='玩家pid')
         self._parser.add_argument('--flop', type=int, nargs='?', help='flop保险')
         self._parser.add_argument('--turn', type=int, nargs='?', help='turn保险')
@@ -33,7 +32,6 @@ class Config(object):
         self._parser.add_argument('--query-time', type=str, nargs='?', help='数据库连接筛选时段')
         self._parser.add_argument('--group', type=str, nargs='?', help='分组索引')
         self._parser.add_argument('--col', type=str, nargs='?', help='分组列')
-        self._parser.add_argument('--hero-index', type=int, nargs='?', help='是否落场', default=0)
         self._parser.add_argument('--all', type=int, nargs='?', help='是否全部数据写入', default=0)
         self._parser.add_argument('--hand-detail', type=int, nargs='?', help='打印所有处理数据的pid详情', default=0)
         self._parser.add_argument('--enable-r', type=int, nargs='?', help='是否弃用redis数据', default=0)
