@@ -64,6 +64,8 @@ def init_query():
             if ai_count == player_count:
                 continue  # 表演赛不计入统计
             for hero_index, player in enumerate(players):
+                if config.get_args('player') and config.get_args('player') != player.get('pId'):
+                    continue
                 row_dic = collections.defaultdict(str)
                 p_id = player.get('pId')
                 if not p_id or p_id not in pid_set:
