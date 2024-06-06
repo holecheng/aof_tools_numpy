@@ -61,7 +61,7 @@ def get_group_key(group_key, row_dic=None):
     allowance = config.get_args('allowance')
     print(allowance)
     if group_key == 'total':
-        return group_key
+        return allowance, group_key
     if allowance:
         ans_group_key = int(group_key) // allowance
     elif config.get_args('insurance'):
