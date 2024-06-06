@@ -32,7 +32,8 @@ class Blinds:
         self.group = group
         self.row_dic = row_dic
         self.allowance = config.get_args('allowance')
-        print('余量计算为'.format(config.get_args('allowance'), config))
+        print('余量计算为'.format(config.get_args('allowance')))
+        print('config是'.format(config))
         self.group_key = self._get_group_key(group_key)
         self._init_row_dic()
 
