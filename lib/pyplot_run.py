@@ -7,6 +7,8 @@ from matplotlib import pyplot as plt
 import pandas as pd
 import os
 
+from matplotlib.ticker import MultipleLocator
+
 BASE = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'output')
 
 
@@ -37,13 +39,22 @@ def run():
         df = df.sort_values(by=args.X)
     color = ['r', 'b', 'c', 'g', 'k', 'm', 'y']
     y_list = args.Y.strip().split(',')
+    # fig = plt.figure()
+    fig, ax = plt.subplots(1, 1)
+    y_major_locator = MultipleLocator(0.1)
+    x_major_locator = MultipleLocator(1)
+    ax = plt.gca()
+    ax.xaxis.set_major_locator(x_major_locator)
+    ax.yaxis.set_major_locator(y_major_locator)
+    plt.ylim(0, 1.0)
+    plt.xlim(0, 100)
     if args.plot_type == 'plot':
         for col in y_list:
             if color:
                 c = color.pop()
             else:
                 c = 'k'
-            plt.plot(df[args.X], df[col], marker='o', color=c, linestyle='--', linewidth=2, markersize=8)
+            plt.plot(df[args.X], df[col], marker='o', color=c, linestyle='--', linewidth=2, markersize=2)
     elif args.plot_type == 'scatter':
         x = df[args.X]
         y = df[args.Y]
