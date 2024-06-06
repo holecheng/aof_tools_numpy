@@ -3,13 +3,12 @@ from utils import resize_insurance
 
 
 class Blinds:
-
     __slots__ = ('group',  # 组
                  'group_key',  # 分组值
                  'allowance',
-                 'avg_ev',   # 平均的期望
+                 'avg_ev',  # 平均的期望
                  'avg_outcome',  # 实际期望
-                 'diff_ev_outcome', # 结果期望差
+                 'diff_ev_outcome',  # 结果期望差
                  'avg_flop_ev',  # 第一轮三张牌之后的期望（均值）
                  'avg_turn_ev',  # turn牌发出来的期望（均值）
                  'avg_sum_stack',  # 场内ai所持砝码
@@ -61,28 +60,28 @@ class Blinds:
             ans_group_key = group_key
         return ans_group_key
 
-
     def covert(self, row_dic, types='add'):
         ev_player = row_dic.get('ev_player')
         outcome_player = row_dic.get('outcome_player')
-        if row_dic['is_turn']:
-            self.turn_count += 1
-            flop_ev_player = row_dic.get('flop_ev_player', 0)
-            turn_ev_player = row_dic.get('turn_ev_player', 0)
-            if types == 'add':
+        flop_ev_player = row_dic.get('flop_ev_player', 0)
+        turn_ev_player = row_dic.get('turn_ev_player', 0)
+        if types == 'add':
+            if row_dic['is_turn']:
+                self.turn_count += 1
                 self.sum_flop_ev += float(flop_ev_player)
                 self.sum_turn_ev += float(turn_ev_player)
                 self.avg_flop_ev = self.avg_get(self.sum_ev, self.turn_count)
                 self.avg_turn_ev = self.avg_get(self.sum_outcome, self.turn_count)
             else:
+                self.sum_ev += float(ev_player)
+                self.sum_outcome += float(outcome_player)
+                self.avg_ev = self.avg_get(self.sum_ev, self.counts)
+                self.avg_outcome = self.avg_get(self.sum_outcome, self.counts)
+        else:
+            if row_dic['is_turn']:
+                self.turn_count += 1
                 self.avg_flop_ev = self.sum_flop_ev = float(flop_ev_player)
                 self.avg_turn_ev = self.sum_turn_ev = float(turn_ev_player)
-        if types == 'add':
-            self.sum_ev += float(ev_player)
-            self.sum_outcome += float(outcome_player)
-            self.avg_ev = self.avg_get(self.sum_ev, self.counts)
-            self.avg_outcome = self.avg_get(self.sum_outcome, self.counts)
-        else:
             self.avg_ev = self.sum_ev = float(ev_player)
             self.avg_outcome = self.sum_outcome = float(outcome_player)
         self.diff_ev_outcome = self.avg_outcome - self.avg_ev
