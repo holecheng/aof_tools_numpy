@@ -14,6 +14,8 @@ class Title:
     counts: str = '总局数'
     avg_flop_i: str = '平均购买flop保险'
     avg_turn_i: str = '平均购买turn保险'
+    date: str = '日期'
+    hour: str = '时间'
 
 
 title = Title()
