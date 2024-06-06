@@ -45,7 +45,7 @@ class Hand:
             turn_ev_player = self.row_dic.get('turn_ev_player', 0)
             self.avg_flop_ev = self.sum_flop_ev = float(flop_ev_player)
             self.avg_turn_ev = self.sum_turn_ev = float(turn_ev_player)
-        if self.row_dic.get('is_leader'):
+        if self.row_dic.get('is_leader_turn') or self.row_dic.get('is_leader_flop'):
             self.leader_counts = 1
             flop_i = self.row_dic.get('flop_i')
             turn_i = self.row_dic.get('turn_i')
