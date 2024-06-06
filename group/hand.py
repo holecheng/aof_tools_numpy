@@ -23,7 +23,7 @@ class Hand:
         self.group = group
         self.row_dic = row_dic
         self.allowance = config.get_args('allowance')
-        self.group = self._get_group_key(group_key)
+        self.group_key = self._get_group_key(group_key)
         self._init_row_dic()
 
     def _get_group_key(self, group_key, row_dic=None):
