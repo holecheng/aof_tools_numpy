@@ -38,15 +38,6 @@ def run():
             plt.plot(df[args.X], df[col], marker='o', color=c, linestyle='--', linewidth=2, markersize=8)
         plt.legend()
         plt.grid(True)
-    elif args.types == 'bar':
-        sizes = math.ceil(len(args.Y.strip().split(',')))
-        fig_s = (12, 8)
-        fig = plt.figure(figsize=fig_s)
-        plot_gen = gen_fig_plot(fig, sizes)
-        for col in y_list:
-            a1 = next(plot_gen)
-            a1.bar(df[args.X], df[col], label=col)
-        autolabel(plot_gen)
     plt.title('%s && %s' % (args.X, args.Y))
     plt.xlabel('%s(%s)' % (total.loc[1, 'group'], total.loc[1, 'allowance']))
     plt.ylabel('avg')
@@ -56,44 +47,42 @@ def run():
     ## 下面的是设置字体为黑体
     # plt.rcParams['font.family'] = ['sans-serif'] # 设置字体为无衬线字体（黑体是无衬线字体之一）
     # plt.rcParams['font.sans-serif'] = ['SimHei'] # 设置无衬线字体为黑体
-
     # 设置公式格式
     plt.rcParams['mathtext.fontset'] = 'stix'
-
     # 正常显示负号
     plt.rcParams['axes.unicode_minus'] = False
     plt.rcParams['font.size'] = 18  # 设 置字体字号
     plt.rcParams['xtick.labelsize'] = 16  # 设置横坐标轴字体字号
     plt.rcParams['ytick.labelsize'] = 16  # 设置纵坐标轴字体字号
-
     # 设置刻度朝里，我喜欢朝里，默认的朝外感觉有点丑
     plt.tick_params(which="major", direction='in', length=5, bottom=True, left=True)
-    plt.show()
     if args.save:
         message = args.m or time.time()
-        plt.savefig('save_img/{}.png'.format(message))
+        plt.savefig('save_img/{}.jpg'.format(message))
+    plt.show()
+    plt.close()
 
 
-def gen_fig_plot(fig, sizes):
-    ans = [1, 1, 0]
-    for i in range(1, sizes + 1):
-        if ans != sizes:
-            ans[2] += 1
-            yield fig.add_subplot(*ans)
-        else:
-            ans[2] = 1
-            if ans[1] != sizes:
-                ans[1] += 1
-            else:
-                ans[1] = 1
-                ans[0] += 1
-            yield fig.add_subplot(*ans)
+# def gen_fig_plot(fig, sizes):
+#     ans = [1, 1, 0]
+#     for i in range(1, sizes + 1):
+#         if ans != sizes:
+#             ans[2] += 1
+#             yield fig.add_subplot(*ans)
+#         else:
+#             ans[2] = 1
+#             if ans[1] != sizes:
+#                 ans[1] += 1
+#             else:
+#                 ans[1] = 1
+#                 ans[0] += 1
+#             yield fig.add_subplot(*ans)
 
 
-def autolabel(rects):
-    for rect in rects:
-        height = rect.get_height()
-        plt.text(rect.get_x() + rect.get_width() / 2. - 0.2, 1.03 * height, '%s' % float(height))
+# def autolabel(rects):
+#     for rect in rects:
+#         height = rect.get_height()
+#         plt.text(rect.get_x() + rect.get_width() / 2. - 0.2, 1.03 * height, '%s' % float(height))
 
 
 if __name__ == '__main__':
