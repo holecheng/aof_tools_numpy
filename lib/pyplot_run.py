@@ -1,5 +1,6 @@
 import argparse
 import math
+import time
 
 from matplotlib import pyplot as plt
 
@@ -16,6 +17,8 @@ def run():
     parser.add_argument('--f-name', type=str, nargs='?', help='文件名')
     parser.add_argument('--types', type=str, nargs='?', help='图形类型', default='plot')
     parser.add_argument('--count-min', type=int, nargs='?', help='最小场次', default=0)
+    parser.add_argument('--m', type=str, nargs='?', help='描述信息', default='')
+    parser.add_argument('--save', type=int, nargs='?', help='是否需要存储', default=0)
     args = parser.parse_args()
     df = pd.read_csv(str(os.path.join(BASE, args.f_name)))
     total = df[df[args.X] == 'total']
@@ -66,6 +69,9 @@ def run():
     # 设置刻度朝里，我喜欢朝里，默认的朝外感觉有点丑
     plt.tick_params(which="major", direction='in', length=5, bottom=True, left=True)
     plt.show()
+    if args.save:
+        message = args.m or time.time()
+        plt.savefig('save_img/{}.png'.format(message))
 
 
 def gen_fig_plot(fig, sizes):
