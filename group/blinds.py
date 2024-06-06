@@ -53,11 +53,11 @@ class Blinds:
 
     def _get_group_key(self, group_key, row_dic=None):
         if self.allowance:
-            ans_group_key = group_key // self.allowance
+            ans_group_key = int(group_key) // self.allowance
         elif config.get_args('insurance'):
             ans_group_key = resize_insurance(row_dic)
         else:
-            ans_group_key = group_key
+            ans_group_key = int(group_key)
         return ans_group_key
 
     def covert(self, row_dic, types='add'):
