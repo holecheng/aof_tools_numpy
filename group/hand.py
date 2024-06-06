@@ -52,9 +52,8 @@ class Hand:
 
     def __eq__(self, other):
         if self.allowance:
-            return self.group == other.group and self.group_key // self.allowance
-        else:
-            return self.group == other.group and self.group_key == other.group_key
+            self.group_key = self.group_key // self.allowance
+        return self.group == other.group and self.group_key == other.group_key
 
     def __add__(self, other):
         row_dic = other.row_dic
