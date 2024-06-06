@@ -57,6 +57,17 @@ def resize_insurance(row_key):
     return '{}{}_{}{}'.format(*[row_key[key] for key in must_key])
 
 
+def get_group_key(group_key, row_dic=None):
+    allowance = config.get_args('allowance')
+    if group_key == 'total':
+        return group_key
+    if allowance:
+        ans_group_key = int(group_key) // allowance
+    elif config.get_args('insurance'):
+        ans_group_key = resize_insurance(row_dic)
+    else:
+        ans_group_key = int(group_key)
+    return allowance, ans_group_key
 
 
 

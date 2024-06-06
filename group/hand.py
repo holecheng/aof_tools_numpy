@@ -1,5 +1,5 @@
 from config_parse import config
-from utils import resize_insurance
+from utils import resize_insurance, get_group_key
 
 
 class Hand:
@@ -24,19 +24,8 @@ class Hand:
         self.row_dic = row_dic
         self.allowance = config.get_args('allowance')
         print('余量计算为'.format(self.allowance))
-        self.group_key = self._get_group_key(group_key)
+        self.allowance, self.group_key = get_group_key(group_key)
         self._init_row_dic()
-
-    def _get_group_key(self, group_key, row_dic=None):
-        if group_key == 'total':
-            return group_key
-        if self.allowance:
-            ans_group_key = int(group_key) // self.allowance
-        elif config.get_args('insurance'):
-            ans_group_key = resize_insurance(row_dic)
-        else:
-            ans_group_key = int(group_key)
-        return ans_group_key
 
     def _init_row_dic(self):
         self.counts = 1
@@ -64,7 +53,7 @@ class Hand:
         self.diff_ev_outcome = self.avg_outcome - self.avg_ev
 
     def __eq__(self, other):
-        other_group_key = self._get_group_key(other.group_key, other.row_dic)
+        _, other_group_key = get_group_key(other.group_key, other.row_dic)
         return self.group == other.group and self.group_key == other_group_key
 
     def __add__(self, other):
