@@ -119,7 +119,7 @@ class NumpyReadDb:
         self.title = next(self.result_gen)
         if config.get_args('simple'):
             self.title = ['group', 'group_key', 'allowance', 'avg_ev', 'avg_flop_ev',
-                          'avg_turn_ev', 'avg_outcome', 'diff_ev_outcome', 'counts']
+                          'avg_turn_ev', 'avg_outcome', 'diff_ev_outcome', 'counts', 'date']
         self.format_list = [Hand, Blinds]
         self.group_dic = {}
         self.group = config.get_args('group')
