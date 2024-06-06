@@ -15,11 +15,14 @@ def run():
     parser.add_argument('--Y', type=str, nargs='?', help='Y轴', default='avg_ev,avg_outcome')
     parser.add_argument('--f-name', type=str, nargs='?', help='文件名')
     parser.add_argument('--types', type=str, nargs='?', help='图形类型', default='plot')
-    parser.add_argument('--count-min', type=int, nargs='?', help='最小场次', default=int)
+    parser.add_argument('--count-min', type=int, nargs='?', help='最小场次', default=0)
     args = parser.parse_args()
     df = pd.read_csv(str(os.path.join(BASE, args.f_name)))
+    total = df[df[args.X] == 'total']
+    df = df[df[args.X] != 'total']
     if args.count_min:
         df = df[df['counts'] >= args.count_min]
+    df[args.X] = df[args.X].astype(int)
     df = df.sort_values(by=args.X)
     color = ['r', 'b', 'c', 'g', 'k', 'm', 'y']
     y_list = args.Y.strip().split(',')
@@ -42,7 +45,7 @@ def run():
             a1.bar(df[args.X], df[col], label=col)
         autolabel(plot_gen)
     plt.title('%s && %s' % (args.X, args.Y))
-    plt.xlabel(args.X)
+    plt.xlabel('%s(%s)' % (total.loc[1, 'group'], total.loc[1, 'allowance']))
     plt.ylabel('avg')
     # 设置字体为宋体
     plt.rcParams['font.family'] = ['serif']  # 设置字体为有衬线字体（宋体是有衬线字体之一）
