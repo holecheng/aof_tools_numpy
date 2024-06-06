@@ -16,4 +16,8 @@ class Title:
     avg_turn_i: str = '平均购买turn保险'
 
 
+title = Title()
+
+
+
 
