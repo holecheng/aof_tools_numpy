@@ -59,7 +59,6 @@ def resize_insurance(row_key):
 
 def get_group_key(group_key, row_dic=None):
     allowance = config.get_args('allowance')
-    print(allowance)
     if group_key == 'total':
         return allowance, group_key
     if allowance:
