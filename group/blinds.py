@@ -52,6 +52,8 @@ class Blinds:
         return self
 
     def _get_group_key(self, group_key, row_dic=None):
+        if group_key == 'total':
+            return group_key
         if self.allowance:
             ans_group_key = int(group_key) // self.allowance
         elif config.get_args('insurance'):
