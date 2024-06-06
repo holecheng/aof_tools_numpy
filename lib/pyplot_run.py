@@ -15,31 +15,46 @@ def run():
     parser.add_argument('--X', type=str, nargs='?', help='X轴', default='group_key')
     parser.add_argument('--Y', type=str, nargs='?', help='Y轴', default='avg_ev,avg_outcome')
     parser.add_argument('--f-name', type=str, nargs='?', help='文件名')
-    parser.add_argument('--types', type=str, nargs='?', help='图形类型', default='plot')
+    parser.add_argument('--types', type=str, nargs='?', help='分类类型', default='group')
+    parser.add_argument('--plot-type', type=str, nargs='?', help='图形类型', default='plot')
     parser.add_argument('--count-min', type=int, nargs='?', help='最小场次', default=0)
     parser.add_argument('--m', type=str, nargs='?', help='描述信息', default='')
     parser.add_argument('--save', type=int, nargs='?', help='是否需要存储', default=0)
+    parser.add_argument('--sort-col', type=str, nargs='?', help='排序内容')
     args = parser.parse_args()
     df = pd.read_csv(str(os.path.join(BASE, args.f_name)))
     total = df[df[args.X] == 'total']
     df = df[df[args.X] != 'total']
     if args.count_min:
         df = df[df['counts'] >= args.count_min]
-    df[args.X] = df[args.X].astype(int)
-    df = df.sort_values(by=args.X)
+    try:
+        df[args.X] = df[args.X].astype(int)
+    except Exception as e:
+        pass
+    if args.sort_col:
+        df = df.sort_values(by=args.sort_col)
+    else:
+        df = df.sort_values(by=args.X)
     color = ['r', 'b', 'c', 'g', 'k', 'm', 'y']
     y_list = args.Y.strip().split(',')
-    if args.types == 'plot':
+    if args.plot_type == 'plot':
         for col in y_list:
             if color:
                 c = color.pop()
             else:
                 c = 'k'
             plt.plot(df[args.X], df[col], marker='o', color=c, linestyle='--', linewidth=2, markersize=8)
-        plt.legend()
-        plt.grid(True)
+    elif args.plot_type == 'scatter':
+        x = df[args.X]
+        y = df[args.Y]
+        plt.scatter(x, y)
+    plt.legend()
+    plt.grid(True)
     plt.title('%s && %s' % (args.X, args.Y))
-    plt.xlabel('%s(%s)' % (total.loc[1, 'group'], total.loc[1, 'allowance']))
+    if args.types == 'group':
+        plt.xlabel('%s(%s)' % (total.loc[1, 'group'], total.loc[1, 'allowance']))
+    else:
+        plt.xlabel('%s' % args.X)
     plt.ylabel('avg')
     # 设置字体为宋体
     plt.rcParams['font.family'] = ['serif']  # 设置字体为有衬线字体（宋体是有衬线字体之一）

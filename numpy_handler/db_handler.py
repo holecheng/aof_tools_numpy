@@ -47,7 +47,7 @@ def init_query():
                 continue
             if i.get('heroIndex') == -1:
                 continue
-            line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName', 'timestamp']
+            line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName', 'timestamp', 'date']
             player_key = ['pId', 'card_num', 'action', 'cards', 'blindLevel', ]
             if not row_key:
                 row_key = line_key + player_key + IS_DIGIT_KEY
@@ -78,6 +78,8 @@ def init_query():
                 winners = line.get('winners')
                 row_dic['timestamp'] = datetime.datetime.fromtimestamp(line.get('timestamp')).strftime(
                     '%Y-%m-%d %H:%M:%S')
+                row_dic['date'] = datetime.datetime.fromtimestamp(line.get('timestamp')).strftime(
+                    '%Y-%m-%d')
                 row_dic['is_turn'] = '1' if line.get('turn') else ''  # 是否turn
                 row_dic['is_river'] = '1' if line.get('river') else ''  # 是否存在river
                 row_dic['blindLevel'] = sign_blind_level(line.get('blindLevel')['blinds'])
