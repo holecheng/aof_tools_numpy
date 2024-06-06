@@ -21,7 +21,7 @@ logger = logging.getLogger()
 
 IS_DIGIT_KEY = ['stack', 'ev_player', 'outcome_player', 'flop_i', 'turn_i', 'player_count', 'is_push',
                 'straddle', 'ante', 'winner', 'is_turn', 'is_flop', 'is_leader_turn', 'is_leader_flop',
-                'flop_ev', 'is_river', 'turn_ev', 'seat']  # 可统计数据（数字类型）
+                'flop_ev', 'is_river', 'turn_ev', 'seat', 'ai_count', 'players']  # 可统计数据（数字类型）
 
 
 def init_query():
@@ -63,6 +63,8 @@ def init_query():
             player_count = len(players)
             if ai_count == player_count:
                 continue  # 表演赛不计入统计
+            row_dic['ai_count'] = str(ai_count)
+            row_dic['players'] = str(player_count)
             for hero_index, player in enumerate(players):
                 if config.get_args('player') and str(config.get_args('player')) != player.get('pId'):
                     continue
