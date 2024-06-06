@@ -20,8 +20,8 @@ from db.db_loader import db_col
 logger = logging.getLogger()
 
 IS_DIGIT_KEY = ['stack', 'ev_player', 'outcome_player', 'flop_i', 'turn_i', 'player_count', 'is_push',
-                'straddle', 'ante', 'winner', 'is_turn', 'is_flop', 'is_leader', 'flop_ev', 'is_river',
-                'turn_ev', 'seat']  # 可统计数据（数字类型）
+                'straddle', 'ante', 'winner', 'is_turn', 'is_flop', 'is_leader_turn', 'is_leader_flop',
+                'flop_ev', 'is_river', 'turn_ev', 'seat']  # 可统计数据（数字类型）
 
 
 def init_query():
@@ -100,7 +100,8 @@ def init_query():
                     player['card_num'] = ''
                 flop_insurance = players[hero_index].get('flopInsurance')
                 turn_insurance = players[hero_index].get('turnInsurance')
-                row_dic['is_leader'] = '1' if flop_insurance or turn_insurance else ''
+                row_dic['is_leader_flop'] = '1' if flop_insurance else ''
+                row_dic['is_leader_turn'] = '1' if turn_insurance else ''
                 player['flop_i'] = flop_insurance[0].get('betStacks', '0') if flop_insurance else ''
                 player['turn_i'] = turn_insurance[0].get('betStacks', '0') if turn_insurance else ''
                 row_dic.update({i: player.get(i) if not row_dic.get(i) else row_dic.get(i) for i in row_key})

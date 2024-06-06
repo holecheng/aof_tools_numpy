@@ -50,6 +50,14 @@ def time_format_time(formats='%Y-%m-%d %H:%M:%S'):
     return datetime.datetime.fromtimestamp(1711929600.0).strftime(formats)
 
 
+def resize_insurance(row_key):
+    must_key = ['is_leader_flop', 'is_leader_turn', 'flop_i', 'turn_i']
+    if not all(elem in row_key for elem in must_key):
+        return ''
+    return '{}{}_{}{}'.format(*[row_key[key] for key in must_key])
+
+
+
 
 
 

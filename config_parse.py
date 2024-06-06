@@ -36,6 +36,7 @@ class Config(object):
         self._parser.add_argument('--hand-detail', type=int, nargs='?', help='打印所有处理数据的pid详情', default=0)
         self._parser.add_argument('--enable-r', type=int, nargs='?', help='是否弃用redis数据', default=0)
         self._parser.add_argument('--allowance', type=int, nargs='?', help='余量', default=0)
+        self._parser.add_argument('--insurance', type=int, nargs='?', help='保险影响', default=0)
         self._args = self._parser.parse_args()
 
     def get_args(self, key):

@@ -1,4 +1,5 @@
 from config_parse import config
+from utils import resize_insurance
 
 
 class Hand:
@@ -20,10 +21,19 @@ class Hand:
         for i in self.__slots__:
             self.__setattr__(i, 0)
         self.group = group
-        self.group_key = group_key
         self.row_dic = row_dic
         self.allowance = config.get_args('allowance')
+        self.group = self._get_group_key(group_key)
         self._init_row_dic()
+
+    def _get_group_key(self, group_key, row_dic=None):
+        if self.allowance:
+            ans_group_key = group_key // self.allowance
+        elif config.get_args('insurance'):
+            ans_group_key = resize_insurance(row_dic)
+        else:
+            ans_group_key = group_key
+        return ans_group_key
 
     def _init_row_dic(self):
         self.counts = 1
@@ -51,9 +61,8 @@ class Hand:
         self.diff_ev_outcome = self.avg_outcome - self.avg_ev
 
     def __eq__(self, other):
-        if self.allowance:
-            self.group_key = self.group_key // self.allowance
-        return self.group == other.group and self.group_key == other.group_key
+        other_group_key = self._get_group_key(other.group_key, other.row_dic)
+        return self.group == other.group and self.group_key == other_group_key
 
     def __add__(self, other):
         row_dic = other.row_dic
@@ -62,25 +71,25 @@ class Hand:
         self.sum_is_river += row_dic.get('is_river')  # 是否存在river
         self.avg_is_flop = self.avg_get(self.sum_is_river, self.counts)
         self.avg_is_turn = self.avg_get(self.sum_is_turn, self.counts)
-        self.leader_counts += row_dic.get('is_leader')  # 领先总场次
         if row_dic['is_turn']:
             self.sum_is_turn += 1
+            self.leader_counts += row_dic.get('is_leader_turn') or row_dic.get('is_leader_flop')  # 领先总场次
             flop_ev_player = row_dic.get('flop_ev_player', 0)
             turn_ev_player = row_dic.get('turn_ev_player', 0)
             self.sum_flop_ev += float(flop_ev_player)
             self.sum_turn_ev += float(turn_ev_player)
             self.avg_flop_ev = self.avg_get(self.sum_ev, self.sum_is_turn)
             self.avg_turn_ev = self.avg_get(self.sum_outcome, self.sum_is_turn)
-        if row_dic.get('is_leader'):
-            flop_i = row_dic.get('flop_i')
-            turn_i = row_dic.get('turn_i')
-            self.sum_flop_i += flop_i
-            self.sum_turn_i += turn_i
-            if not any([turn_i, flop_i]):
-                self.no_insurance += 1  # 未买保险场次
-                self.avg_leader_counts = self.avg_get(self.no_insurance, self.leader_counts)
-            self.avg_flop_i = self.avg_get(self.sum_flop_i, self.leader_counts)
-            self.avg_turn_i = self.avg_get(self.sum_turn_i, self.leader_counts)
+            if row_dic.get('is_leader_turn') or row_dic.get('is_leader_flop'):
+                flop_i = row_dic.get('flop_i')
+                turn_i = row_dic.get('turn_i')
+                self.sum_flop_i += flop_i
+                self.sum_turn_i += turn_i
+                if not any([turn_i, flop_i]):
+                    self.no_insurance += 1  # 未买保险场次
+                    self.avg_leader_counts = self.avg_get(self.no_insurance, self.leader_counts)
+                self.avg_flop_i = self.avg_get(self.sum_flop_i, self.leader_counts)
+                self.avg_turn_i = self.avg_get(self.sum_turn_i, self.leader_counts)
         ev_player = row_dic.get('ev_player')
         outcome_player = row_dic.get('outcome_player')
         self.sum_ev += float(ev_player)
