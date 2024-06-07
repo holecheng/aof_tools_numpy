@@ -149,11 +149,10 @@ class NumpyReadDb:
     def get_row_result(self, index):
         cnt = 0
         data_format = self.format_list[index]
-        # try:
         while True:
             row_dic = self.get_generator()
             if not row_dic:
-                continue
+                break
             if config.get_args('group'):
                 self.apply_blinds_id(row_dic, data_format)
             if config.get_args('all'):
@@ -163,20 +162,18 @@ class NumpyReadDb:
             cnt += 1
             if cnt and cnt % 10000 == 0:
                 print('已处理数据{} * 10000'.format(cnt // 10000))
-        # except Exception as e:
-        #     print(e)
-        #     print('数据处理完成, 总计 {}'.format(cnt))
-        #     if self.f:
-        #         self.f.close()
-        #     title = list(data_format.__slots__)
-        #     title.remove('row_dic')
-        #     ans = [title]
-        #     for _, v in self.group_dic.items():
-        #         ans.append([round(getattr(v, i), 5) if isinstance(getattr(v, i), float)
-        #                     else getattr(v, i) for i in title])
-        #     if self.group:
-        #         self.write_excel(ans, config.get_args('query_time') + self.group)
-        #     return
+        print('数据处理完成, 总计 {}'.format(cnt))
+        if self.f:
+            self.f.close()
+        title = list(data_format.__slots__)
+        title.remove('row_dic')
+        ans = [title]
+        for _, v in self.group_dic.items():
+            ans.append([round(getattr(v, i), 5) if isinstance(getattr(v, i), float)
+                        else getattr(v, i) for i in title])
+        if self.group:
+            self.write_excel(ans, config.get_args('query_time') + self.group)
+        return
 
     def apply_blinds_id(self, row_dic, data_format):
         groups = data_format(self.group, row_dic)
