@@ -152,6 +152,8 @@ class NumpyReadDb:
         # try:
         while True:
             row_dic = self.get_generator()
+            if not row_dic:
+                continue
             if config.get_args('group'):
                 self.apply_blinds_id(row_dic, data_format)
             if config.get_args('all'):

@@ -31,8 +31,6 @@ class Base(object):
         return '{}{}_{}{}'.format(*[row_key[key] for key in must_key])
 
     def get_group_key(self, group, row_dic=None):
-        if not row_dic:
-            return ''
         group_key = row_dic[group]
         if self.allowance:
             ans_group_key = int(group_key) // self.allowance
