@@ -31,9 +31,10 @@ class Base(object):
         return '{}{}_{}{}'.format(*[row_key[key] for key in must_key])
 
     def get_group_key(self, group, row_dic=None):
+        if group not in row_dic:
+            print('有误的group{}'.format(group))
+            return ''
         group_key = row_dic[group]
-        if group_key == 'total':
-            return group_key
         if self.allowance:
             ans_group_key = int(group_key) // self.allowance
         elif config.get_args('insurance'):
