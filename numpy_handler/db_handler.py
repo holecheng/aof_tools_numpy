@@ -7,8 +7,8 @@ import time
 
 import redis
 
-from group.blinds import Blinds
-from group.hand import Hand
+from group.blinds_group import Blinds
+from group.hand_group import Hand
 
 from util_lib.assert_effective import RowHand
 # from handler import get_analysis, AvgStrategy
