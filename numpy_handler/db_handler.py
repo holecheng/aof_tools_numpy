@@ -176,14 +176,13 @@ class NumpyReadDb:
             return
 
     def apply_blinds_id(self, row_dic, data_format):
-        group = row_dic[self.group]
-        groups = data_format(self.group, group, row_dic)
+        groups = data_format(self.group, row_dic)
         group_key = groups.group_key
         if group_key not in self.group_dic:
             self.group_dic[group_key] = groups
         else:
             self.group_dic[group_key] += groups
-        total = data_format(self.group, 'total', row_dic)
+        total = data_format(self.group, row_dic, total=1)
         if 'total' not in self.group_dic:
             self.group_dic['total'] = total
         else:

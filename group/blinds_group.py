@@ -1,7 +1,7 @@
-from utils import get_group_key
+from group.group_base import Base
 
 
-class Blinds:
+class Blinds(Base):
     __slots__ = ('group',  # 组
                  'group_key',  # 分组值
                  'allowance',
@@ -24,13 +24,8 @@ class Blinds:
                  'row_dic',
                  )
 
-    def __init__(self, group, group_key, row_dic=None):
-        for i in self.__slots__:
-            self.__setattr__(i, 0)
-        self.counts = 1
-        self.group = group
-        self.row_dic = row_dic
-        self.allowance, self.group_key = get_group_key(group_key)
+    def __init__(self, group, row_dic=None):
+        super().__init__(group=group, row_dic=row_dic)
         self._init_row_dic()
 
     def _init_row_dic(self):
@@ -40,8 +35,7 @@ class Blinds:
         return self
 
     def __eq__(self, other):
-        _, other_group_key = get_group_key(other.group_key, other.row_dic)
-        return self.group == other.group and self.group_key == other_group_key
+        return self.group == other.group and self.return_group_key(other.row_dic) == self.group_key
 
     def __add__(self, other):
         row_dic = other.row_dic

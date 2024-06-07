@@ -1,8 +1,8 @@
 from config_parse import config
-from utils import get_group_key
+from group.group_base import Base
 
 
-class Hand:
+class Hand(Base):
     __slots__ = ('group', 'group_key', 'allowance', 'avg_ev',
                  'avg_flop_ev',  # 第一轮三张牌之后的期望（均值）
                  'avg_turn_ev',  # turn牌发出来的期望（均值）
@@ -17,13 +17,8 @@ class Hand:
                  'sum_is_river', 'sum_is_push',
                  )
 
-    def __init__(self, group, group_key, row_dic=None):
-        for i in self.__slots__:
-            self.__setattr__(i, 0)
-        self.group = group
-        self.row_dic = row_dic
-        self.allowance = config.get_args('allowance')
-        self.allowance, self.group_key = get_group_key(group_key)
+    def __init__(self, group, row_dic=None):
+        super().__init__(group=group, row_dic=row_dic)
         self._init_row_dic()
 
     def _init_row_dic(self):
@@ -52,8 +47,7 @@ class Hand:
         self.diff_ev_outcome = self.avg_outcome - self.avg_ev
 
     def __eq__(self, other):
-        _, other_group_key = get_group_key(other.group_key, other.row_dic)
-        return self.group == other.group and self.group_key == other_group_key
+        return self.group == other.group and self.return_group_key(other.row_dic) == self.group_key
 
     def __add__(self, other):
         row_dic = other.row_dic
