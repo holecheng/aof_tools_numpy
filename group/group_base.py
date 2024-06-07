@@ -20,7 +20,7 @@ class Base(object):
         for i in self.group.split(','):
             if group_merge:
                 group_merge += ','
-            group_merge += self.get_group_key(i, row_dic)
+            group_merge += str(self.get_group_key(i, row_dic))
         return group_merge
 
     @staticmethod
