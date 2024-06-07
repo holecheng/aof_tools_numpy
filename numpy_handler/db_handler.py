@@ -172,7 +172,7 @@ class NumpyReadDb:
             ans.append([round(getattr(v, i), 5) if isinstance(getattr(v, i), float)
                         else getattr(v, i) for i in title])
         if self.group:
-            self.write_excel(ans, config.get_args('query_time') + self.group)
+            self.write_excel(ans, config.get_args('query_time') + self.group.replace('**', ''))
         return
 
     def apply_blinds_id(self, row_dic, data_format):
