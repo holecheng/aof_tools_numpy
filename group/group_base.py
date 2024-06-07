@@ -17,9 +17,9 @@ class Base(object):
 
     def return_group_key(self, row_dic):
         group_merge = ''  # 返回的键值 '1,2'
-        for i in self.group.split('&'):
+        for i in self.group.split('**'):
             if group_merge:
-                group_merge += '&'
+                group_merge += '**'
             group_merge += str(self.get_group_key(i, row_dic))
         return group_merge
 
