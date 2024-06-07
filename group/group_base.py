@@ -33,9 +33,9 @@ class Base(object):
     def get_group_key(self, group, row_dic=None):
         group_key = row_dic[group]
         if self.allowance:
-            ans_group_key = int(group_key) // self.allowance
+            ans_group_key = str(int(group_key) // self.allowance)
         elif config.get_args('insurance'):
-            ans_group_key = self.resize_insurance(row_dic)
+            ans_group_key = str(self.resize_insurance(row_dic))
         else:
             ans_group_key = str(group_key)
         return ans_group_key
