@@ -41,20 +41,23 @@ def run():
     y_list = args.Y.strip().split(',')
     # fig = plt.figure()
     fig, ax = plt.subplots(1, 1)
-    y_major_locator = MultipleLocator(0.1)
-    x_major_locator = MultipleLocator(1)
-    ax = plt.gca()
-    ax.xaxis.set_major_locator(x_major_locator)
-    ax.yaxis.set_major_locator(y_major_locator)
-    plt.ylim(0, 1.0)
-    plt.xlim(0, 100)
+    # y_major_locator = MultipleLocator(10)
+    # x_major_locator = MultipleLocator(10)
+    # ax = plt.gca()
+    # ax.xaxis.set_major_locator(x_major_locator)
+    # ax.yaxis.set_major_locator(y_major_locator)
+    # plt.ylim(0, 10)
+    plt.xlim(0, 24)
     if args.plot_type == 'plot':
         for col in y_list:
             if color:
                 c = color.pop()
             else:
                 c = 'k'
-            plt.plot(df[args.X], df[col], marker='o', color=c, linestyle='--', linewidth=2, markersize=2)
+            plt.plot(df[args.X], df[col], label=col, marker='o', color=c, linestyle='--', linewidth=2, markersize=2)
+        for i in df.index:
+            plt.text(df.loc[:, args.X][i], df.loc[:, y_list[0]][i], df.loc[:, 'counts'][i])
+        plt.xticks(df.index)
     elif args.plot_type == 'scatter':
         x = df[args.X]
         y = df[args.Y]
