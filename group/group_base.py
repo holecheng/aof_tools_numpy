@@ -34,12 +34,12 @@ class Base(object):
         group_key = row_dic[group]
         if group_key == 'total':
             return group_key
-        if self.allowance :
+        if self.allowance:
             ans_group_key = int(group_key) // self.allowance
         elif config.get_args('insurance'):
             ans_group_key = self.resize_insurance(row_dic)
         else:
-            ans_group_key = int(group_key)
+            ans_group_key = str(group_key)
         return ans_group_key
 
 
