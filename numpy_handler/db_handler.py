@@ -63,12 +63,12 @@ def init_query():
             player_count = len(players)
             if ai_count == player_count:
                 continue  # 表演赛不计入统计
-            row_dic['ai_count'] = str(ai_count)
-            row_dic['players'] = str(player_count)
             for hero_index, player in enumerate(players):
                 if config.get_args('player') and str(config.get_args('player')) != player.get('pId'):
                     continue
                 row_dic = collections.defaultdict(str)
+                row_dic['ai_count'] = str(ai_count)
+                row_dic['players'] = str(player_count)
                 p_id = player.get('pId')
                 if not p_id or p_id not in pid_set:
                     continue  # 非AI玩家暂不分析
