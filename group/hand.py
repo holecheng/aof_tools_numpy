@@ -1,5 +1,5 @@
 from config_parse import config
-from utils import resize_insurance, get_group_key
+from utils import get_group_key
 
 
 class Hand:
@@ -23,7 +23,6 @@ class Hand:
         self.group = group
         self.row_dic = row_dic
         self.allowance = config.get_args('allowance')
-        print('余量计算为'.format(self.allowance))
         self.allowance, self.group_key = get_group_key(group_key)
         self._init_row_dic()
 
