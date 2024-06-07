@@ -29,9 +29,8 @@ class Blinds(Base):
         self._init_row_dic()
 
     def _init_row_dic(self):
-        row_dic = self.row_dic
         self.counts = 1
-        self.covert(row_dic, 'init')
+        self.covert(self.row_dic, 'init')
         return self
 
     def __eq__(self, other):
