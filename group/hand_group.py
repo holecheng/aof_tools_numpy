@@ -17,8 +17,8 @@ class Hand(Base):
                  'sum_is_river', 'sum_is_push',
                  )
 
-    def __init__(self, group, row_dic=None):
-        super().__init__(group=group, row_dic=row_dic)
+    def __init__(self, group, row_dic=None, total=None):
+        super().__init__(group=group, row_dic=row_dic, total=total)
         self._init_row_dic()
 
     def _init_row_dic(self):
