@@ -123,6 +123,7 @@ class NumpyReadDb:
         self.format_list = [Hand, Blinds]
         self.group_dic = {}
         self.group = config.get_args('group')
+        print(self.group)
         self.f = None
         file_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'db_file',)
         if config.get_args('all'):
