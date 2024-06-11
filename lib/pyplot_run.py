@@ -25,6 +25,7 @@ def run():
     parser.add_argument('--sort-col', type=str, nargs='?', help='排序内容')
     parser.add_argument('--x-ticks', type=int, nargs='?', help='是否需要显示X轴', default=1 )
     args = parser.parse_args()
+    time_inv = args.f_name.split('_')[1]
     df = pd.read_csv(str(os.path.join(BASE, args.f_name)))
     df = df[df[args.X] != 'total']
     if args.count_min:
@@ -66,13 +67,13 @@ def run():
         plt.scatter(x, y)
     plt.legend()
     plt.grid(True)
-    plt.title('%s && %s' % (args.X, args.Y))
+    plt.title('%s' % time_inv)
     total = df[df['group_key'] == 'total']
     if args.types == 'group':
         plt.xlabel('%s(%s)' % (total['group'], total['allowance']))
     else:
         plt.xlabel('%s' % args.X)
-    plt.ylabel('avg')
+    plt.ylabel('%s' % args.Y)
     # 设置字体为宋体
     plt.rcParams['font.family'] = ['serif']  # 设置字体为有衬线字体（宋体是有衬线字体之一）
     plt.rcParams['font.serif'] = ['SimSun']  # 设置有衬线字体为宋体
