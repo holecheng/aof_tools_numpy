@@ -20,6 +20,7 @@ def run():
     parser.add_argument('--types', type=str, nargs='?', help='分类类型', default='group')
     parser.add_argument('--plot-type', type=str, nargs='?', help='图形类型', default='plot')
     parser.add_argument('--count-min', type=int, nargs='?', help='最小场次', default=0)
+    parser.add_argument('--Y-min', type=float, nargs='?', help='最小Y值', default=0)
     parser.add_argument('--m', type=str, nargs='?', help='描述信息', default='')
     parser.add_argument('--save', type=int, nargs='?', help='是否需要存储', default=0)
     parser.add_argument('--sort-col', type=str, nargs='?', help='排序内容')
@@ -29,7 +30,7 @@ def run():
     time_inv = args.f_name.split('_')[1]
     df = pd.read_csv(str(os.path.join(BASE, args.f_name)))
     df = df[df[args.X] != 'total']
-    if args.endswith():
+    if args.endswith:
         df = df[df[args.X].endswith(args.endswith)]
     if args.count_min:
         df = df[df['counts'] >= args.count_min]
@@ -43,6 +44,8 @@ def run():
         df = df.sort_values(by=args.X)
     color = ['r', 'b', 'c', 'g', 'k', 'm', 'y']
     y_list = args.Y.strip().split(',')
+    if len(y_list) == 1 and args.Y_min:
+        df = df[df[y_list[0]] > args.Y_min]
     # fig = plt.figure()
     fig, ax = plt.subplots(1, 1)
     # y_major_locator = MultipleLocator(10)
@@ -51,6 +54,7 @@ def run():
     # ax.xaxis.set_major_locator(x_major_locator)
     # ax.yaxis.set_major_locator(y_major_locator)
     # plt.ylim(0, 10)
+    print(df.shape[0])
     xlt = 40 if df.shape[0] > 40 else df.shape[0]
     plt.xlim(0, xlt)
     if args.plot_type == 'plot':
@@ -63,11 +67,13 @@ def run():
         for i in df.index[:xlt]:
             plt.text(df.loc[:, args.X][i], df.loc[:, y_list[0]][i], df.loc[:, 'counts'][i])
         if args.x_ticks:
-            plt.xticks(df.index[:xlt])
+            plt.xticks(df['group_key'][:xlt], rotation=90)
     elif args.plot_type == 'scatter':
         x = df[args.X]
         y = df[args.Y]
         plt.scatter(x, y)
+        if args.x_ticks:
+            plt.xticks(df['group_key'][:xlt], rotation=90)
     plt.legend()
     plt.grid(True)
     plt.title('%s' % time_inv)
