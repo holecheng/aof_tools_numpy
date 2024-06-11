@@ -182,11 +182,11 @@ class NumpyReadDb:
             self.group_dic[group_key] = groups
         else:
             self.group_dic[group_key] += groups
-        total = data_format(self.group, row_dic, total=1)
-        if 'total' not in self.group_dic:
-            self.group_dic['total'] = total
-        else:
-            self.group_dic['total'] += total
+        # total = data_format(self.group, row_dic, total=1)
+        # if 'total' not in self.group_dic:
+        #     self.group_dic['total'] = total
+        # else:
+        #     self.group_dic['total'] += total
 
     def get_generator(self):
         try:
