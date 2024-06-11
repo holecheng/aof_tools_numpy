@@ -77,6 +77,7 @@ class Hand(Base):
                 self.avg_turn_i = self.avg_get(self.sum_turn_i, self.leader_counts)
         ev_player = row_dic.get('ev_player')
         outcome_player = row_dic.get('outcome_player')
+        print(1, ev_player, outcome_player)
         self.sum_ev += float(ev_player)
         self.sum_is_push += row_dic.get('is_push')
         self.sum_outcome += float(outcome_player)

@@ -55,6 +55,7 @@ class Blinds(Base):
                 self.avg_flop_ev = self.avg_get(self.sum_ev, self.turn_count)
                 self.avg_turn_ev = self.avg_get(self.sum_outcome, self.turn_count)
             else:
+                print(2, ev_player, outcome_player)
                 self.sum_ev += float(ev_player)
                 self.sum_outcome += float(outcome_player)
                 self.avg_ev = self.avg_get(self.sum_ev, self.counts)
@@ -64,6 +65,7 @@ class Blinds(Base):
                 self.turn_count += 1
                 self.avg_flop_ev = self.sum_flop_ev = float(flop_ev_player)
                 self.avg_turn_ev = self.sum_turn_ev = float(turn_ev_player)
+            print(1, ev_player, outcome_player)
             self.avg_ev = self.sum_ev = float(ev_player)
             self.avg_outcome = self.sum_outcome = float(outcome_player)
         self.diff_ev_outcome = self.avg_outcome - self.avg_ev
