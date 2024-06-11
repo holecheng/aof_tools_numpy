@@ -40,8 +40,6 @@ class Blinds(Base):
         row_dic = other.row_dic
         self.counts += 1
         self.covert(row_dic)
-        print('相加{}'.format(other.row_dic.get('ev_player')))
-        print(self.sum_ev)
         return self
 
     def covert(self, row_dic, types='add'):
@@ -56,11 +54,10 @@ class Blinds(Base):
                 self.sum_turn_ev += float(turn_ev_player)
                 self.avg_flop_ev = self.avg_get(self.sum_ev, self.turn_count)
                 self.avg_turn_ev = self.avg_get(self.sum_outcome, self.turn_count)
-            else:
-                self.sum_ev += float(ev_player)
-                self.sum_outcome += float(outcome_player)
-                self.avg_ev = self.avg_get(self.sum_ev, self.counts)
-                self.avg_outcome = self.avg_get(self.sum_outcome, self.counts)
+            self.sum_ev += float(ev_player)
+            self.sum_outcome += float(outcome_player)
+            self.avg_ev = self.avg_get(self.sum_ev, self.counts)
+            self.avg_outcome = self.avg_get(self.sum_outcome, self.counts)
         else:
             if row_dic['is_turn']:
                 self.turn_count += 1
