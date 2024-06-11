@@ -82,6 +82,7 @@ def init_query():
                     '%Y-%m-%d %H').split(' ')
                 row_dic['is_turn'] = '1' if line.get('turn') else ''  # 是否turn
                 row_dic['is_river'] = '1' if line.get('river') else ''  # 是否存在river
+                print(line.get('blindLevel'))
                 row_dic['stack'] = int(player.get('stack')) // line.get('blindLevel')[-1]
                 row_dic['blindLevel'] = sign_blind_level(line.get('blindLevel')['blinds'])
                 if flop_ev_list and turn_ev_list:
