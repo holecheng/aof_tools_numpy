@@ -23,11 +23,14 @@ def run():
     parser.add_argument('--m', type=str, nargs='?', help='描述信息', default='')
     parser.add_argument('--save', type=int, nargs='?', help='是否需要存储', default=0)
     parser.add_argument('--sort-col', type=str, nargs='?', help='排序内容')
-    parser.add_argument('--x-ticks', type=int, nargs='?', help='是否需要显示X轴', default=1 )
+    parser.add_argument('--x-ticks', type=int, nargs='?', help='是否需要显示X轴', default=1)
+    parser.add_argument('--endswith', type=str, nargs='?', help='是否需要显示X轴', default='')
     args = parser.parse_args()
     time_inv = args.f_name.split('_')[1]
     df = pd.read_csv(str(os.path.join(BASE, args.f_name)))
     df = df[df[args.X] != 'total']
+    if args.endswith():
+        df = df[df[args.X].endswith(args.endswith)]
     if args.count_min:
         df = df[df['counts'] >= args.count_min]
     try:
