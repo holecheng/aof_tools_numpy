@@ -42,6 +42,8 @@ def init_query():
         row_key = []
         query_round = set()  # 用于统计是否该局号已被计入
         for i in result:
+            if i.get('handNumber') == '101669491-118':
+                print(i)
             is_success, _ = RowHand().convert(i)
             if not is_success:
                 continue
