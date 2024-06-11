@@ -54,10 +54,9 @@ def run():
     # ax.xaxis.set_major_locator(x_major_locator)
     # ax.yaxis.set_major_locator(y_major_locator)
     # plt.ylim(0, 10)
-    print(df.shape[0])
-    xlt = 40 if df.shape[0] > 40 else df.shape[0]
-    plt.xlim(0, xlt)
     if args.plot_type == 'plot':
+        xlt = 40 if df.shape[0] > 40 else df.shape[0]
+        plt.xlim(0, xlt)
         for col in y_list:
             if color:
                 c = color.pop()
@@ -73,7 +72,7 @@ def run():
         y = df[args.Y]
         plt.scatter(x, y)
         if args.x_ticks:
-            plt.xticks(df['group_key'][:xlt], rotation=90)
+            plt.xticks(df['group_key'], rotation=90)
     plt.legend()
     plt.grid(True)
     plt.title('%s' % time_inv)
