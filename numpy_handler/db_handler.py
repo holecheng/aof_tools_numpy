@@ -36,7 +36,7 @@ def init_query():
         else:
             print('正在设置AI PID信息')
             pid_set = db_col.run_pid_set()
-            r.set('pid_set', json.dumps(list(pid_set)), ex=60*1000*60*24)
+            r.set('pid_set', json.dumps(list(pid_set)), ex=60*60*24)
             print('设置完毕！！！！！！')
         result = db_col.run_query()
         row_key = []
@@ -82,6 +82,7 @@ def init_query():
                     '%Y-%m-%d %H').split(' ')
                 row_dic['is_turn'] = '1' if line.get('turn') else ''  # 是否turn
                 row_dic['is_river'] = '1' if line.get('river') else ''  # 是否存在river
+                row_dic['stack'] = int(player.get('stack')) // line.get('blindLevel')[-1]
                 row_dic['blindLevel'] = sign_blind_level(line.get('blindLevel')['blinds'])
                 if flop_ev_list and turn_ev_list:
                     row_dic['flop_ev'] = flop_ev_list[hero_index]

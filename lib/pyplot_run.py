@@ -23,9 +23,9 @@ def run():
     parser.add_argument('--m', type=str, nargs='?', help='描述信息', default='')
     parser.add_argument('--save', type=int, nargs='?', help='是否需要存储', default=0)
     parser.add_argument('--sort-col', type=str, nargs='?', help='排序内容')
+    parser.add_argument('--x-ticks', type=int, nargs='?', help='是否需要显示X轴', default=1 )
     args = parser.parse_args()
     df = pd.read_csv(str(os.path.join(BASE, args.f_name)))
-    total = df[df[args.X] == 'total']
     df = df[df[args.X] != 'total']
     if args.count_min:
         df = df[df['counts'] >= args.count_min]
@@ -47,7 +47,8 @@ def run():
     # ax.xaxis.set_major_locator(x_major_locator)
     # ax.yaxis.set_major_locator(y_major_locator)
     # plt.ylim(0, 10)
-    plt.xlim(0, 24)
+    xlt = 40 if df.shape[0] > 40 else df.shape[0]
+    plt.xlim(0, xlt)
     if args.plot_type == 'plot':
         for col in y_list:
             if color:
@@ -55,9 +56,10 @@ def run():
             else:
                 c = 'k'
             plt.plot(df[args.X], df[col], label=col, marker='o', color=c, linestyle='--', linewidth=2, markersize=2)
-        for i in df.index:
+        for i in df.index[:xlt]:
             plt.text(df.loc[:, args.X][i], df.loc[:, y_list[0]][i], df.loc[:, 'counts'][i])
-        plt.xticks(df.index)
+        if args.x_ticks:
+            plt.xticks(df.index[:xlt])
     elif args.plot_type == 'scatter':
         x = df[args.X]
         y = df[args.Y]
@@ -65,8 +67,9 @@ def run():
     plt.legend()
     plt.grid(True)
     plt.title('%s && %s' % (args.X, args.Y))
+    total = df[df['group_key'] == 'total']
     if args.types == 'group':
-        plt.xlabel('%s(%s)' % (total.loc[1, 'group'], total.loc[1, 'allowance']))
+        plt.xlabel('%s(%s)' % (total['group'], total['allowance']))
     else:
         plt.xlabel('%s' % args.X)
     plt.ylabel('avg')
