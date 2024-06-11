@@ -42,8 +42,6 @@ def init_query():
         row_key = []
         query_round = set()  # 用于统计是否该局号已被计入
         for i in result:
-            if i.get('handNumber') == '101669491-118':
-                print(i)
             is_success, _ = RowHand().convert(i)
             if not is_success:
                 continue
@@ -86,6 +84,8 @@ def init_query():
                 row_dic['is_river'] = '1' if line.get('river') else ''  # 是否存在river
                 row_dic['stack'] = int(player.get('stack')) // line.get('blindLevel')['blinds'][-1]
                 row_dic['blindLevel'] = sign_blind_level(line.get('blindLevel')['blinds'])
+                if not (line.get('heroIndex') is None):
+                    row_dic['heroIndex'] = str(hero_index)
                 if flop_ev_list and turn_ev_list:
                     row_dic['flop_ev'] = flop_ev_list[hero_index]
                     row_dic['turn_ev'] = turn_ev_list[hero_index]
