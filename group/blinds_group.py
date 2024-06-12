@@ -18,7 +18,6 @@ class Blinds(Base):
                  'sum_outcome_player',
                  'sum_flop_ev',
                  'sum_turn_ev',
-                 'sum_rounds',
                  'sum_ai_stack',
                  'compare_stack',
                  'row_dic',
