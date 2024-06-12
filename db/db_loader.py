@@ -71,5 +71,12 @@ class DBLoader:
                     pid_set.add(p_id)
         return pid_set
 
+    def insert_players(self, ids, dic=None):
+        if dic is None:
+            print('插入数据有误    #_id')
+            return
+        else:
+            self.db.update_many({'_id': ids}, {'$set': dic})
+
 
 db_col = DBLoader()

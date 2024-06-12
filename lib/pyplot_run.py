@@ -1,6 +1,7 @@
 import argparse
 import math
 import time
+from functools import reduce
 
 from matplotlib import pyplot as plt, ticker
 
@@ -105,21 +106,11 @@ def run():
     plt.close()
 
 
-# def gen_fig_plot(fig, sizes):
-#     ans = [1, 1, 0]
-#     for i in range(1, sizes + 1):
-#         if ans != sizes:
-#             ans[2] += 1
-#             yield fig.add_subplot(*ans)
-#         else:
-#             ans[2] = 1
-#             if ans[1] != sizes:
-#                 ans[1] += 1
-#             else:
-#                 ans[1] = 1
-#                 ans[0] += 1
-#             yield fig.add_subplot(*ans)
-
+# def gen_fig_plot(sizes: int):
+#     ans = [sizes, sizes, 0]
+#     for _ in range(1, sizes ** 2 + 1):
+#         ans[-1] += 1
+#         yield reduce(lambda x, y: x*10+y, ans)
 
 # def autolabel(rects):
 #     for rect in rects:

@@ -6,6 +6,7 @@ import os.path
 import time
 
 import redis
+import requests
 
 from group.blinds_group import Blinds
 from group.hand_group import Hand
@@ -43,6 +44,13 @@ def init_query():
         query_round = set()  # 用于统计是否该局号已被计入
         cnt = 0
         for i in result:
+            if config.get_args('update_db'):
+                url = ''
+                if r.sismember('updated_id', i.get('_id')):
+                    resp = requests.post(url, data=json.dumps(i))
+                    db_col.insert_players(i.get('_id'), {'pJson': resp.json()})
+                else:
+                    r.sadd('updated_id', 'value1')
             is_success, _ = RowHand().convert(i)
             if not is_success:
                 continue
