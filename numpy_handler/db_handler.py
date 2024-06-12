@@ -21,7 +21,7 @@ logger = logging.getLogger()
 
 IS_DIGIT_KEY = ['stack', 'ev_player', 'outcome_player', 'flop_i', 'turn_i', 'player_count', 'is_push',
                 'straddle', 'ante', 'winner', 'is_turn', 'is_flop', 'is_leader_turn', 'is_leader_flop',
-                'flop_ev', 'is_river', 'turn_ev', 'seat', 'ai_count', 'players']  # 可统计数据（数字类型）
+                'flop_ev', 'is_river', 'turn_ev', 'seat', 'ai_count', 'players', 'ai_stack', 'compare_stack']  # 可统计数据（数字类型）
 
 
 def init_query():
@@ -63,6 +63,9 @@ def init_query():
             player_count = len(players)
             if ai_count == player_count:
                 continue  # 表演赛不计入统计
+            ai_stack = sum([int(i.get('stack')) for i in filter(
+                    lambda x: x.get('pId') in pid_set, players)])
+            compare_stack = ai_stack / (sum([int(i.get('stack')) for i in players]) - ai_stack)
             for hero_index, player in enumerate(players):
                 if config.get_args('player') and str(config.get_args('player')) != player.get('pId'):
                     continue
@@ -72,6 +75,8 @@ def init_query():
                 p_id = player.get('pId')
                 if not p_id or p_id not in pid_set:
                     continue  # 非AI玩家暂不分析
+                row_dic['ai_stack'] = str(ai_stack)
+                row_dic['compare_stack'] = str(compare_stack)
                 row_dic.update({i: line.get(i) for i in row_key})
                 outcome = line.get('outcome')[hero_index]
                 ev = line.get('ev')[hero_index]

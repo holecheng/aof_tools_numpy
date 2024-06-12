@@ -21,6 +21,8 @@ class Blinds(Base):
                  'sum_flop_ev',
                  'sum_turn_ev',
                  'sum_rounds',
+                 'sum_stack',
+                 'compare_stack',
                  'row_dic',
                  )
 
@@ -56,6 +58,10 @@ class Blinds(Base):
                 self.avg_turn_ev = self.avg_get(self.sum_outcome, self.turn_count)
             self.sum_ev += float(ev_player)
             self.sum_outcome += float(outcome_player)
+            self.sum_stack += float(row_dic['ai_stack'])
+            self.compare_stack += float(row_dic['compare_stack'])
+            self.avg_sum_stack = self.avg_get(self.sum_stack, self.counts)
+            self.avg_compare_stack = self.avg_get(self.compare_stack, self.counts)
             self.avg_ev = self.avg_get(self.sum_ev, self.counts)
             self.avg_outcome = self.avg_get(self.sum_outcome, self.counts)
         else:
@@ -65,6 +71,8 @@ class Blinds(Base):
                 self.avg_turn_ev = self.sum_turn_ev = float(turn_ev_player)
             self.avg_ev = self.sum_ev = float(ev_player)
             self.avg_outcome = self.sum_outcome = float(outcome_player)
+            self.avg_sum_stack = self.sum_stack = float(row_dic['ai_stack'])
+            self.avg_compare_stack = self.compare_stack = float(row_dic['compare_stack'])
         self.diff_ev_outcome = self.avg_outcome - self.avg_ev
 
     @staticmethod
