@@ -41,6 +41,7 @@ def init_query():
         result = db_col.run_query()
         row_key = []
         query_round = set()  # 用于统计是否该局号已被计入
+        cnt = 0
         for i in result:
             is_success, _ = RowHand().convert(i)
             if not is_success:
@@ -68,6 +69,8 @@ def init_query():
                     lambda x: x.get('pId') in pid_set, players)])
             if sum([int(i.get('stack')) / ante for i in players]) == ai_stack:
                 compare_stack = 0
+                cnt += 1
+                print('存在异常的数据,第{}个'.format(cnt))
             else:
                 compare_stack = ai_stack / (sum([int(i.get('stack')) / ante for i in players]) - ai_stack)
             for hero_index, player in enumerate(players):
