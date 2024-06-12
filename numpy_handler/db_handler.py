@@ -63,9 +63,11 @@ def init_query():
             player_count = len(players)
             if ai_count == player_count:
                 continue  # 表演赛不计入统计
-            ai_stack = sum([int(i.get('stack')) for i in filter(
+            ante = line.get('blindLevel')['blinds'][-1]
+            ai_stack = sum([float(i.get('stack') / ante) for i in filter(
                     lambda x: x.get('pId') in pid_set, players)])
-            compare_stack = ai_stack / (sum([int(i.get('stack')) for i in players]) - ai_stack)
+            print(sum([int(i.get('stack')) / ante for i in players]), ai_stack)
+            compare_stack = ai_stack / (sum([int(i.get('stack')) / ante for i in players]) - ai_stack)
             for hero_index, player in enumerate(players):
                 if config.get_args('player') and str(config.get_args('player')) != player.get('pId'):
                     continue
@@ -87,7 +89,7 @@ def init_query():
                     '%Y-%m-%d %H').split(' ')
                 row_dic['is_turn'] = '1' if line.get('turn') else ''  # 是否turn
                 row_dic['is_river'] = '1' if line.get('river') else ''  # 是否存在river
-                row_dic['stack'] = int(player.get('stack')) // line.get('blindLevel')['blinds'][-1]
+                row_dic['stack'] = int(player.get('stack')) // ante
                 row_dic['blindLevel'] = sign_blind_level(line.get('blindLevel')['blinds'])
                 if not (line.get('heroIndex') is None):
                     row_dic['heroIndex'] = str(hero_index)
