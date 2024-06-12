@@ -45,9 +45,8 @@ def init_query():
         cnt = 0
         for i in result:
             if config.get_args('update_db'):
-                url = ''
                 if r.sismember('updated_id', i.get('_id')):
-                    resp = requests.post(url, data=json.dumps(i))
+                    resp = requests.post(config.config.get('url'), data=json.dumps(i))
                     db_col.insert_players(i.get('_id'), {'pJson': resp.json()})
                 else:
                     r.sadd('updated_id', 'value1')

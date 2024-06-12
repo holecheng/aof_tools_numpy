@@ -3,7 +3,8 @@
     "db_name": "aof",
     "table_name": "history",
     "root": "",
-    "password": ""
+    "password": "",
+    "p_url": ""
 }
 
 
