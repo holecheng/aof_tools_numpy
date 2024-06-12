@@ -42,10 +42,10 @@ class Blinds(Base):
         return self
 
     def covert(self, row_dic, types='add'):
-        print(row_dic)
         if types == 'add':
             if row_dic['is_turn']:
                 self.turn_count += 1
+                print(row_dic.get('flop_ev'))
                 self.add_or_init('flop_ev', row_dic, counts=self.turn_count)
                 self.add_or_init('turn_ev', row_dic, counts=self.turn_count)
             self.add_or_init('ev_player', row_dic)
