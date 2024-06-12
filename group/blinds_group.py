@@ -66,6 +66,9 @@ class Blinds(Base):
         if not counts:
             counts = self.counts
         if types == 'add':
+            if suffix == 'ev_player':
+                print('本轮需要处理的值%s' % (row_dic[suffix]))
+                print('相加后的值'.format(getattr(self, 'avg_' + suffix) + float(row_dic[suffix])))
             setattr(self, 'sum_' + suffix, getattr(self, 'avg_' + suffix) + float(row_dic[suffix]))
             setattr(self, 'avg_' + suffix, self.avg_get(getattr(self, 'sum_' + suffix), counts))
         else:
