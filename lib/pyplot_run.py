@@ -15,7 +15,7 @@ BASE = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'output')
 def run():
     parser = argparse.ArgumentParser(description='传递参数')
     parser.add_argument('--X', type=str, nargs='?', help='X轴', default='group_key')
-    parser.add_argument('--Y', type=str, nargs='?', help='Y轴', default='avg_ev,avg_outcome')
+    parser.add_argument('--Y', type=str, nargs='?', help='Y轴', default='avg_ev_player,avg_outcome_player')
     parser.add_argument('--f-name', type=str, nargs='?', help='文件名')
     parser.add_argument('--types', type=str, nargs='?', help='分类类型', default='group')
     parser.add_argument('--plot-type', type=str, nargs='?', help='图形类型', default='plot')
