@@ -66,11 +66,11 @@ class Blinds(Base):
         if not counts:
             counts = self.counts
         if types == 'add':
-            setattr(self, 'sum' + suffix, getattr(self, 'avg' + suffix) + float(row_dic[suffix]))
-            setattr(self, 'avg' + suffix, self.avg_get(getattr(self, 'sum' + suffix), counts))
+            setattr(self, 'sum_' + suffix, getattr(self, 'avg_' + suffix) + float(row_dic[suffix]))
+            setattr(self, 'avg_' + suffix, self.avg_get(getattr(self, 'sum_' + suffix), counts))
         else:
-            setattr(self, 'avg'+suffix, float(row_dic[suffix]))
-            setattr(self, 'sum' + suffix, float(row_dic[suffix]))
+            setattr(self, 'avg_'+suffix, float(row_dic[suffix]))
+            setattr(self, 'sum_' + suffix, float(row_dic[suffix]))
 
     @staticmethod
     def avg_get(sum_c, count):
