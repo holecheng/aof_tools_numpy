@@ -19,7 +19,7 @@ class Blinds(Base):
                  'sum_flop_ev',
                  'sum_turn_ev',
                  'sum_ai_stack',
-                 'compare_stack',
+                 'sum_compare_stack',
                  'row_dic',
                  )
 
