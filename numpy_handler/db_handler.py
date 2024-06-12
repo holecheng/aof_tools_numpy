@@ -66,9 +66,8 @@ def init_query():
             ante = line.get('blindLevel')['blinds'][-1]
             ai_stack = sum([float(i.get('stack') / ante) for i in filter(
                     lambda x: x.get('pId') in pid_set, players)])
-            print(sum([int(i.get('stack')) / ante for i in players]), ai_stack, ai_count, player_count)
             if sum([int(i.get('stack')) / ante for i in players]) == ai_stack:
-                print(players)
+                compare_stack = 0
             else:
                 compare_stack = ai_stack / (sum([int(i.get('stack')) / ante for i in players]) - ai_stack)
             for hero_index, player in enumerate(players):
