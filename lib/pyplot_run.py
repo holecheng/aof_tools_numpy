@@ -2,7 +2,7 @@ import argparse
 import math
 import time
 
-from matplotlib import pyplot as plt
+from matplotlib import pyplot as plt, ticker
 
 import pandas as pd
 import os
@@ -68,11 +68,12 @@ def run():
         if args.x_ticks:
             plt.xticks(df['group_key'][:xlt], rotation=90)
     elif args.plot_type == 'scatter':
+        ax.xaxis.set_major_locator(ticker.MultipleLocator(2500))
         x = df[args.X]
         y = df[args.Y]
         plt.scatter(x, y)
-        if args.x_ticks:
-            plt.xticks(df['group_key'], rotation=90)
+        # if args.x_ticks:
+        #     plt.xticks(df['group_key'], rotation=90)
     plt.legend()
     plt.grid(True)
     plt.title('%s' % time_inv)
