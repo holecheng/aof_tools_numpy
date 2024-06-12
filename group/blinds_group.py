@@ -42,6 +42,7 @@ class Blinds(Base):
         return self
 
     def covert(self, row_dic, types='add'):
+        print(row_dic)
         if types == 'add':
             if row_dic['is_turn']:
                 self.turn_count += 1
