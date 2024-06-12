@@ -39,7 +39,6 @@ class Blinds(Base):
         row_dic = other.row_dic
         self.counts += 1
         self.covert(row_dic)
-        print('此刻self{}'.format(self.sum_ev_player))
         return self
 
     def covert(self, row_dic, types='add'):
