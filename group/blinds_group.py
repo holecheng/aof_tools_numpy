@@ -57,6 +57,9 @@ class Blinds(Base):
             self.add_or_init('outcome_player', row_dic)
             self.add_or_init('ai_stack', row_dic)
             self.add_or_init('compare_stack', row_dic)
+            self.add_or_init('ai_count', row_dic)
+            self.add_or_init('player_stack', row_dic)
+            self.add_or_init('compare_player', row_dic)
         else:
             if row_dic['is_turn']:
                 self.turn_count += 1
@@ -66,6 +69,9 @@ class Blinds(Base):
             self.add_or_init('outcome_player', row_dic, types='init')
             self.add_or_init('ai_stack', row_dic, types='init')
             self.add_or_init('compare_stack', row_dic, types='init')
+            self.add_or_init('ai_count', row_dic, types='init')
+            self.add_or_init('player_stack', row_dic, types='init')
+            self.add_or_init('compare_player', row_dic, types='init')
         setattr(self, 'diff_ev_outcome', self.avg_outcome_player - self.avg_ev_player)
 
     def add_or_init(self, suffix, row_dic, types='add', counts=None):
