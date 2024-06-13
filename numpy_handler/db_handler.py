@@ -22,7 +22,7 @@ logger = logging.getLogger()
 
 IS_DIGIT_KEY = ['stack', 'ev_player', 'outcome_player', 'flop_i', 'turn_i', 'player_count', 'is_push',
                 'straddle', 'ante', 'winner', 'is_turn', 'is_flop', 'is_leader_turn', 'is_leader_flop',
-                'flop_ev', 'is_river', 'turn_ev', 'seat', 'ai_count', 'players', 'ai_stack', 'compare_stack']  # 可统计数据（数字类型）
+                'flop_ev', 'is_river', 'turn_ev', 'seat', 'ai_count', 'player_count', 'ai_stack', 'compare_stack']  # 可统计数据（数字类型）
 
 
 def init_query():
@@ -47,7 +47,7 @@ def init_query():
             if config.get_args('update_db'):
                 if r.sismember('updated_id', i.get('_id')):
                     resp = requests.post(config.config.get('url'), data=json.dumps(i))
-                    db_col.insert_players(i.get('_id'), {'pJson': resp.json()})
+                    db_col.update(i.get('_id'), {'pJson': resp.json()})
                 else:
                     r.sadd('updated_id', 'value1')
             is_success, _ = RowHand().convert(i)
@@ -68,8 +68,8 @@ def init_query():
                 query_round.add(hand_num)
             players = line.pop('players')
             ai_count = sum(1 if i.get('pId') in pid_set else 0 for i in players)
-            player_count = len(players)
-            if ai_count == player_count:
+            player_count = len(players) - ai_count
+            if not player_count:
                 continue  # 表演赛不计入统计
             ante = line.get('blindLevel')['blinds'][-1]
             ai_stack = sum([float(i.get('stack') / ante) for i in filter(
@@ -85,7 +85,7 @@ def init_query():
                     continue
                 row_dic = collections.defaultdict(str)
                 row_dic['ai_count'] = str(ai_count)
-                row_dic['players'] = str(player_count)
+                row_dic['player_count'] = str(player_count)
                 p_id = player.get('pId')
                 if not p_id or p_id not in pid_set:
                     continue  # 非AI玩家暂不分析
