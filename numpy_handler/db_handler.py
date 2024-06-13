@@ -86,10 +86,10 @@ def init_query():
                 if config.get_args('player') and str(config.get_args('player')) != player.get('pId'):
                     continue
                 row_dic = collections.defaultdict(str)
+                row_dic.update({i: line.get(i) for i in row_key})
                 p_id = player.get('pId')
                 if not p_id or p_id not in pid_set:
                     continue  # 非AI玩家暂不分析
-                row_dic.update({i: line.get(i) for i in row_key})
                 row_dic['ai_count'] = str(ai_count)
                 row_dic['player_count'] = str(player_count)
                 row_dic['compare_player'] = str(compare_player)
