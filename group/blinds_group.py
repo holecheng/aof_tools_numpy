@@ -11,6 +11,9 @@ class Blinds(Base):
                  'avg_flop_ev',  # 第一轮三张牌之后的期望（均值）
                  'avg_turn_ev',  # turn牌发出来的期望（均值）
                  'avg_ai_stack',  # 场内ai所持砝码
+                 'avg_ai_count',  # 场内ai人数
+                 'avg_player_count',  # 场内玩家人数
+                 'avg_compare_player',  # 玩家人数比
                  'avg_compare_stack',  # 场内ai所持砝码对比对方所持砝码
                  'counts',  # 总对局数-同一局按AI出现次数计
                  'turn_count',  # 分发到第一张牌的总场次  turn-counts 因为发了turn一定会继续下去所以计算一个
@@ -19,7 +22,10 @@ class Blinds(Base):
                  'sum_flop_ev',
                  'sum_turn_ev',
                  'sum_ai_stack',
+                 'sum_ai_count',
+                 'sum_player_count',
                  'sum_compare_stack',
+                 'sum_compare_player',
                  'row_dic',
                  )
 
