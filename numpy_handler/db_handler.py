@@ -70,9 +70,9 @@ def init_query():
             players = line.pop('players')
             ai_count = sum(1 if i.get('pId') in pid_set else 0 for i in players)
             player_count = len(players) - ai_count
-            compare_player = ai_count / player_count
             if not player_count:
                 continue  # 表演赛不计入统计
+            compare_player = ai_count / player_count
             ante = line.get('blindLevel')['blinds'][-1]
             ai_stack = sum([float(i.get('stack') / ante) for i in filter(
                     lambda x: x.get('pId') in pid_set, players)])
