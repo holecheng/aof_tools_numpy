@@ -22,7 +22,8 @@ logger = logging.getLogger()
 
 IS_DIGIT_KEY = ['stack', 'ev_player', 'outcome_player', 'flop_i', 'turn_i', 'player_count', 'is_push',
                 'straddle', 'ante', 'winner', 'is_turn', 'is_flop', 'is_leader_turn', 'is_leader_flop',
-                'flop_ev', 'is_river', 'turn_ev', 'seat', 'ai_count', 'player_count', 'ai_stack', 'compare_stack']  # 可统计数据（数字类型）
+                'flop_ev', 'is_river', 'turn_ev', 'seat', 'ai_count', 'player_count', 'ai_stack', 'compare_stack',
+                'compare_player']  # 可统计数据（数字类型）
 
 
 def init_query():
@@ -69,6 +70,7 @@ def init_query():
             players = line.pop('players')
             ai_count = sum(1 if i.get('pId') in pid_set else 0 for i in players)
             player_count = len(players) - ai_count
+            compare_player = ai_count / player_count
             if not player_count:
                 continue  # 表演赛不计入统计
             ante = line.get('blindLevel')['blinds'][-1]
@@ -86,6 +88,7 @@ def init_query():
                 row_dic = collections.defaultdict(str)
                 row_dic['ai_count'] = str(ai_count)
                 row_dic['player_count'] = str(player_count)
+                row_dic['compare_player'] = str(compare_player)
                 p_id = player.get('pId')
                 if not p_id or p_id not in pid_set:
                     continue  # 非AI玩家暂不分析
