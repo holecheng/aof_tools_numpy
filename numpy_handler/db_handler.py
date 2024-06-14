@@ -251,7 +251,9 @@ class NumpyReadDb:
     @staticmethod
     def write_origin():
         with db_col:
+            print('正在处理')
             ans = db_col.run_query()
+            print('获取数据成功')
             unique = {}
             with open('4-01-4-30.csv', 'a+', newline='\n', encoding='utf-8') as f:
                 f.write('pId,handNumber,ev,outcome\n')
