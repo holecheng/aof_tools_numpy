@@ -36,6 +36,9 @@ def init_query():
         query_round = set()  # 用于统计是否该局号已被计入
         cnt = 0
         f.write('pId,handNumber,ev,outcome,timestamp\n')
+        count = 0
+        sum_ev = 0
+        sum_outcome = 0
         for i in result:
             is_success, _ = RowHand().convert(i)
             if not is_success:
@@ -78,6 +81,9 @@ def init_query():
                     continue  # 非AI玩家暂不分析
                 dates = datetime.datetime.fromtimestamp(i.get('timestamp')).strftime(
                     '%Y-%m-%d')
+                count += 1
+                sum_ev += i.get('ev')[hero_index]
+                sum_outcome += i.get('outcome')[hero_index]
                 f.write(f"{player.get('pId')},{i.get('handNumber')},"
                         f"{i.get('ev')[hero_index]},{i.get('outcome')[hero_index]},"
                         f"{dates}\n")
@@ -125,6 +131,9 @@ def init_query():
                 row_dic.update({i: player.get(i) if not row_dic.get(i) else row_dic.get(i) for i in row_key})
                 row_dic.update({i: float(row_dic.get(i) if row_dic.get(i) else 0) for i in IS_DIGIT_KEY})
                 yield {key: row_dic.get(key, '') for key in row_key}
+    f.write((f"count,{count},sum_ev:,{sum_ev},sum_outcome:,"
+             f"{sum_outcome},avg_ev:,{sum_ev / count},avg_outcome:,{sum_outcome / count},"))
+    f.write(f'处理完成总计{cnt}')
     f.close()
 
 
@@ -288,7 +297,7 @@ class NumpyReadDb:
                             sum_ev += i.get('ev')[k]
                             sum_outcome += i.get('outcome')[k]
                             dates = datetime.datetime.fromtimestamp(i.get('timestamp')).strftime(
-                                        '%Y-%m-%d')
+                                '%Y-%m-%d')
                             f.write(f"{v.get('pId')},{i.get('handNumber')},"
                                     f"{i.get('ev')[k]},{i.get('outcome')[k]},"
                                     f"{dates}\n")
