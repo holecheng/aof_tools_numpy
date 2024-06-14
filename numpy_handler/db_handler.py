@@ -128,31 +128,31 @@ class NumpyReadDb:
             self.write_origin()
         else:
             self.result_gen = init_query()
-        self.title = next(self.result_gen)
-        if config.get_args('simple'):
-            self.title = ['group', 'group_key', 'allowance', 'avg_ev', 'avg_flop_ev',
-                          'avg_turn_ev', 'avg_outcome', 'diff_ev_outcome', 'counts']
-        self.format_list = [Hand, Blinds]
-        self.group_dic = {}
-        self.group = config.get_args('group')
-        self.f = None
-        file_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'db_file',)
-        if config.get_args('all'):
-            file_path = os.path.join(file_dir, config.get_args('query_time') + 'all.csv')
-            self.f = open(file_path, 'a+', encoding='utf-8')
-            if os.path.exists(file_path):
-                self.f.truncate(0)
-            self.f.write(','.join(self.title) + '\n')
-        if config.get_args('hand_detail'):
-            file_path = os.path.join(file_dir, config.get_args('query_time') + 'hand_detail.csv')
-            self.f = open(file_path, 'a+', encoding='utf-8')
-            if os.path.exists(file_path):
-                self.f.truncate(0)
-            self.f.write(','.join(self.title) + '\n')
-        if self.group in ['card_num', 'pId']:
-            self.get_row_result(0)
-        else:
-            self.get_row_result(1)
+            self.title = next(self.result_gen)
+            if config.get_args('simple'):
+                self.title = ['group', 'group_key', 'allowance', 'avg_ev', 'avg_flop_ev',
+                              'avg_turn_ev', 'avg_outcome', 'diff_ev_outcome', 'counts']
+            self.format_list = [Hand, Blinds]
+            self.group_dic = {}
+            self.group = config.get_args('group')
+            self.f = None
+            file_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'db_file',)
+            if config.get_args('all'):
+                file_path = os.path.join(file_dir, config.get_args('query_time') + 'all.csv')
+                self.f = open(file_path, 'a+', encoding='utf-8')
+                if os.path.exists(file_path):
+                    self.f.truncate(0)
+                self.f.write(','.join(self.title) + '\n')
+            if config.get_args('hand_detail'):
+                file_path = os.path.join(file_dir, config.get_args('query_time') + 'hand_detail.csv')
+                self.f = open(file_path, 'a+', encoding='utf-8')
+                if os.path.exists(file_path):
+                    self.f.truncate(0)
+                self.f.write(','.join(self.title) + '\n')
+            if self.group in ['card_num', 'pId']:
+                self.get_row_result(0)
+            else:
+                self.get_row_result(1)
         print((time.time() - s))
         print('总共用时{}分'.format((time.time() - s) // 60))
         # self.add_result()
