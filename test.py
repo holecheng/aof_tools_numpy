@@ -1,66 +1,32 @@
-import math
-from functools import reduce
-
-import matplotlib.pyplot as plt
-
-
-def gen_fig_plot(sizes: int):
-    ans = [sizes, sizes, 0]
-    for _ in range(1, sizes ** 2 + 1):
-        ans[-1] += 1
-        yield reduce(lambda x, y: x*10+y, ans)
-
-
-plt.figure()
-
-gen_ans = gen_fig_plot(3)
-while True:
-    try:
-        nas = next(gen_ans)
-        plt.subplot(nas)
-        plt.plot([0, 1], [0, 1])
-    except:
-        break
-plt.show()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 '''
-import numpy as np
-import pandas as pd
-from scipy.stats import chi2_contingency
- 
-# 假设有以下分类变量数据
-data = np.array([[48, 11, 3, 3],
-                 [20, 5, 2, 1],
-                 [6, 1, 1, 1],
-                 [1, 1, 1, 1]])
- 
-# 调用chi2_contingency进行卡方检验
-chi2, p, dof, expected = chi2_contingency(data)
- 
-# 输出卡方值、p值和自由度
-print("卡方值:", chi2)
-print("p值:", p)
-print("自由度:", dof)
- 
-# 如果需要基于p值来判断是否拒绝原假设，可以设定一个显著性水平，例如0.05
-alpha = 0.05
-if p < alpha:
-    print("拒绝原假设，数据有显著性差异")
-else:
-    print("不能拒绝原假设，数据无显著性差异")
+
+
+{'_id': ObjectId('6609fbaf17188830a8dcc6d6'), 'river': '8c', 'nash_range':
+[0.514, 0.367, 0.697, 0.685, 0.0, 0.0],
+'players': [{'isSb': False,'playerId': 'ToooC',
+'pId': '5797530797', 'straddle': 0, 'isBb': False,
+'flopInsurance': [], 'turnInsurance': [], 'cards': 'As7d', 'stack': 1031892.0,
+'seat': 3, 'isButton': True, 'action': 'Push', 'ante': 20000.0},
+{'isSb': True, 'playerId': '惆怅已成曲调', 'pId': '5198985297', 'straddle': 0, 'isBb': False,
+ 'flopInsurance': [{'betStacks': 0.0, 'defaultPot': True, 'potId': '200000'}],
+  'turnInsurance': [{'betStacks': 6646.0, 'defaultPot': True, 'potId': '200000'}],
+   'cards': '5d5h', 'stack': 200000.0, 'seat': 6, 'isButton': False, 'action': 'Push', 'ante': 20000.0},
+   {'isSb': False, 'playerId': '梦之蓝1', 'pId': '9567280874', 'straddle': 0,
+   'isBb': True, 'flopInsurance': [], 'turnInsurance': [], 'cards': '',
+   'stack': 200000.0, 'seat': 1, 'isButton': False, 'action': 'Fold',
+   'ante': 20000.0}, {'isSb': False, 'playerId': '别逼我骂人', 'pId': '5797015056',
+    'straddle': 1, 'isBb': False, 'flopInsurance': [], 'turnInsurance': [],
+    'cards': '8d6c', 'stack': 200000.0, 'seat': 2, 'isButton':False, 'action': 'Fold', 'ante': 20000.0}],
+     'flop_ev': [-4.295, 6.595,-1.1, -1.2, 0.0, 0.0],
+      'timestamp': 1711930287.241598, 'flop': '8h3dQs',
+      'heroIndex': 3, 'blindLevel': {'blinds': [1000.0, 2000.0, 20000.0],'straddle': 1},
+       'turn': '3c', 'reqid': 650505899, 'version': 1.0, 'command': 'aofhistory',
+       'handNumber': '101651575-27', 'winners': ['5198985297', '5797530797'],
+       'ev': [0.038, 2.262, -1.1, -1.2, 0.0, 0.0], 'outcome': [-10.0, 12.3, -1.1, -1.2, 0.0, 0.0],
+       'turn_ev': [-6.814, 9.114, -1.1, -1.2, 0.0, 0.0],
+       'leagueName': '熊猫联盟', 'pid_case': {'case_num':1370754, 'showdown_ranks':
+       [[636718, 734036, 0, 0], [742839, 627915, 0,0],
+       [0, 0, 1370754, 0], [0, 0, 1370754, 0]], 'final_ranks': [[0, 1, 0,0],
+        [1, 0, 0, 0], [0, 0, 1, 0], [0, 0, 1, 0]]}}
+
 '''
