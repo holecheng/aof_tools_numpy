@@ -281,7 +281,6 @@ class NumpyReadDb:
                             sum_outcome += i.get('outcome')[k]
                             dates = datetime.datetime.fromtimestamp(i.get('timestamp')).strftime(
                                         '%Y-%m-%d')
-                            print(dates)
                             f.write(f"{v.get('pId')},{i.get('handNumber')},"
                                     f"{i.get('ev')[k]},{i.get('outcome')[k]},"
                                     f"{dates}\n")
