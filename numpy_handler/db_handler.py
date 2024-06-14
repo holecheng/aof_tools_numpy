@@ -40,6 +40,8 @@ def init_query():
         sum_ev = 0
         sum_outcome = 0
         for i in result:
+            if i.get('pId') == '101652141-60':
+                print(i)
             is_success, _ = RowHand().convert(i)
             if not is_success:
                 continue
@@ -72,8 +74,6 @@ def init_query():
             else:
                 compare_stack = ai_stack / (sum([int(i.get('stack')) / ante for i in players]) - ai_stack)
             for hero_index, player in enumerate(players):
-                if str(player.get('pId')) == '5797530797' and str(i.get('handNumber')) == '101651575-27':
-                    print(i)
                 if config.get_args('player') and str(config.get_args('player')) != player.get('pId'):
                     continue
                 row_dic = collections.defaultdict(str)
