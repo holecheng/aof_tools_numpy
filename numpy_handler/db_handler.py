@@ -63,15 +63,15 @@ def init_query():
                 yield row_key
             line = i.copy()
             hand_num = line.get('handNumber')
-            if hand_num in query_round:
-                continue
-            else:
-                query_round.add(hand_num)
             players = line.pop('players')
             ai_count = sum(1 if i.get('pId') in pid_set else 0 for i in players)
             player_count = len(players) - ai_count
             if not player_count:
                 continue  # 表演赛不计入统计
+            if hand_num in query_round:
+                continue
+            else:
+                query_round.add(hand_num)
             compare_player = ai_count / player_count
             ante = line.get('blindLevel')['blinds'][-1]
             ai_stack = sum([float(i.get('stack') / ante) for i in filter(
@@ -140,7 +140,10 @@ class NumpyReadDb:
 
     def __init__(self):
         s = time.time()
-        self.result_gen = init_query()
+        if config.get_args('aof'):
+            self.write_origin()
+        else:
+            self.result_gen = init_query()
         self.title = next(self.result_gen)
         if config.get_args('simple'):
             self.title = ['group', 'group_key', 'allowance', 'avg_ev', 'avg_flop_ev',
@@ -261,4 +264,38 @@ class NumpyReadDb:
     #                 new_npd = get_group_avg_nps(nps)
     #                 np_apply.append(new_npd)
     #             # self.write_excel(np_apply, str(page) + '_{}'.format(config.get_args('types')))
+    @staticmethod
+    def write_origin():
+        with db_col:
+            ans = db_col.run_query()
+            unique = {}
+            with open('4-01-4-30.csv', 'a+', newline='\n', encoding='utf-8') as f:
+                f.write('pId,handNumber,ev,outcome\n')
+                count = 0
+                sum_ev = 0
+                sum_outcome = 0
+                for i in ans:
+                    hand = RowHand()
+                    is_success, _ = hand.convert(i)
+                    if not is_success:
+                        continue
+                    ukey = (hand.handno, hand.hero)
+                    if ukey in unique:
+                        continue
+                    players = i.get('players')
+                    ai_count = sum(1 if i.get('pId') in db_col.pid_set else 0 for i in players)
+                    if ai_count == len(players):
+                        continue
+                    for k, v in enumerate(players):
+                        if v.get('pId') in db_col.pid_set:
+                            count += 1
+                            sum_ev += i.get('ev')[k]
+                            sum_outcome += i.get('outcome')[k]
+                            f.write(f"{v.get('pId')},{i.get('handNumber')},{i.get('ev')[k]},{i.get('outcome')[k]}\n")
+                    f.write(f"count:,{count},sum_ev,{sum_ev},sum_outcome,"
+                            f"{sum_outcome},avg_ev,{sum_ev/count},avg_outcome,{sum_outcome/count},")
+                    print((f"count,{count},sum_ev:,{sum_ev},sum_outcome:,"
+                           f"{sum_outcome},avg_ev:,{sum_ev/count},avg_outcome:,{sum_outcome/count},"))
+
+
 

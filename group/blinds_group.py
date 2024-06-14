@@ -54,8 +54,8 @@ class Blinds(Base):
         else:
             if row_dic['is_turn']:
                 self.turn_count += 1
-                self.add_or_init('flop_ev', row_dic, types='init')
-                self.add_or_init('turn_ev', row_dic, types='init')
+                self.add_or_init('flop_ev', row_dic, types='init', counts=self.turn_count)
+                self.add_or_init('turn_ev', row_dic, types='init', counts=self.turn_count)
             self.add_or_init('ev_player', row_dic, types='init')
             self.add_or_init('outcome_player', row_dic, types='init')
             self.add_or_init('ai_stack', row_dic, types='init')
