@@ -34,6 +34,7 @@ def init_query(f):
         row_key = []
         query_round = set()  # 用于统计是否该局号已被计入
         cnt = 0
+        f.write('pId,handNumber,ev,outcome,timestamp\n')
         for i in result:
             is_success, _ = RowHand().convert(i)
             if not is_success:
