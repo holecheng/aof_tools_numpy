@@ -26,7 +26,7 @@ IS_DIGIT_KEY = ['stack', 'ev_player', 'outcome_player', 'flop_i', 'turn_i', 'pla
                 'compare_player']  # 可统计数据（数字类型）
 
 
-def init_query():
+def init_query(f):
     # todo此处可以对处理数据进行进一步query筛选
     with db_col:
         pid_set = db_col.pid_set
@@ -74,6 +74,11 @@ def init_query():
                 p_id = player.get('pId')
                 if not p_id or p_id not in pid_set:
                     continue  # 非AI玩家暂不分析
+                dates = datetime.datetime.fromtimestamp(i.get('timestamp')).strftime(
+                    '%Y-%m-%d')
+                f.write(f"{player.get('pId')},{i.get('handNumber')},"
+                        f"{i.get('ev')[hero_index]},{i.get('outcome')[hero_index]},"
+                        f"{dates}\n")
                 row_dic['ai_count'] = str(ai_count)
                 row_dic['player_count'] = str(player_count)
                 row_dic['compare_player'] = str(compare_player)
@@ -127,7 +132,8 @@ class NumpyReadDb:
         if config.get_args('aof'):
             self.write_origin()
         else:
-            self.result_gen = init_query()
+            with open('all_detail.csv', 'a+', newline='\n') as f:
+                self.result_gen = init_query(f)
             self.title = next(self.result_gen)
             if config.get_args('simple'):
                 self.title = ['group', 'group_key', 'allowance', 'avg_ev', 'avg_flop_ev',
