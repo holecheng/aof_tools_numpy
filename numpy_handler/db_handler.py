@@ -59,7 +59,7 @@ def init_query():
             compare_player = ai_count / player_count
             ante = line.get('blindLevel')['blinds'][-1]
             ai_stack = sum([float(i.get('stack') / ante) for i in filter(
-                    lambda x: x.get('pId') in pid_set, players)])
+                lambda x: x.get('pId') in pid_set, players)])
             if sum([int(i.get('stack')) / ante for i in players]) == ai_stack:
                 compare_stack = 0
                 cnt += 1
@@ -136,7 +136,7 @@ class NumpyReadDb:
             self.group_dic = {}
             self.group = config.get_args('group')
             self.f = None
-            file_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'db_file',)
+            file_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'db_file', )
             if config.get_args('all'):
                 file_path = os.path.join(file_dir, config.get_args('query_time') + 'all.csv')
                 self.f = open(file_path, 'a+', encoding='utf-8')
@@ -256,7 +256,7 @@ class NumpyReadDb:
             print('获取数据成功')
             unique = {}
             with open('4-01-4-30.csv', 'a+', newline='\n', encoding='utf-8') as f:
-                f.write('pId,handNumber,ev,outcome\n')
+                f.write('pId,handNumber,ev,outcome,timestamp\n')
                 count = 0
                 sum_ev = 0
                 sum_outcome = 0
@@ -279,12 +279,12 @@ class NumpyReadDb:
                             count += 1
                             sum_ev += i.get('ev')[k]
                             sum_outcome += i.get('outcome')[k]
-                            f.write(f"{v.get('pId')},{i.get('handNumber')},{i.get('ev')[k]},{i.get('outcome')[k]}\n")
+                            f.write(f"{v.get('pId')},{i.get('handNumber')},"
+                                    f"{i.get('ev')[k]},{i.get('outcome')[k]},"
+                                    f"{datetime.datetime.fromtimestamp(i.get('timestamp')).strftime(
+                                        '%Y-%m-%d')}\n")
                 f.write(f"count:,{count},sum_ev,{sum_ev},sum_outcome,"
-                        f"{sum_outcome},avg_ev,{sum_ev/count},avg_outcome,{sum_outcome/count},")
+                        f"{sum_outcome},avg_ev,{sum_ev / count},avg_outcome,{sum_outcome / count},")
                 print((f"count,{count},sum_ev:,{sum_ev},sum_outcome:,"
-                       f"{sum_outcome},avg_ev:,{sum_ev/count},avg_outcome:,{sum_outcome/count},"))
+                       f"{sum_outcome},avg_ev:,{sum_ev / count},avg_outcome:,{sum_outcome / count},"))
                 print(f'处理完成总计{cnt}')
-
-
-
