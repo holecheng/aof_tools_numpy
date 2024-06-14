@@ -279,10 +279,12 @@ class NumpyReadDb:
                             count += 1
                             sum_ev += i.get('ev')[k]
                             sum_outcome += i.get('outcome')[k]
+                            dates = datetime.datetime.fromtimestamp(i.get('timestamp')).strftime(
+                                        '%Y-%m-%d')
+                            print(dates)
                             f.write(f"{v.get('pId')},{i.get('handNumber')},"
                                     f"{i.get('ev')[k]},{i.get('outcome')[k]},"
-                                    f"{str(datetime.datetime.fromtimestamp(i.get('timestamp')).strftime(
-                                        '%Y-%m-%d'))}\n")
+                                    f"{dates}\n")
                 f.write(f"count:,{count},sum_ev,{sum_ev},sum_outcome,"
                         f"{sum_outcome},avg_ev,{sum_ev / count},avg_outcome,{sum_outcome / count},")
                 print((f"count,{count},sum_ev:,{sum_ev},sum_outcome:,"
