@@ -260,7 +260,9 @@ class NumpyReadDb:
                 count = 0
                 sum_ev = 0
                 sum_outcome = 0
+                cnt = 0
                 for i in ans:
+                    cnt += 1
                     hand = RowHand()
                     is_success, _ = hand.convert(i)
                     if not is_success:
@@ -282,6 +284,7 @@ class NumpyReadDb:
                         f"{sum_outcome},avg_ev,{sum_ev/count},avg_outcome,{sum_outcome/count},")
                 print((f"count,{count},sum_ev:,{sum_ev},sum_outcome:,"
                        f"{sum_outcome},avg_ev:,{sum_ev/count},avg_outcome:,{sum_outcome/count},"))
+                print(f'处理完成总计{cnt}')
 
 
 
