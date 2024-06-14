@@ -26,8 +26,9 @@ IS_DIGIT_KEY = ['stack', 'ev_player', 'outcome_player', 'flop_i', 'turn_i', 'pla
                 'compare_player']  # 可统计数据（数字类型）
 
 
-def init_query(f):
+def init_query():
     # todo此处可以对处理数据进行进一步query筛选
+    f = open('all_detail.csv', 'a+', newline='\n')
     with db_col:
         pid_set = db_col.pid_set
         result = db_col.run_query()
@@ -124,6 +125,7 @@ def init_query(f):
                 row_dic.update({i: player.get(i) if not row_dic.get(i) else row_dic.get(i) for i in row_key})
                 row_dic.update({i: float(row_dic.get(i) if row_dic.get(i) else 0) for i in IS_DIGIT_KEY})
                 yield {key: row_dic.get(key, '') for key in row_key}
+    f.close()
 
 
 class NumpyReadDb:
@@ -133,8 +135,7 @@ class NumpyReadDb:
         if config.get_args('aof'):
             self.write_origin()
         else:
-            with open('all_detail.csv', 'a+', newline='\n') as f:
-                self.result_gen = init_query(f)
+            self.result_gen = init_query()
             self.title = next(self.result_gen)
             if config.get_args('simple'):
                 self.title = ['group', 'group_key', 'allowance', 'avg_ev', 'avg_flop_ev',
