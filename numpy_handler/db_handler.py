@@ -281,7 +281,6 @@ class NumpyReadDb:
                 sum_outcome = 0
                 cnt = 0
                 for i in ans:
-                    cnt += 1
                     hand = RowHand()
                     is_success, _ = hand.convert(i)
                     if not is_success:
@@ -293,6 +292,7 @@ class NumpyReadDb:
                     ai_count = sum(1 if i.get('pId') in db_col.pid_set else 0 for i in players)
                     if ai_count == len(players):
                         continue
+                    cnt += 1
                     for k, v in enumerate(players):
                         if v.get('pId') in db_col.pid_set:
                             count += 1
