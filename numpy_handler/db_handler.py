@@ -278,8 +278,8 @@ class NumpyReadDb:
                             sum_ev += i.get('ev')[k]
                             sum_outcome += i.get('outcome')[k]
                             f.write(f"{v.get('pId')},{i.get('handNumber')},{i.get('ev')[k]},{i.get('outcome')[k]}\n")
-                    f.write(f"count:,{count},sum_ev,{sum_ev},sum_outcome,"
-                            f"{sum_outcome},avg_ev,{sum_ev/count},avg_outcome,{sum_outcome/count},")
+                f.write(f"count:,{count},sum_ev,{sum_ev},sum_outcome,"
+                        f"{sum_outcome},avg_ev,{sum_ev/count},avg_outcome,{sum_outcome/count},")
                 print((f"count,{count},sum_ev:,{sum_ev},sum_outcome:,"
                        f"{sum_outcome},avg_ev:,{sum_ev/count},avg_outcome:,{sum_outcome/count},"))
 
