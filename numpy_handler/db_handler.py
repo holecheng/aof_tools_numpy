@@ -29,28 +29,12 @@ IS_DIGIT_KEY = ['stack', 'ev_player', 'outcome_player', 'flop_i', 'turn_i', 'pla
 def init_query():
     # todo此处可以对处理数据进行进一步query筛选
     with db_col:
-        pool = redis.ConnectionPool(host='localhost', port=6379, db=0, decode_responses=True)
-        r = redis.Redis(connection_pool=pool)
-        if r.get('pid_set') and not config.get_args('enable_r'):
-            print('已获取AI PID信息')
-            pid_set = r.get('pid_set')
-            pid_set = set(json.loads(pid_set))
-        else:
-            print('正在设置AI PID信息')
-            pid_set = db_col.run_pid_set()
-            r.set('pid_set', json.dumps(list(pid_set)), ex=60*60*24)
-            print('设置完毕！！！！！！')
+        pid_set = db_col.pid_set
         result = db_col.run_query()
         row_key = []
         query_round = set()  # 用于统计是否该局号已被计入
         cnt = 0
         for i in result:
-            if config.get_args('update_db'):
-                if r.sismember('updated_id', i.get('_id')):
-                    resp = requests.post(config.config.get('url'), data=json.dumps(i))
-                    db_col.update(i.get('_id'), {'pJson': resp.json()})
-                else:
-                    r.sadd('updated_id', 'value1')
             is_success, _ = RowHand().convert(i)
             if not is_success:
                 continue
