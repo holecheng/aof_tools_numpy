@@ -87,7 +87,7 @@ class DBLoader:
             if player_hash[player_id]["first_time"] > i["timestamp"]:
                 player_hash[player_id]["first_time"] = i["timestamp"]
             cnt += 1
-            if cnt // 10000 == 0 and cnt:
+            if cnt // 10000 == 0 and cnt != 0:
                 print(f'已扫描{cnt // 10000}*10000数据')
         self.r.set('pid_set', json.dumps(player_hash, ensure_ascii=False, indent=2), ex=60 * 1000 * 60 * 24)  # 半永久
         print('设置完毕！！！！！！')
