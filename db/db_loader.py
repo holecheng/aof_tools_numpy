@@ -74,8 +74,6 @@ class DBLoader:
             st = gt_lt['timestamp'].get('$gt')
             if st < self.r.get('update_pid_set'):
                 gt_lt['timestamp']['$gt'] = self.r.get('update_pid_set')
-        if gt_lt['timestamp'].get('$lt'):
-            self.r.set('update_pid_set', max(self.r.get('update_pid_set'), gt_lt['timestamp'].get('$lt')))
         for i in self.db.find(gt_lt):
             hero_index = int(i.get('heroIndex', -1))
             if hero_index < 0:
@@ -87,6 +85,8 @@ class DBLoader:
                 player_hash[player_id] = {"name": player["playerId"], "first_time": i["timestamp"]}
             if player_hash[player_id]["first_time"] > i["timestamp"]:
                 player_hash[player_id]["first_time"] = i["timestamp"]
+        if gt_lt['timestamp'].get('$lt'):
+            self.r.set('update_pid_set', max(self.r.get('update_pid_set'), gt_lt['timestamp'].get('$lt')))
         return player_hash
 
     def insert_players(self, ids, dic=None):
