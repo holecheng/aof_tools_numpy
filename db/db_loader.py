@@ -72,7 +72,7 @@ class DBLoader:
         gt_lt = self.query
         if gt_lt['timestamp'].get('$gt'):
             st = gt_lt['timestamp'].get('$gt')
-            if st < self.r.get('update_pid_set'):
+            if self.r.get('update_pid_set') and st < self.r.get('update_pid_set'):
                 gt_lt['timestamp']['$gt'] = self.r.get('update_pid_set')
         for i in self.db.find(gt_lt):
             hero_index = int(i.get('heroIndex', -1))
