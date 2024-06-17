@@ -45,7 +45,7 @@ def init_query():
             is_success, _ = RowHand().convert(i)
             if not is_success:
                 continue
-            if i.get('heroIndex') == -1:
+            if i.get('heroIndex') < 0:
                 continue
             line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName', 'date', 'hours']
             player_key = ['pId', 'card_num', 'action', 'cards', 'blindLevel']
