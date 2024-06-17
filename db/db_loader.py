@@ -85,6 +85,8 @@ class DBLoader:
                 player_hash[player_id] = {"name": player["playerId"], "first_time": i["timestamp"]}
             if player_hash[player_id]["first_time"] > i["timestamp"]:
                 player_hash[player_id]["first_time"] = i["timestamp"]
+        self.r.set('pid_set', json.dumps(player_hash, ensure_ascii=False, indent=2), ex=60 * 1000 * 60 * 24)  # 半永久
+        print('设置完毕！！！！！！')
         if gt_lt['timestamp'].get('$lt'):
             self.r.set('update_pid_set', max(self.r.get('update_pid_set'), gt_lt['timestamp'].get('$lt')))
         return player_hash
@@ -106,8 +108,6 @@ class DBLoader:
         else:
             print('正在设置AI PID信息')
             player_hash = self.run_pid_set()
-            self.r.set('pid_set', json.dumps(player_hash, ensure_ascii=False, indent=2), ex=60*1000*60*24)  # 半永久
-            print('设置完毕！！！！！！')
         self.pid_set = player_hash
 
 
