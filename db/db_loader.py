@@ -74,6 +74,7 @@ class DBLoader:
             st = gt_lt['timestamp'].get('$gt')
             if self.r.get('update_pid_set') and st < self.r.get('update_pid_set'):
                 gt_lt['timestamp']['$gt'] = self.r.get('update_pid_set')
+        cnt = 0
         for i in self.db.find(gt_lt):
             hero_index = int(i.get('heroIndex', -1))
             if hero_index < 0:
@@ -85,6 +86,9 @@ class DBLoader:
                 player_hash[player_id] = {"name": player["playerId"], "first_time": i["timestamp"]}
             if player_hash[player_id]["first_time"] > i["timestamp"]:
                 player_hash[player_id]["first_time"] = i["timestamp"]
+            cnt += 1
+            if cnt // 10000 == 0 and cnt:
+                print(f'已扫描{cnt // 10000}*10000数据')
         self.r.set('pid_set', json.dumps(player_hash, ensure_ascii=False, indent=2), ex=60 * 1000 * 60 * 24)  # 半永久
         print('设置完毕！！！！！！')
         if gt_lt['timestamp'].get('$lt'):
