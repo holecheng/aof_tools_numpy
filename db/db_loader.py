@@ -25,6 +25,7 @@ class DBLoader:
         self.conn = None
         self.db = None
         self.pid_set = None
+        self.r = None
 
     def __enter__(self):
         self._load_data_from_db()
@@ -68,7 +69,14 @@ class DBLoader:
 
     def run_pid_set(self):
         player_hash = {}
-        for i in self.db.find(self.query):
+        gt_lt = self.query
+        if gt_lt['timestamp'].get('$gt'):
+            st = gt_lt['timestamp'].get('$gt')
+            if st < self.r.get('update_pid_set'):
+                gt_lt['timestamp']['$gt'] = self.r.get('update_pid_set')
+        if gt_lt['timestamp'].get('$lt'):
+            self.r.set('update_pid_set', max(self.r.get('update_pid_set'), gt_lt['timestamp'].get('$lt')))
+        for i in self.db.find(gt_lt):
             hero_index = int(i.get('heroIndex', -1))
             if hero_index < 0:
                 continue
@@ -90,15 +98,15 @@ class DBLoader:
 
     def _init_redis(self):
         pool = redis.ConnectionPool(host='localhost', port=6379, db=0, decode_responses=True)
-        r = redis.Redis(connection_pool=pool)
-        if r.get('pid_set') and not config.get_args('enable_r'):
+        self.r = redis.Redis(connection_pool=pool)
+        if self.r.get('pid_set') and not config.get_args('enable_r'):
             print('已获取AI PID信息')
-            pid_set = r.get('pid_set')
+            pid_set = self.r.get('pid_set')
             player_hash = json.loads(pid_set)
         else:
             print('正在设置AI PID信息')
             player_hash = self.run_pid_set()
-            r.set('pid_set', json.dumps(player_hash, ensure_ascii=False, indent=2), ex=60*60*24)
+            self.r.set('pid_set', json.dumps(player_hash, ensure_ascii=False, indent=2), ex=60*1000*60*24)  # 半永久
             print('设置完毕！！！！！！')
         self.pid_set = player_hash
 
