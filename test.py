@@ -1,32 +1,13 @@
 '''
 
 
-{'_id': ObjectId('6609fbaf17188830a8dcc6d6'), 'river': '8c', 'nash_range':
-[0.514, 0.367, 0.697, 0.685, 0.0, 0.0],
-'players': [{'isSb': False,'playerId': 'ToooC',
-'pId': '5797530797', 'straddle': 0, 'isBb': False,
-'flopInsurance': [], 'turnInsurance': [], 'cards': 'As7d', 'stack': 1031892.0,
-'seat': 3, 'isButton': True, 'action': 'Push', 'ante': 20000.0},
-{'isSb': True, 'playerId': '惆怅已成曲调', 'pId': '5198985297', 'straddle': 0, 'isBb': False,
- 'flopInsurance': [{'betStacks': 0.0, 'defaultPot': True, 'potId': '200000'}],
-  'turnInsurance': [{'betStacks': 6646.0, 'defaultPot': True, 'potId': '200000'}],
-   'cards': '5d5h', 'stack': 200000.0, 'seat': 6, 'isButton': False, 'action': 'Push', 'ante': 20000.0},
-   {'isSb': False, 'playerId': '梦之蓝1', 'pId': '9567280874', 'straddle': 0,
-   'isBb': True, 'flopInsurance': [], 'turnInsurance': [], 'cards': '',
-   'stack': 200000.0, 'seat': 1, 'isButton': False, 'action': 'Fold',
-   'ante': 20000.0}, {'isSb': False, 'playerId': '别逼我骂人', 'pId': '5797015056',
-    'straddle': 1, 'isBb': False, 'flopInsurance': [], 'turnInsurance': [],
-    'cards': '8d6c', 'stack': 200000.0, 'seat': 2, 'isButton':False, 'action': 'Fold', 'ante': 20000.0}],
-     'flop_ev': [-4.295, 6.595,-1.1, -1.2, 0.0, 0.0],
-      'timestamp': 1711930287.241598, 'flop': '8h3dQs',
-      'heroIndex': 3, 'blindLevel': {'blinds': [1000.0, 2000.0, 20000.0],'straddle': 1},
-       'turn': '3c', 'reqid': 650505899, 'version': 1.0, 'command': 'aofhistory',
-       'handNumber': '101651575-27', 'winners': ['5198985297', '5797530797'],
-       'ev': [0.038, 2.262, -1.1, -1.2, 0.0, 0.0], 'outcome': [-10.0, 12.3, -1.1, -1.2, 0.0, 0.0],
-       'turn_ev': [-6.814, 9.114, -1.1, -1.2, 0.0, 0.0],
-       'leagueName': '熊猫联盟', 'pid_case': {'case_num':1370754, 'showdown_ranks':
-       [[636718, 734036, 0, 0], [742839, 627915, 0,0],
-       [0, 0, 1370754, 0], [0, 0, 1370754, 0]], 'final_ranks': [[0, 1, 0,0],
-        [1, 0, 0, 0], [0, 0, 1, 0], [0, 0, 1, 0]]}}
+{'_id': ObjectId('660a0eed17188830a8dccbad'), 'river': 'Th', 'nash_range': [0.689, 0.472, 0.342, 0.0, 0.0, 0.0], 'players': [{'isSb': False, 'playerId': '我想找个对象了.', 'pId': '5797501911', 'straddle': 0, 'isBb': False, 'flopInsurance': [], 'turnInsurance': [], 'cards': 'Kh3s', 'stack': 137000.0, 'seat': 1, 'isButton': True, 'action': 'Push', 'ante': 20000.0}, {'isSb': True, 'playerId': '梦之蓝1', 'pId': '9567280874', 'straddle': 0, 'isBb': False, 'flopInsurance': [{'betStacks': 0.0, 'defaultPot': False, 'potId': '200000'}], 'turnInsurance': [{'betStacks': 0.0, 'defaultPot': False, 'potId': '200000'}], 'cards': '6sKc', 'stack': 200000.0, 'seat': 2, 'isButton': False, 'action': 'Push', 'ante': 20000.0}, {'isSb': False, 'playerId': '最熟悉的陌生伦', 'pId': '6095018817', 'straddle': 0, 'isBb': True, 'flopInsurance': [], 'turnInsurance': [], 'cards': 'Ts8s', 'stack': 683000.0, 'seat': 4, 'isButton': False, 'action': 'Push', 'ante': 20000.0}], 'flop_ev': [-2.64, -1.524, 4.164, 0.0, 0.0, 0.0], 'timestamp': 1711935213.239057, 'flop': 'AcJh9d', 'heroIndex': 2, 'blindLevel': {'blinds': [1000.0, 2000.0, 20000.0], 'straddle': 1}, 'turn': '5h', 'reqid': 156031767, 'version': 1.0, 'command': 'aofhistory', 'handNumber': '101652141-60', 'winners': ['6095018817'], 'ev': [-2.533, -0.466, 2.999, 0.0, 0.0, 0.0], 'outcome': [-6.85, -10.0, 16.85, 0.0, 0.0, 0.0], 'turn_ev': [-1.957, 3.007, -1.05, 0.0, 0.0, 0.0], 'leagueName': '熊猫联盟', 'pid_case': '{"case_num":1370754,"showdown_ranks":[[393644,671743,305367],[535411,683493,151850],[659309,71765,639680]],"final_ranks":[[0,1,0],[1,0,0],[0,0,1]]}'}
+
 
 '''
+import json
+
+print(json.dumps(
+{'river': 'Js', 'nash_range': [0.472, 0.367, 0.25, 0.857, 0.712, 0.0], 'players': [{'isSb': False, 'playerId': '碟霜飞', 'pId': '4787979260', 'straddle': 0, 'isBb': False, 'flopInsurance': [{'betStacks': 0.0, 'defaultPot': False, 'potId': '200000'}], 'turnInsurance': [{'betStacks': 564.0, 'defaultPot': False, 'potId': '200000'}], 'cards': 'As2d', 'stack': 200000.0, 'seat': 5, 'isButton': False, 'action': 'Push', 'ante': 20000.0}, {'isSb': False, 'playerId': '5277', 'pId': '8724254188', 'straddle': 0, 'isBb': False, 'flopInsurance': [], 'turnInsurance': [], 'cards': '5cQh', 'stack': 179000.0, 'seat': 6, 'isButton': True, 'action': 'Push', 'ante': 20000.0}, {'isSb': True, 'playerId': '静若处女', 'pId': '5217347395', 'straddle': 0, 'isBb': False, 'flopInsurance': [], 'turnInsurance': [], 'cards': '8sTc', 'stack': 436275.0, 'seat': 1, 'isButton': False, 'action': 'Push', 'ante': 20000.0}, {'isSb': False, 'playerId': '你爱了吗', 'pId': '7650440929', 'straddle': 0, 'isBb': True, 'flopInsurance': [], 'turnInsurance': [], 'cards': '', 'stack': 862000.0, 'seat': 3, 'isButton': False, 'action': 'Fold', 'ante': 20000.0}, {'isSb': False, 'playerId': '海裡薰衣草香正浓', 'pId': '5838117485', 'straddle': 1, 'isBb': False, 'flopInsurance': [], 'turnInsurance': [], 'cards': '', 'stack': 201000.0, 'seat': 4, 'isButton': False, 'action': 'Fold', 'ante': 20000.0}], 'flop_ev': [-7.23, 17.166, -7.636, -1.1, -1.2, 0.0], 'timestamp': 1712798564.059606, 'flop': 'Qc5d7s', 'heroIndex': 2, 'blindLevel': {'blinds': [1000.0, 2000.0, 20000.0], 'straddle': 1}, 'turn': 'Kd', 'reqid': 335833351, 'version': 1.0, 'command': 'aofhistory', 'handNumber': '101856509-80', 'winners': ['8724254188', '4787979260', '5217347395'], 'ev': [2.11, -0.855, 1.045, -1.1, -1.2, 0.0], 'outcome': [-7.9, 20.2, -10.0, -1.1, -1.2, 0.0], 'turn_ev': [-8.2, 20.2, -9.7, -1.1, -1.2, 0.0], 'leagueName': '熊猫联盟'}
+
+))

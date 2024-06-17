@@ -67,15 +67,19 @@ class DBLoader:
         return self.db.find(self.query)
 
     def run_pid_set(self):
-        pid_set = set()
+        player_hash = {}
         for i in self.db.find(self.query):
             hero_index = int(i.get('heroIndex', -1))
-            if hero_index != -1:
-                players = i.pop('players')
-                p_id = players[hero_index].get('pId')
-                if p_id:
-                    pid_set.add(p_id)
-        return pid_set
+            if hero_index < 0:
+                continue
+            players = i.get('players')
+            player = players[hero_index]
+            player_id = player.get('pId')
+            if player_id not in player_hash:
+                player_hash[player_id] = {"name": player["playerId"], "first_time": i["timestamp"]}
+            if player_hash[player_id]["first_time"] > i["timestamp"]:
+                player_hash[player_id]["first_time"] = i["timestamp"]
+        return player_hash
 
     def insert_players(self, ids, dic=None):
         if dic is None:
@@ -90,13 +94,13 @@ class DBLoader:
         if r.get('pid_set') and not config.get_args('enable_r'):
             print('已获取AI PID信息')
             pid_set = r.get('pid_set')
-            pid_set = set(json.loads(pid_set))
+            player_hash = json.loads(pid_set)
         else:
             print('正在设置AI PID信息')
-            pid_set = self.run_pid_set()
-            r.set('pid_set', json.dumps(list(pid_set)), ex=60*60*24)
+            player_hash = self.run_pid_set()
+            r.set('pid_set', json.dumps(player_hash, ensure_ascii=False, indent=2), ex=60*60*24)
             print('设置完毕！！！！！！')
-        self.pid_set = pid_set
+        self.pid_set = player_hash
 
 
 db_col = DBLoader()
