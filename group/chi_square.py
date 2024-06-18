@@ -68,7 +68,7 @@ class ChiSquareCheck:
             "Content-Type": "application/json",
         }
         ans = requests.post(url=url, json=data, headers=headers)
-        return ans.json()
+        return ans.text
 
 
 
