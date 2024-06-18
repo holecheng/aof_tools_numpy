@@ -12,10 +12,10 @@ class ChiSquareCheck:
     def __init__(self, group, row_dic, total=None):
         self.group = group
         self.group_key = self.find_group_key(row_dic)
+        self.total = total
         self.row_dic = row_dic
         self.matrix_dic = {'∑p0': collections.defaultdict(int), '∑x': collections.defaultdict(int)}
         self.covert(self.row_dic)
-        self.total = total
 
     def __eq__(self, other):
         group_key = self.find_group_key(other.row_dic)
