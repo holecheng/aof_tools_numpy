@@ -1,21 +1,30 @@
 import json
 
+from group.group_base import AddSystem
 
-class ChiSquareCheck:
+
+class ChiSquareCheck(AddSystem):
     __slots__ = ('group',
                  'group_key',  # 几人场
                  'matrix_dic',  # 排名矩阵
+                 'avg_outcome_player',
+                 'avg_ev_player',
+                 'diff_ev_outcome',
                  'total',
+                 'counts',  # 符合条件的计数
+                 'sum_ev_player',
+                 'sum_outcome_player',
                  'row_dic'   # 数据字典
                  )
 
     def __init__(self, group, row_dic, total=None):
+        super().__init__()
         self.group = group
         self.group_key = self.find_group_key(row_dic)
         self.total = total
         self.row_dic = row_dic
         self.matrix_dic = {}
-        self.covert(self.row_dic)
+        self.covert(self.row_dic, types='init')
 
     def __eq__(self, other):
         group_key = self.find_group_key(other.row_dic)
@@ -26,7 +35,7 @@ class ChiSquareCheck:
         self.covert(row_dic)
         return self
 
-    def covert(self, row_dic):
+    def covert(self, row_dic, types=None):
         if not row_dic.get('turn'):
             return self
         pid_case = row_dic.get('pid_case')
@@ -39,6 +48,13 @@ class ChiSquareCheck:
             showdown_ranks = pid_case.get('showdown_ranks')
         except Exception:
             return self  # 没有数据不计入
+        self.counts += 1
+        if types:
+            self.add_or_init('ev_player', row_dic, types='init')
+            self.add_or_init('outcome_player', row_dic, types='init')
+        else:
+            self.add_or_init('ev_player', row_dic)
+            self.add_or_init('outcome_player', row_dic)
         ai_list = row_dic.get('ai_list')
         for i, v in enumerate(ai_list):
             if v == 1:  # 判断是不是AI

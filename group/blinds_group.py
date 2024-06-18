@@ -1,7 +1,7 @@
-from group.group_base import Base
+from group.group_base import Base, AddSystem
 
 
-class Blinds(Base):
+class Blinds(Base, AddSystem):
     __slots__ = ('group',  # 组
                  'group_key',  # 分组值
                  'allowance',
@@ -61,17 +61,3 @@ class Blinds(Base):
             self.add_or_init('ai_stack', row_dic, types='init')
             self.add_or_init('compare_stack', row_dic, types='init')
         setattr(self, 'diff_ev_outcome', self.avg_outcome_player - self.avg_ev_player)
-
-    def add_or_init(self, suffix, row_dic, types='add', counts=None):
-        if not counts:
-            counts = self.counts
-        if types == 'add':
-            setattr(self, 'sum_' + suffix, getattr(self, 'sum_' + suffix) + float(row_dic[suffix]))
-            setattr(self, 'avg_' + suffix, self.avg_get(getattr(self, 'sum_' + suffix), counts))
-        else:
-            setattr(self, 'avg_'+suffix, float(row_dic[suffix]))
-            setattr(self, 'sum_' + suffix, float(row_dic[suffix]))
-
-    @staticmethod
-    def avg_get(sum_c, count):
-        return float(sum_c) / float(count)

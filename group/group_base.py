@@ -41,3 +41,24 @@ class Base(object):
         return ans_group_key
 
 
+class AddSystem:
+
+    def __init__(self):
+        self.counts = 0
+
+    def add_or_init(self, suffix, row_dic, types='add', counts=None):
+        if not counts:
+            counts = self.counts
+        if types == 'add':
+            setattr(self, 'sum_' + suffix, getattr(self, 'sum_' + suffix) + float(row_dic[suffix]))
+            setattr(self, 'avg_' + suffix, self.avg_get(getattr(self, 'sum_' + suffix), counts))
+        else:
+            setattr(self, 'avg_'+suffix, float(row_dic[suffix]))
+            setattr(self, 'sum_' + suffix, float(row_dic[suffix]))
+
+    @staticmethod
+    def avg_get(sum_c, count):
+        return float(sum_c) / float(count)
+
+
+
