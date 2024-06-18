@@ -28,7 +28,7 @@ class ChiSquareCheck:
 
     def covert(self, row_dic):
         if self.total:
-            return self
+            return self  # 去除total干扰
         showdown_ranks = row_dic.get('showdown_ranks')
         final_ranks = row_dic.get('final_ranks')
         ai_list = row_dic.get('ai_list')
