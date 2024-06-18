@@ -134,8 +134,10 @@ class DBLoader:
             "Content-Type": "application/json",
         }
         ans = requests.post(url=url, json=data, headers=headers)
-        print(ans)
-        return ans.json()
+        if ans.status_code == 200:
+            return ans.json()
+        else:
+            print(data)
 
 
 db_col = DBLoader()
