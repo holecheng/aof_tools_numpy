@@ -38,8 +38,6 @@ def init_query():
         for i in result:
             # if str(i.get('handNumber')) == '101652141-60':
             #     print(i)
-            if i.get('pid_case'):
-                print(i)
             is_success, _ = RowHand().convert(i)
             if not is_success:
                 continue
@@ -64,9 +62,9 @@ def init_query():
             else:
                 query_round.add(hand_num)
             if not i.get('pid_case'):
-                if i.get('handNumber') == '101653485-38':
-                    print(i)
                 db_col.run_update(i)  # 避免数据未更新
+            else:
+                print('数据已更新，执行下一步')
             compare_player = ai_count / player_count
             ante = line.get('blindLevel')['blinds'][-1]
             ai_stack = sum([float(i.get('stack') / ante) for i in filter(
