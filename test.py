@@ -1,13 +1,28 @@
-'''
+import pandas as pd
+from scipy.stats import chi2_contingency
+import numpy as np
 
+# 假设有如下的观察频率分布
+observed = pd.DataFrame([
+    [0.8, 0.8, 0.8],
+    [0.4, 0.5, 0.5],
+    [0.3, 0.2, 0.2]
+])
+# 执行卡方检验
+# 第一个返回值是卡方统计量，第二个返回值是p值
+chi2, p, dof, expected = chi2_contingency(observed.values)
 
-{'_id': ObjectId('660a0eed17188830a8dccbad'), 'river': 'Th', 'nash_range': [0.689, 0.472, 0.342, 0.0, 0.0, 0.0], 'players': [{'isSb': False, 'playerId': '我想找个对象了.', 'pId': '5797501911', 'straddle': 0, 'isBb': False, 'flopInsurance': [], 'turnInsurance': [], 'cards': 'Kh3s', 'stack': 137000.0, 'seat': 1, 'isButton': True, 'action': 'Push', 'ante': 20000.0}, {'isSb': True, 'playerId': '梦之蓝1', 'pId': '9567280874', 'straddle': 0, 'isBb': False, 'flopInsurance': [{'betStacks': 0.0, 'defaultPot': False, 'potId': '200000'}], 'turnInsurance': [{'betStacks': 0.0, 'defaultPot': False, 'potId': '200000'}], 'cards': '6sKc', 'stack': 200000.0, 'seat': 2, 'isButton': False, 'action': 'Push', 'ante': 20000.0}, {'isSb': False, 'playerId': '最熟悉的陌生伦', 'pId': '6095018817', 'straddle': 0, 'isBb': True, 'flopInsurance': [], 'turnInsurance': [], 'cards': 'Ts8s', 'stack': 683000.0, 'seat': 4, 'isButton': False, 'action': 'Push', 'ante': 20000.0}], 'flop_ev': [-2.64, -1.524, 4.164, 0.0, 0.0, 0.0], 'timestamp': 1711935213.239057, 'flop': 'AcJh9d', 'heroIndex': 2, 'blindLevel': {'blinds': [1000.0, 2000.0, 20000.0], 'straddle': 1}, 'turn': '5h', 'reqid': 156031767, 'version': 1.0, 'command': 'aofhistory', 'handNumber': '101652141-60', 'winners': ['6095018817'], 'ev': [-2.533, -0.466, 2.999, 0.0, 0.0, 0.0], 'outcome': [-6.85, -10.0, 16.85, 0.0, 0.0, 0.0], 'turn_ev': [-1.957, 3.007, -1.05, 0.0, 0.0, 0.0], 'leagueName': '熊猫联盟', 'pid_case': '{"case_num":1370754,"showdown_ranks":[[393644,671743,305367],[535411,683493,151850],[659309,71765,639680]],"final_ranks":[[0,1,0],[1,0,0],[0,0,1]]}'}
+# 输出结果
+print(f"卡方统计量: {chi2}")  # ∑(观察频数 - 期望频数)
+print(f"p值: {p}")  #
+print(f"自由度: {dof}") # 自由度  行-1 * 列-1
+print(f"期望频率: \n{expected}")  # 期望频率 行总频数*列总频数/总频数
+npd = np.array(((observed**2 - expected**2) / observed).apply(np.abs))
+print(npd)
+print(npd.sum())
 
-
-'''
-import json
-
-print(json.dumps(
-{'river': None, 'nash_range': [0.747, 0.492, 0.0, 0.0, 0.0, 0.0], 'players': [{'isSb': True, 'playerId': 'joycasc', 'pId': '6095661926', 'straddle': 0, 'isBb': False, 'flopInsurance': [], 'turnInsurance': [], 'cards': '', 'stack': 100000.0, 'seat': 4, 'isButton': True, 'action': 'Push', 'ante': 10000.0}, {'isSb': False, 'playerId': '想回从前的时', 'pId': '6095027984', 'straddle': 0, 'isBb': True, 'flopInsurance': [], 'turnInsurance': [], 'cards': '4d5d', 'stack': 307516.0, 'seat': 1, 'isButton': False, 'action': 'Fold', 'ante': 10000.0}], 'timestamp': 1712161289.122752, 'flop': '', 'heroIndex': 1, 'blindLevel': {'blinds': [500.0, 1000.0, 10000.0], 'straddle': 1}, 'turn': None, 'reqid': 152995066, 'version': 1.0, 'command': 'aofhistory', 'winners': ['6095661926'], 'ev': [1.1, -1.1, 0.0, 0.0, 0.0, 0.0], 'outcome': [1.1, -1.1, 0.0, 0.0, 0.0, 0.0], 'handNumber': '101708199-71', 'leagueName': '熊猫联盟'}
-
-))
+# 根据p值判断是否拒绝原假设
+if p < 0.05:
+    print("拒绝原假设，观察频率分布不独立。")
+else:
+    print("接受原假设，观察频率分布独立")

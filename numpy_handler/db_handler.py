@@ -1,14 +1,10 @@
-import collections
-import json
 import logging
 import datetime
 import os.path
 import time
 
-import redis
-import requests
-
 from group.blinds_group import Blinds
+from group.chi_square import ChiSquareCheck
 from group.hand_group import Hand
 
 from util_lib.assert_effective import RowHand
@@ -48,14 +44,16 @@ def init_query():
             if i.get('heroIndex') < 0:
                 continue
             line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName', 'date', 'hours']
-            player_key = ['pId', 'card_num', 'action', 'cards', 'blindLevel']
+            player_key = ['pId', 'card_num', 'action', 'cards', 'blindLevel',  'final_ranks', 'showdown_ranks',
+                          'ai_list']
             if not row_key:
                 row_key = line_key + player_key + IS_DIGIT_KEY
                 yield row_key
             line = i.copy()
             hand_num = line.get('handNumber')
             players = line.pop('players')
-            ai_count = sum(1 if i.get('pId') in pid_set else 0 for i in players)
+            ai_list = [1 if i.get('pId') in pid_set else 0 for i in players]
+            ai_count = sum(ai_list)
             player_count = len(players) - ai_count
             if not player_count:
                 continue  # 表演赛不计入统计
@@ -76,7 +74,7 @@ def init_query():
             for hero_index, player in enumerate(players):
                 if config.get_args('player') and str(config.get_args('player')) != player.get('pId'):
                     continue
-                row_dic = collections.defaultdict(str)
+                row_dic = {}
                 row_dic.update({i: line.get(i) for i in row_key})
                 p_id = player.get('pId')
                 if not p_id or p_id not in pid_set:
@@ -89,11 +87,12 @@ def init_query():
                 f.write(f"{player.get('pId')},{i.get('handNumber')},"
                         f"{i.get('ev')[hero_index]},{i.get('outcome')[hero_index]},"
                         f"{dates}\n")
-                row_dic['ai_count'] = str(ai_count)
-                row_dic['player_count'] = str(player_count)
-                row_dic['compare_player'] = str(compare_player)
-                row_dic['ai_stack'] = str(ai_stack)
-                row_dic['compare_stack'] = str(compare_stack)
+                row_dic['ai_count'] = ai_count
+                row_dic['ai_list'] = ai_list
+                row_dic['player_count'] = player_count
+                row_dic['compare_player'] = compare_player
+                row_dic['ai_stack'] = ai_stack
+                row_dic['compare_stack'] = compare_stack
                 outcome = line.get('outcome')[hero_index]
                 ev = line.get('ev')[hero_index]
                 flop_ev_list = line.get('flop_ev')
@@ -106,7 +105,7 @@ def init_query():
                 row_dic['stack'] = int(player.get('stack')) // ante
                 row_dic['blindLevel'] = sign_blind_level(line.get('blindLevel')['blinds'])
                 if not (line.get('heroIndex') is None):
-                    row_dic['heroIndex'] = str(hero_index)
+                    row_dic['heroIndex'] = hero_index
                 if flop_ev_list and turn_ev_list:
                     row_dic['flop_ev'] = flop_ev_list[hero_index]
                     row_dic['turn_ev'] = turn_ev_list[hero_index]
@@ -151,7 +150,7 @@ class NumpyReadDb:
             if config.get_args('simple'):
                 self.title = ['group', 'group_key', 'allowance', 'avg_ev', 'avg_flop_ev',
                               'avg_turn_ev', 'avg_outcome', 'diff_ev_outcome', 'counts']
-            self.format_list = [Hand, Blinds]
+            self.format_list = [Hand, Blinds, ChiSquareCheck]
             self.group_dic = {}
             self.group = config.get_args('group')
             self.f = None
@@ -170,6 +169,8 @@ class NumpyReadDb:
                 self.f.write(','.join(self.title) + '\n')
             if self.group in ['card_num', 'pId']:
                 self.get_row_result(0)
+            elif self.group in ['chi_square']:
+                self.get_row_result(2)
             else:
                 self.get_row_result(1)
         print((time.time() - s))
@@ -239,34 +240,6 @@ class NumpyReadDb:
         row = [str(row_dic[k]) for k in ['pId', 'handNumber']]
         self.f.write(','.join(row) + '\n')
 
-    # def add_result(self):
-    #     page = 0
-    #     final = 1
-    #     np_apply = []
-    #     while final:
-    #         nps = [self.title]
-    #         page_row = 10000
-    #         while page_row:
-    #             row_dic = self.get_generator()
-    #             if row_dic:
-    #                 page_row -= 1
-    #                 nps.append([row_dic[i] for i in self.title])
-    #             else:
-    #                 final = 0
-    #                 print('数据处理完毕！')
-    #                 break
-    #         else:
-    #             page += 1
-    #             # self.write_excel(nps, str(page))
-    #             npd = get_group_avg_nps(nps)
-    #             np_apply.append(get_analysis(AvgStrategy(), npd))
-    #             print('已完成处理数据第{}页'.format(page))
-    #             if len(np_apply) > 30:
-    #                 title = np_apply[0]
-    #                 nps = np.vstack([title]+[c[1:,] for c in np_apply])
-    #                 new_npd = get_group_avg_nps(nps)
-    #                 np_apply.append(new_npd)
-    #             # self.write_excel(np_apply, str(page) + '_{}'.format(config.get_args('types')))
     @staticmethod
     def write_origin():
         with db_col:
