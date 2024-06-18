@@ -137,7 +137,7 @@ class DBLoader:
         if ans.status_code == 200:
             return ans.json()
         else:
-            print(111)
+            print(data)
 
 
 db_col = DBLoader()
