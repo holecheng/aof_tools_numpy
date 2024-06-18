@@ -31,6 +31,7 @@ class ChiSquareCheck:
             return self  # 去除total干扰
         showdown_ranks = row_dic.get('showdown_ranks')
         final_ranks = row_dic.get('final_ranks')
+        print(final_ranks)
         ai_list = row_dic.get('ai_list')
         for rank in range(self.group_key):
             for i, v in enumerate(ai_list):
