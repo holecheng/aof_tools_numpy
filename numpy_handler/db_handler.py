@@ -211,10 +211,11 @@ class NumpyReadDb:
                 avg_ev_player = v.avg_ev_player
                 avg_outcome_player = v.avg_outcome_player
                 diff_ev_outcome = v.diff_ev_outcome
+                counts = v.counts
                 chi_square_value = get_chi_square_value(matrix_dic)  # 卡方值
                 print(f'{k}人场： 卡方值为{chi_square_value}, 自由度为{free_d}')
                 ans.append(['chi_square', k, chi_square_value, avg_ev_player,
-                            avg_outcome_player, diff_ev_outcome, free_d])
+                            avg_outcome_player, diff_ev_outcome, free_d, counts])
 
         if self.group:
             self.write_excel(ans, config.get_args('query_time') + self.group.replace('**', ''))
