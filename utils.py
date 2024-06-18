@@ -53,7 +53,7 @@ def time_format_time(formats='%Y-%m-%d %H:%M:%S'):
 def get_chi_square_value(matrix_dic):
     # 计算卡方自由度
     chi_square_value = 0
-    for _, v in matrix_dic:
+    for _, v in matrix_dic.items():
         # {0: {'∑p0': 106.54013410011522, '∑x': 106},
         # 1: {'∑p0': 97.40170709040343, '∑x': 102},
         # 2: {'∑p0': 201.36368602475036, '∑x': 200}, 3: {'∑p0': 45.69447278473087, '∑x': 43}}
