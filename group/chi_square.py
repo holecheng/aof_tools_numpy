@@ -30,8 +30,7 @@ class ChiSquareCheck:
         if self.total:
             return self  # 去除total干扰
         pid_case = row_dic.get('pid_case')
-        print(type(pid_case), pid_case)
-        if not pid_case:
+        if not pid_case or pid_case == 'null':
             return self  # 没有数据不计入
         if isinstance(pid_case, str):
             pid_case = json.loads(pid_case)
