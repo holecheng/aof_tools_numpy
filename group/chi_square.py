@@ -36,7 +36,7 @@ class ChiSquareCheck:
             ans = self.run_update(row_dic)
             showdown_ranks, final_ranks = ans.get('showdown_ranks'), ans.get('final_ranks')
         ai_list = row_dic.get('ai_list')
-        for rank in range(self.group_key):
+        for rank in range(2, self.group_key):  # 至少2人场
             for i, v in enumerate(ai_list):
                 if v == 1:  # 判断是不是AI
                     final_rank = final_ranks[i]
