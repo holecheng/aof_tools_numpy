@@ -58,6 +58,7 @@ class ChiSquareCheck(AddSystem):
         else:
             self.add_or_init('ev_player', row_dic)
             self.add_or_init('outcome_player', row_dic)
+        self.diff_ev_outcome = self.avg_outcome_player - self.avg_ev_player
         ai_list = row_dic.get('ai_list')
         for i, v in enumerate(ai_list):
             if v == 1:  # 判断是不是AI
