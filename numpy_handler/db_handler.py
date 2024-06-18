@@ -62,7 +62,8 @@ def init_query():
             else:
                 query_round.add(hand_num)
             if not i.get('pid_case'):
-                print(i)
+                if i.get('handNumber') == '101653485-38':
+                    print(i)
                 db_col.run_update(i)  # 避免数据未更新
             compare_player = ai_count / player_count
             ante = line.get('blindLevel')['blinds'][-1]
