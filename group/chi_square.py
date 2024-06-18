@@ -15,7 +15,7 @@ class ChiSquareCheck:
         self.group_key = self.find_group_key(row_dic)
         self.total = total
         self.row_dic = row_dic
-        self.matrix_dic = {'∑p0': collections.defaultdict(int), '∑x': collections.defaultdict(int)}
+        self.matrix_dic = {}
         self.covert(self.row_dic)
 
     def __eq__(self, other):
@@ -36,18 +36,19 @@ class ChiSquareCheck:
             ans = self.run_update(row_dic)
             showdown_ranks, final_ranks = ans.get('showdown_ranks'), ans.get('final_ranks')
         ai_list = row_dic.get('ai_list')
-        for rank in range(2, self.group_key):  # 至少2人场
-            for i, v in enumerate(ai_list):
-                if v == 1:  # 判断是不是AI
-                    final_rank = final_ranks[i]
-                    showdown_rank = showdown_ranks[i]
-                    for k, p in enumerate(showdown_rank):
-                        if p == 0:
-                            continue
-                        p0 = p / sum(showdown_rank)
-                        self.matrix_dic[k]['∑p0'] += p0
-                        if final_rank[k]:
-                            self.matrix_dic[k]['∑x'] += 1
+        for i, v in enumerate(ai_list):
+            if v == 1:  # 判断是不是AI
+                final_rank = final_ranks[i]
+                showdown_rank = showdown_ranks[i]
+                for k, p in enumerate(showdown_rank):
+                    if p == 0:
+                        continue
+                    if not self.matrix_dic.get(k):
+                        self.matrix_dic[k] = {'∑p0': collections.defaultdict(int), '∑x': collections.defaultdict(int)}
+                    p0 = p / sum(showdown_rank)
+                    self.matrix_dic[k]['∑p0'] += p0
+                    if final_rank[k]:
+                        self.matrix_dic[k]['∑x'] += 1
 
     @staticmethod
     def find_group_key(row_dic):
