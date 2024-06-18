@@ -118,6 +118,7 @@ class DBLoader:
     def run_update(self, row_dic):
         url = 'https://aof-tools-tdse67xzfa-de.a.run.app/api/simulate_results'
         # url = 'http://10.140.0.15:52222/api/simulate_results'
+        print(row_dic)
         data_key = ['command', 'players', 'flop', 'turn', 'river', 'blindLevel']
         ans = self.fetch_url(url, {k: row_dic.get(k, '') for k in data_key})
         filters = {'_id': row_dic['_id']}
@@ -126,7 +127,8 @@ class DBLoader:
         print(f"Updated {result.matched_count} document(s) with {result.modified_count} modification(s), "
               f"{row_dic['_id']}")
 
-    def fetch_url(self, url, data):
+    @staticmethod
+    def fetch_url(url, data):
         headers = {
             "Accept": "*/*",
             "Accept-Encoding": "gzip, deflate",
