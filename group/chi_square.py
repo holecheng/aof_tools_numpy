@@ -19,6 +19,9 @@ class ChiSquareCheck(AddSystem):
 
     def __init__(self, group, row_dic, total=None):
         super().__init__()
+        if hasattr(self, '__slots__'):
+            for i in self.__slots__:
+                self.__setattr__(i, 0)
         self.group = group
         self.group_key = self.find_group_key(row_dic)
         self.total = total
