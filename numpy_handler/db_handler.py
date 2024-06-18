@@ -78,6 +78,7 @@ def init_query():
                 if not p_id or p_id not in pid_set:
                     continue  # 非AI玩家暂不分析
                 if not i.get('final_ranks') and not i.get('showdown_ranks'):
+                    print(i)
                     db_col.run_update(i)  # 避免数据未更新
                 row_dic = {}
                 row_dic.update({i: line.get(i) for i in row_key})
