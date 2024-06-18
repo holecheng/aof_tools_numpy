@@ -61,6 +61,8 @@ def init_query():
                 continue
             else:
                 query_round.add(hand_num)
+            if not i.get('pid_case'):
+                db_col.run_update(i)  # 避免数据未更新
             compare_player = ai_count / player_count
             ante = line.get('blindLevel')['blinds'][-1]
             ai_stack = sum([float(i.get('stack') / ante) for i in filter(
@@ -77,8 +79,6 @@ def init_query():
                 p_id = player.get('pId')
                 if not p_id or p_id not in pid_set:
                     continue  # 非AI玩家暂不分析
-                if not i.get('pid_case'):
-                    db_col.run_update(i)  # 避免数据未更新
                 row_dic = {}
                 row_dic.update({i: line.get(i) for i in row_key})
                 dates = datetime.datetime.fromtimestamp(i.get('timestamp')).strftime(
