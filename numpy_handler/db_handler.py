@@ -44,8 +44,8 @@ def init_query():
             if i.get('heroIndex') < 0:
                 continue
             line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName', 'date', 'hours']
-            player_key = ['pId', 'card_num', 'action', 'cards', 'blindLevel',  'final_ranks', 'showdown_ranks',
-                          'ai_list']
+            player_key = ['pId', 'card_num', 'action', 'cards', 'blind_l',  'final_ranks', 'showdown_ranks',
+                          'ai_list', 'players', 'flop', 'turn', 'blindLevel']
             if not row_key:
                 row_key = line_key + player_key + IS_DIGIT_KEY
                 yield row_key
@@ -103,7 +103,7 @@ def init_query():
                 row_dic['is_turn'] = '1' if line.get('turn') else ''  # 是否turn
                 row_dic['is_river'] = '1' if line.get('river') else ''  # 是否存在river
                 row_dic['stack'] = int(player.get('stack')) // ante
-                row_dic['blindLevel'] = sign_blind_level(line.get('blindLevel')['blinds'])
+                row_dic['blind_l'] = sign_blind_level(line.get('blindLevel')['blinds'])
                 if not (line.get('heroIndex') is None):
                     row_dic['heroIndex'] = hero_index
                 if flop_ev_list and turn_ev_list:
