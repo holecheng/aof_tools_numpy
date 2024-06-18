@@ -33,7 +33,7 @@ class ChiSquareCheck:
         if not pid_case or pid_case == 'null':
             return self  # 没有数据不计入
         if isinstance(pid_case, str):
-            pid_case = json.loads(pid_case)
+            pid_case = eval(pid_case)
         try:
             final_ranks = pid_case.get('final_ranks')
             showdown_ranks = pid_case.get('showdown_ranks')
