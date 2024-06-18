@@ -28,6 +28,7 @@ class ChiSquareCheck:
         showdown_ranks = row_dic.get('showdown_ranks')
         final_ranks = row_dic.get('final_ranks')
         ai_list = row_dic.get('ai_list')
+        print(self.group_key)
         for rank in range(self.group_key):
             for i, v in enumerate(ai_list.split(',')):
                 if v == '1':  # 判断是不是AI
