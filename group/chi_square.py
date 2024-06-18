@@ -28,10 +28,11 @@ class ChiSquareCheck:
     def covert(self, row_dic):
         if self.total:
             return self  # 去除total干扰
-        showdown_ranks = row_dic.get('showdown_ranks')
-        final_ranks = row_dic.get('final_ranks')
-        if not showdown_ranks or not final_ranks:
+        pid_case = row_dic.get('pid_case')
+        if not pid_case:
             return self  # 没有数据不计入
+        final_ranks = pid_case.get('final_ranks')
+        showdown_ranks = pid_case.get('showdown_ranks')
         ai_list = row_dic.get('ai_list')
         for i, v in enumerate(ai_list):
             if v == 1:  # 判断是不是AI

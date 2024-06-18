@@ -44,7 +44,7 @@ def init_query():
             if i.get('heroIndex') < 0:
                 continue
             line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName', 'date', 'hours']
-            player_key = ['pId', 'card_num', 'action', 'cards', 'blind_l',  'final_ranks', 'showdown_ranks',
+            player_key = ['pId', 'card_num', 'action', 'cards', 'blind_l',  'pid_case',
                           'ai_list', 'players', 'flop', 'turn', 'blindLevel']
             if not row_key:
                 row_key = line_key + player_key + IS_DIGIT_KEY
@@ -77,8 +77,7 @@ def init_query():
                 p_id = player.get('pId')
                 if not p_id or p_id not in pid_set:
                     continue  # 非AI玩家暂不分析
-                if not i.get('final_ranks') and not i.get('showdown_ranks'):
-                    print(i)
+                if not i.get('pid_case'):
                     db_col.run_update(i)  # 避免数据未更新
                 row_dic = {}
                 row_dic.update({i: line.get(i) for i in row_key})
