@@ -34,8 +34,12 @@ class ChiSquareCheck:
             return self  # 没有数据不计入
         if isinstance(pid_case, str):
             pid_case = json.loads(pid_case)
-        final_ranks = pid_case.get('final_ranks')
-        showdown_ranks = pid_case.get('showdown_ranks')
+        try:
+            final_ranks = pid_case.get('final_ranks')
+            showdown_ranks = pid_case.get('showdown_ranks')
+        except Exception:
+            print('数据有误不允计入')
+            return self  # 没有数据不计入
         ai_list = row_dic.get('ai_list')
         for i, v in enumerate(ai_list):
             if v == 1:  # 判断是不是AI
