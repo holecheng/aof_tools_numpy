@@ -44,7 +44,8 @@ class Base(object):
 class AddSystem:
 
     def __init__(self):
-        self.counts = 0
+        if not hasattr(self, 'counts'):
+            self.counts = 0
 
     def add_or_init(self, suffix, row_dic, types='add', counts=None):
         if not counts:
