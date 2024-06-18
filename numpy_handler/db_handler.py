@@ -208,9 +208,13 @@ class NumpyReadDb:
             else:
                 matrix_dic = v.matrix_dic  # 卡方集合
                 free_d = k - 1  # 自由度K-1
+                avg_ev_player = v.avg_ev_player
+                avg_outcome_player = v.avg_outcome_player
+                diff_ev_outcome = v.diff_ev_outcome
                 chi_square_value = get_chi_square_value(matrix_dic)  # 卡方值
                 print(f'{k}人场： 卡方值为{chi_square_value}, 自由度为{free_d}')
-                ans.append(['chi_square', k, chi_square_value, free_d])
+                ans.append(['chi_square', k, chi_square_value, avg_ev_player,
+                            avg_outcome_player, diff_ev_outcome, free_d])
 
         if self.group:
             self.write_excel(ans, config.get_args('query_time') + self.group.replace('**', ''))

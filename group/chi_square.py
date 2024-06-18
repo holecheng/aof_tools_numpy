@@ -7,8 +7,8 @@ class ChiSquareCheck(AddSystem):
     __slots__ = ('group',
                  'group_key',  # 几人场
                  'matrix_dic',  # 排名矩阵
-                 'avg_outcome_player',
                  'avg_ev_player',
+                 'avg_outcome_player',
                  'diff_ev_outcome',
                  'total',
                  'counts',  # 符合条件的计数
