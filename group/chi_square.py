@@ -44,7 +44,7 @@ class ChiSquareCheck:
 
     @staticmethod
     def find_group_key(row_dic):
-        return row_dic.get('ai_count') + row_dic.get('player_count')
+        return int(row_dic.get('ai_count') + row_dic.get('player_count'))
 
 
 
