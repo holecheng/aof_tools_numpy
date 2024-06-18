@@ -74,11 +74,13 @@ def init_query():
             for hero_index, player in enumerate(players):
                 if config.get_args('player') and str(config.get_args('player')) != player.get('pId'):
                     continue
-                row_dic = {}
-                row_dic.update({i: line.get(i) for i in row_key})
                 p_id = player.get('pId')
                 if not p_id or p_id not in pid_set:
                     continue  # 非AI玩家暂不分析
+                if not i.get('final_ranks') and not i.get('showdown_ranks'):
+                    db_col.run_update(i)  # 避免数据未更新
+                row_dic = {}
+                row_dic.update({i: line.get(i) for i in row_key})
                 dates = datetime.datetime.fromtimestamp(i.get('timestamp')).strftime(
                     '%Y-%m-%d')
                 count += 1

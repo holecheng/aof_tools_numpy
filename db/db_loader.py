@@ -5,6 +5,7 @@ import pymongo
 import logging
 
 import redis
+import requests
 
 from config_parse import config
 from datetime import datetime
@@ -113,6 +114,27 @@ class DBLoader:
             print('正在设置AI PID信息')
             player_hash = self.run_pid_set()
         self.pid_set = player_hash
+
+    def run_update(self, row_dic):
+        url = 'https://aof-tools-tdse67xzfa-de.a.run.app/api/simulate_results'
+        # url = 'http://10.140.0.15:52222/api/simulate_results'
+        data_key = ['command', 'players', 'flop', 'turn', 'river', 'blindLevel']
+        ans = self.fetch_url(url, {k: row_dic.get(k) for k in data_key})
+        filters = {'_id': row_dic['_id']}
+        updates = {"$set": {"pid_case": ans}}
+        result = self.db.update_one(filters, updates)
+        print(f"Updated {result.matched_count} document(s) with {result.modified_count} modification(s), "
+              f"{row_dic['_id']}")
+
+    def fetch_url(self, url, data):
+        headers = {
+            "Accept": "*/*",
+            "Accept-Encoding": "gzip, deflate",
+            "User-Agent": "python-requests/2.20.1",
+            "Content-Type": "application/json",
+        }
+        ans = requests.post(url=url, json=data, headers=headers)
+        return ans.json()
 
 
 db_col = DBLoader()
