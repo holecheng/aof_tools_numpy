@@ -51,7 +51,7 @@ def init_query():
                 yield row_key
             line = i.copy()
             hand_num = line.get('handNumber')
-            players = line.pop('players')
+            players = line.get('players')
             ai_list = [1 if i.get('pId') in pid_set else 0 for i in players]
             ai_count = sum(ai_list)
             player_count = len(players) - ai_count
