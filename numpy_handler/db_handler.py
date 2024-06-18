@@ -201,8 +201,9 @@ class NumpyReadDb:
         title = list(data_format.__slots__)
         title.remove('row_dic')
         ans = [title]
-        for _, v in self.group_dic.items():
-            print(v.matrix_dic, v.group_key)
+        for k, v in self.group_dic.items():
+            if k != 'total':
+                print(v.matrix_dic, v.group_key)
             ans.append([round(getattr(v, i), 5) if isinstance(getattr(v, i), float)
                         else getattr(v, i) for i in title])
         if self.group:
