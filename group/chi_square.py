@@ -29,7 +29,7 @@ class ChiSquareCheck:
         final_ranks = row_dic.get('final_ranks')
         ai_list = row_dic.get('ai_list')
         for rank in range(self.group_key):
-            for i, v in ai_list:
+            for i, v in enumerate(ai_list):
                 if v == '1':  # 判断是不是AI
                     final_rank = final_ranks[i]
                     showdown_rank = showdown_ranks[i]
