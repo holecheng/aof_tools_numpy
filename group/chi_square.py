@@ -34,7 +34,7 @@ class ChiSquareCheck:
         final_ranks = row_dic.get('final_ranks')
         if not showdown_ranks or not final_ranks:
             ans = self.run_update(row_dic)
-            print(ans)
+            showdown_ranks, final_ranks = ans.get('showdown_ranks'), ans.get('final_ranks')
         ai_list = row_dic.get('ai_list')
         for rank in range(self.group_key):
             for i, v in enumerate(ai_list):
@@ -69,7 +69,7 @@ class ChiSquareCheck:
             "Content-Type": "application/json",
         }
         ans = requests.post(url=url, json=data, headers=headers)
-        return ans.text
+        return ans.json()
 
 
 
