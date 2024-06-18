@@ -44,7 +44,7 @@ class ChiSquareCheck:
                     if p == 0:
                         continue
                     if not self.matrix_dic.get(k):
-                        self.matrix_dic[k] = {'∑p0': collections.defaultdict(float), '∑x': collections.defaultdict(int)}
+                        self.matrix_dic[k] = {'∑p0': 0, '∑x': 0}
                     p0 = p / sum(showdown_rank)
                     self.matrix_dic[k]['∑p0'] += p0
                     if final_rank[k]:
