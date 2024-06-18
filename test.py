@@ -5,3 +5,15 @@ print(json.dumps(
 
 
 ))
+
+
+
+
+
+
+
+a = {'0': {'0': 1, '1':2}, '1':{'0': 3, '1':2}}
+for _, v in a.items():
+    keys = ['0', '1']
+    x, y = (v.get(i) for i in keys)
+    print(x, y)

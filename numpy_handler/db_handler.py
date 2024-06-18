@@ -9,7 +9,7 @@ from group.hand_group import Hand
 
 from util_lib.assert_effective import RowHand
 # from handler import get_analysis, AvgStrategy
-from utils import sign_blind_level, to_excel_numpy, get_group_avg_nps
+from utils import sign_blind_level, to_excel_numpy, get_group_avg_nps, get_chi_square_value
 from config_parse import config
 
 from db.db_loader import db_col
@@ -202,10 +202,16 @@ class NumpyReadDb:
         title.remove('row_dic')
         ans = [title]
         for k, v in self.group_dic.items():
-            if k != 'total':
-                print(v.matrix_dic, v.group_key)
-            ans.append([round(getattr(v, i), 5) if isinstance(getattr(v, i), float)
-                        else getattr(v, i) for i in title])
+            if self.group != 'chi_square':
+                ans.append([round(getattr(v, i), 5) if isinstance(getattr(v, i), float)
+                            else getattr(v, i) for i in title])
+            else:
+                matrix_dic = v.matrix_dic  # 卡方集合
+                free_d = k - 1  # 自由度K-1
+                chi_square_value = get_chi_square_value(matrix_dic)  # 卡方值
+                print(f'{k}人场： 卡方值为{chi_square_value}, 自由度为{free_d}')
+                ans.append(['chi_square', 'k', 'chi_square_value', 'free_d'])
+
         if self.group:
             self.write_excel(ans, config.get_args('query_time') + self.group.replace('**', ''))
         return
@@ -217,11 +223,12 @@ class NumpyReadDb:
             self.group_dic[group_key] = groups
         else:
             self.group_dic[group_key] += groups
-        total = data_format(self.group, row_dic, total=1)
-        if 'total' not in self.group_dic:
-            self.group_dic['total'] = total
-        else:
-            self.group_dic['total'] += total
+        if self.group != 'chi_square':
+            total = data_format(self.group, row_dic, total=1)
+            if 'total' not in self.group_dic:
+                self.group_dic['total'] = total
+            else:
+                self.group_dic['total'] += total
 
     def get_generator(self):
         try:
