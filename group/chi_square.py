@@ -5,15 +5,17 @@ class ChiSquareCheck:
     __slots__ = ('group',
                  'group_key',  # 几人场
                  'matrix_dic',  # 排名矩阵
+                 'total',
                  'row_dic'   # 数据字典
                  )
 
-    def __init__(self, group, row_dic):
+    def __init__(self, group, row_dic, total=None):
         self.group = group
         self.group_key = self.find_group_key(row_dic)
         self.row_dic = row_dic
         self.matrix_dic = {'∑p0': collections.defaultdict(int), '∑x': collections.defaultdict(int)}
         self.covert(self.row_dic)
+        self.total = total
 
     def __eq__(self, other):
         group_key = self.find_group_key(other.row_dic)
@@ -25,6 +27,8 @@ class ChiSquareCheck:
         return self
 
     def covert(self, row_dic):
+        if self.total:
+            return self
         showdown_ranks = row_dic.get('showdown_ranks')
         final_ranks = row_dic.get('final_ranks')
         ai_list = row_dic.get('ai_list')
