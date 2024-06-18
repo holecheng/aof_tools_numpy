@@ -138,6 +138,7 @@ class DBLoader:
         ans = requests.post(url=url, json=data, headers=headers)
         if ans.status_code != 200:
             print(data)
+            print(ans)
         return ans.json()
 
 
