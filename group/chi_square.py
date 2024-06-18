@@ -32,13 +32,12 @@ class ChiSquareCheck:
         pid_case = row_dic.get('pid_case')
         if not pid_case or pid_case == 'null':
             return self  # 没有数据不计入
-        if isinstance(pid_case, str):
+        if not isinstance(pid_case, dict):
             pid_case = json.loads(pid_case)
         try:
             final_ranks = pid_case.get('final_ranks')
             showdown_ranks = pid_case.get('showdown_ranks')
         except Exception:
-            print(f'数据有误不允计入{type(json.loads(pid_case))} ')
             return self  # 没有数据不计入
         ai_list = row_dic.get('ai_list')
         for i, v in enumerate(ai_list):
