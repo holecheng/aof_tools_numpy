@@ -121,7 +121,7 @@ class DBLoader:
         data_key = ['command', 'players', 'flop', 'turn', 'river', 'blindLevel']
         ans = self.fetch_url(url, {k: row_dic.get(k) for k in data_key})
         filters = {'_id': row_dic['_id']}
-        updates = {"$set": {"pid_case": ans}}
+        updates = {"$set": {"pid_case": json.dumps(ans)}}
         result = self.db.update_one(filters, updates)
         print(f"Updated {result.matched_count} document(s) with {result.modified_count} modification(s), "
               f"{row_dic['_id']}")
