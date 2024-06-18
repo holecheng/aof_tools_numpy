@@ -32,6 +32,7 @@ class ChiSquareCheck:
         pid_case = row_dic.get('pid_case')
         if not pid_case:
             return self  # 没有数据不计入
+        print(type(pid_case))
         final_ranks = pid_case.get('final_ranks')
         showdown_ranks = pid_case.get('showdown_ranks')
         ai_list = row_dic.get('ai_list')
