@@ -38,7 +38,7 @@ class ChiSquareCheck:
             final_ranks = pid_case.get('final_ranks')
             showdown_ranks = pid_case.get('showdown_ranks')
         except Exception:
-            print('数据有误不允计入')
+            print(f'数据有误不允计入{pid_case}')
             return self  # 没有数据不计入
         ai_list = row_dic.get('ai_list')
         for i, v in enumerate(ai_list):
