@@ -38,6 +38,8 @@ def init_query():
         for i in result:
             # if str(i.get('handNumber')) == '101652141-60':
             #     print(i)
+            if i.get('pid_case'):
+                print(i)
             is_success, _ = RowHand().convert(i)
             if not is_success:
                 continue
