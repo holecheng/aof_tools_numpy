@@ -134,6 +134,7 @@ class DBLoader:
             "Content-Type": "application/json",
         }
         ans = requests.post(url=url, json=data, headers=headers)
+        print(ans)
         return ans.json()
 
 
