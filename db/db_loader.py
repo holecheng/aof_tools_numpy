@@ -118,14 +118,14 @@ class DBLoader:
     def run_update(self, row_dic):
         url = 'https://aof-tools-tdse67xzfa-de.a.run.app/api/simulate_results'
         # url = 'http://10.140.0.15:52222/api/simulate_results'
-        print(row_dic)
         data_key = ['command', 'players', 'flop', 'turn', 'river', 'blindLevel']
         ans = self.fetch_url(url, {k: row_dic.get(k, '') for k in data_key})
-        filters = {'_id': row_dic['_id']}
-        updates = {"$set": {"pid_case": json.dumps(ans)}}
-        result = self.db.update_one(filters, updates)
-        print(f"Updated {result.matched_count} document(s) with {result.modified_count} modification(s), "
-              f"{row_dic['_id']}")
+        if ans:
+            filters = {'_id': row_dic['_id']}
+            updates = {"$set": {"pid_case": json.dumps(ans)}}
+            result = self.db.update_one(filters, updates)
+            print(f"Updated {result.matched_count} document(s) with {result.modified_count} modification(s), "
+                  f"{row_dic['_id']}")
 
     @staticmethod
     def fetch_url(url, data):
@@ -135,10 +135,9 @@ class DBLoader:
             "User-Agent": "python-requests/2.20.1",
             "Content-Type": "application/json",
         }
+        if not data.get('turn'):
+            return
         ans = requests.post(url=url, json=data, headers=headers)
-        if ans.status_code != 200:
-            print(data)
-            print(ans)
         return ans.json()
 
 

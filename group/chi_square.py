@@ -29,6 +29,8 @@ class ChiSquareCheck:
     def covert(self, row_dic):
         if self.total:
             return self  # 去除total干扰
+        if not row_dic.get('turn'):
+            return self
         pid_case = row_dic.get('pid_case')
         if not pid_case or pid_case == 'null':
             return self  # 没有数据不计入
