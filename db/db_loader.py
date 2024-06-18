@@ -119,7 +119,7 @@ class DBLoader:
         url = 'https://aof-tools-tdse67xzfa-de.a.run.app/api/simulate_results'
         # url = 'http://10.140.0.15:52222/api/simulate_results'
         data_key = ['command', 'players', 'flop', 'turn', 'river', 'blindLevel']
-        ans = self.fetch_url(url, {k: row_dic.get(k) for k in data_key})
+        ans = self.fetch_url(url, {k: row_dic.get(k, '') for k in data_key})
         filters = {'_id': row_dic['_id']}
         updates = {"$set": {"pid_case": json.dumps(ans)}}
         result = self.db.update_one(filters, updates)
