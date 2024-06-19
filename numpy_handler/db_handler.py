@@ -36,6 +36,7 @@ def init_query():
         sum_ev = 0
         sum_outcome = 0
         for i in result:
+            print(i)
             # if str(i.get('handNumber')) == '101652141-60':
             #     print(i)
             is_success, _ = RowHand().convert(i)
