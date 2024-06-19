@@ -81,6 +81,7 @@ class DBLoader:
                 gt_lt['timestamp']['$lt'] = self.r.get('update_pid_set_et')
         cnt = 0
         pid_dic = json.loads(self.r.get('pid_set'))
+        print(f'查询数据：{gt_lt}')
         for i in self.db.find(gt_lt):
             hero_index = int(i.get('heroIndex', -1))
             if hero_index < 0:
