@@ -27,6 +27,7 @@ class ChiSquareCheck(AddSystem):
         self.total = total
         self.row_dic = row_dic
         self.matrix_dic = {}
+        self.diff_ev_outcome = None
         self.covert(self.row_dic, types='init')
 
     def __eq__(self, other):
@@ -42,6 +43,7 @@ class ChiSquareCheck(AddSystem):
         if not row_dic.get('turn'):
             return self
         pid_case = row_dic.get('pid_case')
+        print(pid_case)
         if not pid_case or pid_case == 'null':
             return self  # 没有数据不计入
         if not isinstance(pid_case, dict):
