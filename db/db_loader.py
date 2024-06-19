@@ -99,9 +99,11 @@ class DBLoader:
         self.r.set('pid_set', json.dumps(pid_dic, ensure_ascii=False, indent=2), ex=60 * 1000 * 60 * 24)  # 半永久
         print('设置完毕！！！！！！')
         if gt_lt['timestamp'].get('$lt'):
-            self.r.set('update_pid_set_et', max(self.get_with_default('update_pid_set_et', 0), gt_lt['timestamp'].get('$lt')))
+            self.r.set('update_pid_set_et', max(self.get_with_default('update_pid_set_et', 0),
+                                                gt_lt['timestamp'].get('$lt', 0)))
         if gt_lt['timestamp'].get('$gt'):
-            self.r.set('update_pid_set_st', max(self.get_with_default('update_pid_set_st', 0), gt_lt['timestamp'].get('$st')))
+            self.r.set('update_pid_set_st', max(self.get_with_default('update_pid_set_st', 0),
+                                                gt_lt['timestamp'].get('$gt', 0)))
         return pid_dic
 
     def get_with_default(self, key, default=None):
