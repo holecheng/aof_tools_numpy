@@ -260,6 +260,7 @@ class NumpyReadDb:
                         continue
                     unique[hand.handno] = 1
                     players = i.get('players')
+                    print(len(db_col.pid_set))
                     ai_count = sum(1 if i.get('pId') in db_col.pid_set else 0 for i in players)
                     if ai_count == len(players):
                         continue
