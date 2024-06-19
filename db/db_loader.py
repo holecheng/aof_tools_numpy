@@ -91,8 +91,9 @@ class DBLoader:
         cnt = 0
         pid_dic = json.loads(self.r.get('pid_set'))
         do_update = [do_lt_update, do_gt_update]
-        if gt_lt == self.query:
-            do_update = [gt_lt]
+        if gt_lt == {'timestamp': {'$gt': self.r.get('update_pid_set_st'),
+                                   '$lt': self.r.get('update_pid_set_et')}}:
+            do_update = []
         print(f'缓存更新数据：{do_update}')
         for dos in do_update:
             if dos.get('timestamp'):
