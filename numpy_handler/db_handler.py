@@ -27,14 +27,12 @@ def init_query():
     with db_col:
         pid_set = db_col.pid_set
         result = db_col.run_query()
-        print(1111111111111111)
         row_key = []
         query_round = set()  # 用于统计是否该局号已被计入
         cnt = 0
         count = 0
         cnt_ai = 0
         alls = 0
-        print(f'pid_set总共{len(db_col.pid_set)}')
         for i in result:
             is_success, _ = RowHand().convert(i)
             if not is_success:
