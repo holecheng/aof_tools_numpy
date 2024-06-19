@@ -27,7 +27,6 @@ def init_query():
     with db_col:
         result = db_col.run_query()
         pid_set = db_col.pid_set
-        print(pid_set)
         row_key = []
         query_round = set()  # 用于统计是否该局号已被计入
         cnt = 0
