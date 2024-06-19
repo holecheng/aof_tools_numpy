@@ -31,8 +31,8 @@ class DBLoader:
     def __enter__(self):
         self._load_data_from_db()
         self._init_query()
-        self._init_redis()
         logger.info("query:{}".format(self.query))
+        self._init_redis()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -66,8 +66,6 @@ class DBLoader:
                                                                              "%Y-%m-%d").timestamp()})
 
     def run_query(self):
-        print(f'self.query: {self.query}')
-        print(111111111, self.db.find(self.query))
         return self.db.find(self.query)
 
     def run_pid_set(self):
