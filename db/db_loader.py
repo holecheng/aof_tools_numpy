@@ -66,6 +66,7 @@ class DBLoader:
                                                                              "%Y-%m-%d").timestamp()})
 
     def run_query(self):
+        print(f'查询内容{self.query}')
         return self.db.find(self.query)
 
     def run_pid_set(self):
