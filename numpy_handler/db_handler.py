@@ -59,8 +59,8 @@ def init_query():
                 continue
             else:
                 query_round.add(hand_num)
-            if not i.get('pid_case'):
-                db_col.run_update(i)  # 避免数据未更新
+            # if not i.get('pid_case'):
+            #     db_col.run_update(i)  # 避免数据未更新
             compare_player = ai_count / player_count
             ante = line.get('blindLevel')['blinds'][-1]
             ai_stack = sum([float(i.get('stack') / ante) for i in filter(
