@@ -79,14 +79,9 @@ def init_query():
                     continue  # 非AI玩家暂不分析
                 row_dic = {}
                 row_dic.update({i: line.get(i) for i in row_key})
-                dates = datetime.datetime.fromtimestamp(i.get('timestamp')).strftime(
-                    '%Y-%m-%d')
                 count += 1
                 sum_ev += i.get('ev')[hero_index]
                 sum_outcome += i.get('outcome')[hero_index]
-                f.write(f"{player.get('pId')},{i.get('handNumber')},"
-                        f"{i.get('ev')[hero_index]},{i.get('outcome')[hero_index]},"
-                        f"{dates}\n")
                 row_dic['ai_count'] = ai_count
                 row_dic['ai_list'] = ai_list
                 row_dic['player_count'] = player_count
@@ -132,6 +127,7 @@ def init_query():
                 row_dic.update({i: player.get(i) if not row_dic.get(i) else row_dic.get(i) for i in row_key})
                 row_dic.update({i: float(row_dic.get(i) if row_dic.get(i) else 0) for i in IS_DIGIT_KEY})
                 yield {key: row_dic.get(key, '') for key in row_key}
+        print(f'总共{count}手(pID-handNo)数据')
 
 
 class NumpyReadDb:
