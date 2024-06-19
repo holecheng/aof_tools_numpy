@@ -70,7 +70,7 @@ class DBLoader:
 
     def run_pid_set(self):
         player_hash = {}
-        gt_lt = self.query
+        gt_lt = self.query.copy()
         if gt_lt['timestamp'].get('$gt'):
             st = gt_lt['timestamp'].get('$gt')
             if self.r.get('update_pid_set_st') and st < float(self.r.get('update_pid_set_st')):
