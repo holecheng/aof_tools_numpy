@@ -41,7 +41,7 @@ def init_query():
             if i.get('heroIndex') < 0:
                 continue
             line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName', 'date', 'hours']
-            player_key = ['pId', 'card_num', 'action', 'cards', 'blind_l',  'pid_case',
+            player_key = ['pId', 'action', 'cards', 'blind_l',  'pid_case',
                           'ai_list', 'players', 'flop', 'turn', 'blindLevel']
             if not row_key:
                 row_key = line_key + player_key + IS_DIGIT_KEY
@@ -112,12 +112,6 @@ def init_query():
                     row_dic['winner'] = '1'
                 else:
                     row_dic['winner'] = '0'
-                card = player.get('cards', '')
-                if card:
-                    a, b = max(card[0], card[2]), min(card[0], card[2])
-                    player['card_num'] = '%s%s' % (a, b)
-                else:
-                    player['card_num'] = ''
                 flop_insurance = players[hero_index].get('flopInsurance')
                 turn_insurance = players[hero_index].get('turnInsurance')
                 row_dic['is_leader_flop'] = '1' if flop_insurance else ''
