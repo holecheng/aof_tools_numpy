@@ -35,6 +35,7 @@ def init_query():
         count = 0
         sum_ev = 0
         sum_outcome = 0
+        alls = 0
         for i in result:
             is_success, _ = RowHand().convert(i)
             if not is_success:
@@ -58,9 +59,10 @@ def init_query():
             if hand_num in query_round:
                 continue
             else:
+                alls += 1
                 query_round.add(hand_num)
-            # if not i.get('pid_case'):
-            #     db_col.run_update(i)  # 避免数据未更新
+            if not i.get('pid_case'):
+                db_col.run_update(i)  # 避免数据未更新
             compare_player = ai_count / player_count
             ante = line.get('blindLevel')['blinds'][-1]
             ai_stack = sum([float(i.get('stack') / ante) for i in filter(
@@ -135,7 +137,7 @@ def init_query():
     if count:
         f.write((f"count,{count},sum_ev:,{sum_ev},sum_outcome:,"
                  f"{sum_outcome},avg_ev:,{sum_ev / count},avg_outcome:,{sum_outcome / count},"))
-    f.write(f'处理完成总计{cnt}')
+    f.write(f'处理完成总计{cnt}, 总局数{alls}')
     f.close()
 
 
