@@ -31,8 +31,7 @@ def init_query():
         query_round = set()  # 用于统计是否该局号已被计入
         cnt = 0
         count = 0
-        sum_ev = 0
-        sum_outcome = 0
+        cnt_ai = 0
         alls = 0
         for i in result:
             is_success, _ = RowHand().convert(i)
@@ -76,12 +75,11 @@ def init_query():
                     continue
                 p_id = player.get('pId')
                 if not p_id or p_id not in pid_set:
+                    cnt_ai += 1
                     continue  # 非AI玩家暂不分析
                 row_dic = {}
                 row_dic.update({i: line.get(i) for i in row_key})
                 count += 1
-                sum_ev += i.get('ev')[hero_index]
-                sum_outcome += i.get('outcome')[hero_index]
                 row_dic['ai_count'] = ai_count
                 row_dic['ai_list'] = ai_list
                 row_dic['player_count'] = player_count
@@ -121,7 +119,7 @@ def init_query():
                 row_dic.update({key: player.get(key) if not row_dic.get(key) else row_dic.get(key) for key in row_key})
                 row_dic.update({key: float(row_dic.get(key) if row_dic.get(key) else 0) for key in IS_DIGIT_KEY})
                 yield {key: row_dic.get(key, '') for key in row_key}
-        print(f'总共{count}手(pID-handNo)数据{alls}不含表演赛存在局数')
+        print(f'总共{count}手(pID-handNo)数据{alls}不含表演赛存在局数, 非AI手数{cnt_ai}')
 
 
 class NumpyReadDb:
