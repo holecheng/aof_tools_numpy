@@ -73,9 +73,14 @@ class DBLoader:
         gt_lt = self.query
         if gt_lt['timestamp'].get('$gt'):
             st = gt_lt['timestamp'].get('$gt')
-            if self.r.get('update_pid_set') and st < self.r.get('update_pid_set'):
-                gt_lt['timestamp']['$gt'] = self.r.get('update_pid_set')
+            if self.r.get('update_pid_set_st') and st < self.r.get('update_pid_set_st'):
+                gt_lt['timestamp']['$gt'] = self.r.get('update_pid_set_st')
+        if gt_lt['timestamp'].get('$lt'):
+            et = gt_lt['timestamp'].get('$lt')
+            if self.r.get('update_pid_set_et') and et < self.r.get('update_pid_set_et'):
+                gt_lt['timestamp']['$gt'] = self.r.get('update_pid_set_et')
         cnt = 0
+        pid_dic = json.loads(self.r.get('pid_set'))
         for i in self.db.find(gt_lt):
             hero_index = int(i.get('heroIndex', -1))
             if hero_index < 0:
@@ -90,10 +95,13 @@ class DBLoader:
             cnt += 1
             if cnt != 0 and cnt % 10000 == 0:
                 print(f'已扫描{cnt // 10000}*10000数据')
-        self.r.set('pid_set', json.dumps(player_hash, ensure_ascii=False, indent=2), ex=60 * 1000 * 60 * 24)  # 半永久
+        pid_dic.update(player_hash)
+        self.r.set('pid_set', json.dumps(pid_dic, ensure_ascii=False, indent=2), ex=60 * 1000 * 60 * 24)  # 半永久
         print('设置完毕！！！！！！')
         if gt_lt['timestamp'].get('$lt'):
-            self.r.set('update_pid_set', max(self.r.get('update_pid_set'), gt_lt['timestamp'].get('$lt')))
+            self.r.set('update_pid_set_et', max(self.r.get('update_pid_set_et', 0), gt_lt['timestamp'].get('$lt')))
+        if gt_lt['timestamp'].get('$gt'):
+            self.r.set('update_pid_set_st', max(self.r.get('update_pid_set_st', 0), gt_lt['timestamp'].get('$st')))
         return player_hash
 
     def insert_players(self, ids, dic=None):
