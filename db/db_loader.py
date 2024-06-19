@@ -78,7 +78,7 @@ class DBLoader:
         if gt_lt['timestamp'].get('$lt'):
             et = gt_lt['timestamp'].get('$lt')
             if self.r.get('update_pid_set_et') and et < self.r.get('update_pid_set_et'):
-                gt_lt['timestamp']['$gt'] = self.r.get('update_pid_set_et')
+                gt_lt['timestamp']['$lt'] = self.r.get('update_pid_set_et')
         cnt = 0
         pid_dic = json.loads(self.r.get('pid_set'))
         for i in self.db.find(gt_lt):
