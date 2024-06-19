@@ -74,11 +74,11 @@ class DBLoader:
         if gt_lt['timestamp'].get('$gt'):
             st = gt_lt['timestamp'].get('$gt')
             if self.r.get('update_pid_set_st') and st < float(self.r.get('update_pid_set_st')):
-                gt_lt['timestamp']['$gt'] = self.r.get('update_pid_set_st')
+                gt_lt['timestamp']['$gt'] = float(self.r.get('update_pid_set_st'))
         if gt_lt['timestamp'].get('$lt'):
             et = gt_lt['timestamp'].get('$lt')
             if self.r.get('update_pid_set_et') and et < float(self.r.get('update_pid_set_et')):
-                gt_lt['timestamp']['$lt'] = self.r.get('update_pid_set_et')
+                gt_lt['timestamp']['$lt'] = float(self.r.get('update_pid_set_et'))
         cnt = 0
         pid_dic = json.loads(self.r.get('pid_set'))
         print(f'查询数据：{gt_lt}')
