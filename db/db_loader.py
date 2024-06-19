@@ -90,7 +90,7 @@ class DBLoader:
         do_update = [do_lt_update, do_gt_update]
         if gt_lt == self.query:
             do_update = [gt_lt]
-        print(f'缓存更新数据：{gt_lt}')
+        print(f'缓存更新数据：{do_update}')
         for dos in do_update:
             if dos.get('timestamp'):
                 for i in self.db.find(dos):
