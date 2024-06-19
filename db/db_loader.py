@@ -102,7 +102,7 @@ class DBLoader:
             self.r.set('update_pid_set_et', max(self.r.get('update_pid_set_et', 0), gt_lt['timestamp'].get('$lt')))
         if gt_lt['timestamp'].get('$gt'):
             self.r.set('update_pid_set_st', max(self.r.get('update_pid_set_st', 0), gt_lt['timestamp'].get('$st')))
-        return player_hash
+        return pid_dic
 
     def insert_players(self, ids, dic=None):
         if dic is None:
