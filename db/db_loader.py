@@ -67,7 +67,7 @@ class DBLoader:
 
     def run_query(self):
         print(f'查询内容{self.query}')
-        return self.db.find(self.query)
+        return self.db.find({'timestamp': {'$gt': '1709251200.0', '$lt': '1730332800.0'}})
 
     def run_pid_set(self):
         player_hash = {}
