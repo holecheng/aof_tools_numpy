@@ -31,7 +31,7 @@ class DBLoader:
     def __enter__(self):
         self._load_data_from_db()
         self._init_query()
-        logger.info("query:{}".format(self.query))
+        logger.info("处理查询数据:{}".format(self.query))
         self._init_redis()
         return self
 
@@ -81,7 +81,7 @@ class DBLoader:
                 gt_lt['timestamp']['$lt'] = float(self.r.get('update_pid_set_et'))
         cnt = 0
         pid_dic = json.loads(self.r.get('pid_set'))
-        print(f'查询数据：{gt_lt}')
+        print(f'缓存更新数据：{gt_lt}')
         for i in self.db.find(gt_lt):
             hero_index = int(i.get('heroIndex', -1))
             if hero_index < 0:
