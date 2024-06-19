@@ -25,6 +25,7 @@ IS_DIGIT_KEY = ['stack', 'ev_player', 'outcome_player', 'flop_i', 'turn_i', 'pla
 def init_query():
     # todo此处可以对处理数据进行进一步query筛选
     with db_col:
+        print(111111111111111111)
         result = db_col.run_query()
         pid_set = db_col.pid_set
         row_key = []
