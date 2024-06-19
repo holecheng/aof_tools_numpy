@@ -73,6 +73,7 @@ class DBLoader:
         gt_lt = self.query.copy()
         do_lt_update = {'timestamp': collections.defaultdict(float)}
         do_gt_update = {'timestamp': collections.defaultdict(float)}
+        print(f'self.gt_lt: {gt_lt}')
         print(f'待更新update_pid_set_st{self.get_with_default("update_pid_set_st")}, '
               f'update_pid_set_et{self.get_with_default("update_pid_set_et")}')
         if gt_lt['timestamp'].get('$gt'):
