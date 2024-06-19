@@ -47,6 +47,8 @@ class ChiSquareCheck(AddSystem):
             return self  # 没有数据不计入
         if not isinstance(pid_case, dict):
             pid_case = json.loads(pid_case)
+        if not isinstance(pid_case, dict):
+            pid_case = json.loads(pid_case)
         try:
             final_ranks = pid_case.get('final_ranks')
             showdown_ranks = pid_case.get('showdown_ranks')
