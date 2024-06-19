@@ -137,6 +137,7 @@ def init_query():
     if count:
         f.write((f"count,{count},sum_ev:,{sum_ev},sum_outcome:,"
                  f"{sum_outcome},avg_ev:,{sum_ev / count},avg_outcome:,{sum_outcome / count},"))
+    print(f'处理完成总计{cnt}, 总局数{alls}')
     f.write(f'处理完成总计{cnt}, 总局数{alls}')
     f.close()
 
