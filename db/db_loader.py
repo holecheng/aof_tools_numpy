@@ -64,6 +64,7 @@ class DBLoader:
                 if end_timestamp.strip():
                     self.query['timestamp'].update({'$lt': datetime.strptime(end_timestamp.strip(),
                                                                              "%Y-%m-%d").timestamp()})
+        print(self.query)
 
     def run_query(self):
         return self.db.find(self.query)
