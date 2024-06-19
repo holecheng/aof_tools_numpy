@@ -134,8 +134,9 @@ def init_query():
                 row_dic.update({i: player.get(i) if not row_dic.get(i) else row_dic.get(i) for i in row_key})
                 row_dic.update({i: float(row_dic.get(i) if row_dic.get(i) else 0) for i in IS_DIGIT_KEY})
                 yield {key: row_dic.get(key, '') for key in row_key}
-    f.write((f"count,{count},sum_ev:,{sum_ev},sum_outcome:,"
-             f"{sum_outcome},avg_ev:,{sum_ev / count},avg_outcome:,{sum_outcome / count},"))
+    if count:
+        f.write((f"count,{count},sum_ev:,{sum_ev},sum_outcome:,"
+                 f"{sum_outcome},avg_ev:,{sum_ev / count},avg_outcome:,{sum_outcome / count},"))
     f.write(f'处理完成总计{cnt}')
     f.close()
 
