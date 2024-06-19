@@ -109,11 +109,12 @@ class DBLoader:
                         print(f'已扫描{cnt // 10000}*10000数据')
         pid_dic.update(player_hash)
         self.r.set('pid_set', json.dumps(pid_dic, ensure_ascii=False, indent=2), ex=60 * 1000 * 60 * 24)  # 半永久
-        print('设置完毕！！！！！！')
         if gt_lt['timestamp'].get('$gt'):
             self.r.set('update_pid_set_st', float(gt_lt['timestamp']['$gt']))
         if gt_lt['timestamp'].get('$lt'):
             self.r.set('update_pid_set_et', float(gt_lt['timestamp']['$lt']))
+        print(f'设置完毕！！！！！！update_pid_set_st{self.get_with_default("update_pid_set_st")}, '
+              f'update_pid_set_et{self.get_with_default("update_pid_set_et")}')
         return pid_dic
 
     def get_with_default(self, key, default=None):
