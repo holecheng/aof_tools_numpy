@@ -33,6 +33,7 @@ def init_query():
         count = 0
         cnt_ai = 0
         alls = 0
+        print(f'pid_set总共{len(db_col.pid_set)}')
         for i in result:
             is_success, _ = RowHand().convert(i)
             if not is_success:
