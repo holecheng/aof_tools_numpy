@@ -118,8 +118,8 @@ def init_query():
                 row_dic['is_leader_turn'] = '1' if turn_insurance else ''
                 player['flop_i'] = flop_insurance[0].get('betStacks', '0') if flop_insurance else ''
                 player['turn_i'] = turn_insurance[0].get('betStacks', '0') if turn_insurance else ''
-                row_dic.update({i: player.get(i) if not row_dic.get(i) else row_dic.get(i) for i in row_key})
-                row_dic.update({i: float(row_dic.get(i) if row_dic.get(i) else 0) for i in IS_DIGIT_KEY})
+                row_dic.update({key: player.get(key) if not row_dic.get(key) else row_dic.get(key) for key in row_key})
+                row_dic.update({key: float(row_dic.get(key) if row_dic.get(key) else 0) for key in IS_DIGIT_KEY})
                 yield {key: row_dic.get(key, '') for key in row_key}
         print(f'总共{count}手(pID-handNo)数据{alls}不含表演赛存在局数')
 
