@@ -71,40 +71,49 @@ class DBLoader:
     def run_pid_set(self):
         player_hash = {}
         gt_lt = self.query.copy()
+        do_lt_update = {'timestamp': collections.defaultdict(float)}
+        do_gt_update = {'timestamp': collections.defaultdict(float)}
         if gt_lt['timestamp'].get('$gt'):
             st = gt_lt['timestamp'].get('$gt')
             if self.r.get('update_pid_set_st') and st < float(self.r.get('update_pid_set_st')):
-                gt_lt['timestamp']['$gt'] = float(self.r.get('update_pid_set_st'))
+                do_gt_update['timestamp']['$gt'] = float(self.r.get('update_pid_set_st'))
+                do_gt_update['timestamp']['$lt'] = float(st)
+                gt_lt['timestamp']['$gt'] = float(st)
         if gt_lt['timestamp'].get('$lt'):
             et = gt_lt['timestamp'].get('$lt')
-            if self.r.get('update_pid_set_et') and et < float(self.r.get('update_pid_set_et')):
-                gt_lt['timestamp']['$lt'] = float(self.r.get('update_pid_set_et'))
+            if self.r.get('update_pid_set_et') and et > float(self.r.get('update_pid_set_et')):
+                do_lt_update['timestamp']['$gt'] = float(et)
+                do_lt_update['timestamp']['$lt'] = float(self.r.get('update_pid_set_et'))
+                gt_lt['timestamp']['$lt'] = float(et)
         cnt = 0
         pid_dic = json.loads(self.r.get('pid_set'))
+        do_update = [do_lt_update, do_gt_update]
+        if gt_lt == self.query:
+            do_update = [gt_lt]
         print(f'缓存更新数据：{gt_lt}')
-        for i in self.db.find(gt_lt):
-            hero_index = int(i.get('heroIndex', -1))
-            if hero_index < 0:
-                continue
-            players = i.get('players')
-            player = players[hero_index]
-            player_id = player.get('pId')
-            if player_id not in player_hash:
-                player_hash[player_id] = {"name": player["playerId"], "first_time": i["timestamp"]}
-            if player_hash[player_id]["first_time"] > i["timestamp"]:
-                player_hash[player_id]["first_time"] = i["timestamp"]
-            cnt += 1
-            if cnt != 0 and cnt % 10000 == 0:
-                print(f'已扫描{cnt // 10000}*10000数据')
+        for dos in do_update:
+            if dos.get('timestamp'):
+                for i in self.db.find(dos):
+                    hero_index = int(i.get('heroIndex', -1))
+                    if hero_index < 0:
+                        continue
+                    players = i.get('players')
+                    player = players[hero_index]
+                    player_id = player.get('pId')
+                    if player_id not in player_hash:
+                        player_hash[player_id] = {"name": player["playerId"], "first_time": i["timestamp"]}
+                    if player_hash[player_id]["first_time"] > i["timestamp"]:
+                        player_hash[player_id]["first_time"] = i["timestamp"]
+                    cnt += 1
+                    if cnt != 0 and cnt % 10000 == 0:
+                        print(f'已扫描{cnt // 10000}*10000数据')
         pid_dic.update(player_hash)
         self.r.set('pid_set', json.dumps(pid_dic, ensure_ascii=False, indent=2), ex=60 * 1000 * 60 * 24)  # 半永久
         print('设置完毕！！！！！！')
-        if gt_lt['timestamp'].get('$lt'):
-            self.r.set('update_pid_set_et', max(float(self.get_with_default('update_pid_set_et', 0)),
-                                                float(gt_lt['timestamp'].get('$lt', 0))))
         if gt_lt['timestamp'].get('$gt'):
-            self.r.set('update_pid_set_st', max(float(self.get_with_default('update_pid_set_st', 0)),
-                                                float(gt_lt['timestamp'].get('$gt', 0))))
+            self.r.set('update_pid_set_st', float(gt_lt['timestamp']['$gt']))
+        if gt_lt['timestamp'].get('$lt'):
+            self.r.set('update_pid_set_et', float(gt_lt['timestamp']['$lt']))
         return pid_dic
 
     def get_with_default(self, key, default=None):
