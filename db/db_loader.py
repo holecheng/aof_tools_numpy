@@ -67,8 +67,7 @@ class DBLoader:
 
     def run_query(self):
         print(f'self.query: {self.query}')
-        for i in self.db.find(self.query):
-            print(i)
+        print(self.db.find(self.query))
         return self.db.find(self.query)
 
     def run_pid_set(self):
