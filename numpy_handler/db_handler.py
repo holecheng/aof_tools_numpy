@@ -24,14 +24,12 @@ IS_DIGIT_KEY = ['stack', 'ev_player', 'outcome_player', 'flop_i', 'turn_i', 'pla
 
 def init_query():
     # todo此处可以对处理数据进行进一步query筛选
-    f = open('all_detail.csv', 'a+', newline='\n')
     with db_col:
         pid_set = db_col.pid_set
         result = db_col.run_query()
         row_key = []
         query_round = set()  # 用于统计是否该局号已被计入
         cnt = 0
-        f.write('pId,handNumber,ev,outcome,timestamp\n')
         count = 0
         sum_ev = 0
         sum_outcome = 0
@@ -134,12 +132,6 @@ def init_query():
                 row_dic.update({i: player.get(i) if not row_dic.get(i) else row_dic.get(i) for i in row_key})
                 row_dic.update({i: float(row_dic.get(i) if row_dic.get(i) else 0) for i in IS_DIGIT_KEY})
                 yield {key: row_dic.get(key, '') for key in row_key}
-    if count:
-        f.write((f"count,{count},sum_ev:,{sum_ev},sum_outcome:,"
-                 f"{sum_outcome},avg_ev:,{sum_ev / count},avg_outcome:,{sum_outcome / count},"))
-    print(f'处理完成总计{cnt}, 总局数{alls}')
-    f.write(f'处理完成总计{cnt}, 总局数{alls}')
-    f.close()
 
 
 class NumpyReadDb:
@@ -265,7 +257,7 @@ class NumpyReadDb:
             ans = db_col.run_query()
             print('获取数据成功')
             unique = {}
-            with open('4-01-4-30.csv', 'a+', newline='\n', encoding='utf-8') as f:
+            with open('3-01-3-31.csv', 'a+', newline='\n', encoding='utf-8') as f:
                 f.write('pId,handNumber,ev,outcome,timestamp\n')
                 count = 0
                 sum_ev = 0
