@@ -17,7 +17,7 @@ def to_excel_numpy(nps, df_path, suffix='all'):
         f_name = f_name + 'month'
     with open(f_name + '.csv', 'w+', encoding='utf-8') as f:
         for i in nps:
-            f.write(','.join(map(str, i)) + '\n')
+            f.write(','.join(map(lambda x: str(round(x, 5)) if isinstance(x, float) else str(x), i)) + '\n')
 
 
 def sign_blind_level(blinds: list) -> str:
