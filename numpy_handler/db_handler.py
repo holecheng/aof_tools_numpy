@@ -94,7 +94,7 @@ def init_query():
                 winners = line.get('winners')
                 date_obj = datetime.datetime.fromtimestamp(line.get('timestamp'))
                 row_dic['date'], row_dic['hours'] = date_obj.strftime('%Y-%m-%d %H').split(' ')
-                row_dic['month'] = date_obj.strftime('%m')
+                row_dic['month'] = date_obj.strftime('%Y-%m')
                 row_dic['is_turn'] = '1' if line.get('turn') else ''  # 是否turn
                 row_dic['is_river'] = '1' if line.get('river') else ''  # 是否存在river
                 row_dic['stack'] = int(player.get('stack')) // ante
@@ -201,8 +201,9 @@ class NumpyReadDb:
                 counts = v.counts
                 chi_square_value = get_chi_square_value(matrix_dic)  # 卡方值
                 print(f'{k}人场： 卡方值为{chi_square_value}, 自由度为{free_d}')
-                ans.append(['chi_square', k, chi_square_value, avg_ev_player,
-                            avg_outcome_player, diff_ev_outcome, free_d, counts])
+                data = ['chi_square', k, chi_square_value, avg_ev_player,
+                        avg_outcome_player, diff_ev_outcome, free_d, counts]
+                ans.append(data)
 
         if self.group:
             self.write_excel(ans, config.get_args('query_time') + self.group.replace('**', ''))

@@ -17,6 +17,9 @@ class Base(object):
 
     def return_group_key(self, row_dic):
         group_merge = ''  # 返回的键值 '1,2'
+        group_list = self.group.split('**')
+        if config.get_args('month'):
+            group_list.append(row_dic['month'])
         for i in self.group.split('**'):
             if group_merge:
                 group_merge += '**'

@@ -33,9 +33,6 @@ class ChiSquareCheck(AddSystem):
 
     def __eq__(self, other):
         group_key = self.find_group_key(other.row_dic)
-        if config.get_args('month'):
-            return (self.group == other.group and self.group_key == group_key
-                    and other.row_dic.get('month') == self.row_dic.get('month'))
         return self.group == other.group and self.group_key == group_key
 
     def __add__(self, other):
@@ -84,7 +81,9 @@ class ChiSquareCheck(AddSystem):
 
     @staticmethod
     def find_group_key(row_dic):
-        return int(row_dic.get('ai_count') + row_dic.get('player_count'))
+        if config.get_args('month'):
+            return f"{int(row_dic.get('ai_count') + row_dic.get('player_count'))}**{int(row_dic.get('month'))}"
+        return f"{int(row_dic.get('ai_count') + row_dic.get('player_count'))}"
 
 
 

@@ -34,9 +34,6 @@ class Blinds(Base, AddSystem):
         return self
 
     def __eq__(self, other):
-        if config.get_args('month'):
-            return (self.group == other.group and self.return_group_key(other.row_dic) == self.group_key
-                    and other.row_dic.get('month') == self.row_dic.get('month'))
         return self.group == other.group and self.return_group_key(other.row_dic) == self.group_key
 
     def __add__(self, other):
