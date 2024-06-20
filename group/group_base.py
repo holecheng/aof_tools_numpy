@@ -20,7 +20,7 @@ class Base(object):
         group_list = self.group.split('**')
         if config.get_args('month'):
             group_list.append(row_dic['month'])
-        for i in self.group.split('**'):
+        for i in group_list:
             if group_merge:
                 group_merge += '**'
             group_merge += str(self.get_group_key(i, row_dic))
