@@ -12,7 +12,10 @@ def resize_timestamp(result):
 
 
 def to_excel_numpy(nps, df_path, suffix='all'):
-    with open('./output/' + os.path.basename(df_path).split('.')[0] + '_' + suffix + '.csv', 'w+', encoding='utf-8') as f:
+    f_name = './output/' + os.path.basename(df_path).split('.')[0] + '_' + suffix
+    if config.get_args('month'):
+        f_name = f_name + 'month'
+    with open(f_name + '.csv', 'w+', encoding='utf-8') as f:
         for i in nps:
             f.write(','.join(map(str, i)) + '\n')
 
@@ -59,32 +62,5 @@ def get_chi_square_value(matrix_dic):
         # 2: {'∑p0': 201.36368602475036, '∑x': 200}, 3: {'∑p0': 45.69447278473087, '∑x': 43}}
         keys = ['∑p0', '∑x']
         p0, x = (v.get(i) for i in keys)
-        chi_square_value += (p0 - x)**2 / p0**2
+        chi_square_value += (p0 - x) ** 2 / p0 ** 2
     return chi_square_value
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
