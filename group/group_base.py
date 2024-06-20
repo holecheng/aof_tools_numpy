@@ -22,8 +22,6 @@ class Base(object):
             group_list.append(row_dic['month'])
         for i in group_list:
             add_str = self.get_group_key(i, row_dic)
-            if not add_str:
-                continue
             if group_merge:
                 group_merge += '**'
             group_merge += str(add_str)
@@ -38,7 +36,7 @@ class Base(object):
 
     def get_group_key(self, group, row_dic=None):
         if group not in row_dic:
-            return ''
+            return group
         group_key = row_dic[group]
         if self.allowance:
             ans_group_key = str(int(group_key) // self.allowance)
