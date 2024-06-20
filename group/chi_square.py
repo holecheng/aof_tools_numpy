@@ -1,6 +1,7 @@
 import json
 
 from group.group_base import AddSystem
+from config_parse import config
 
 
 class ChiSquareCheck(AddSystem):
@@ -32,6 +33,9 @@ class ChiSquareCheck(AddSystem):
 
     def __eq__(self, other):
         group_key = self.find_group_key(other.row_dic)
+        if config.get_args('month'):
+            return (self.group == other.group and self.group_key == group_key
+                    and other.row_dic.get('month') == self.row_dic.get('month'))
         return self.group == other.group and self.group_key == group_key
 
     def __add__(self, other):
