@@ -83,7 +83,7 @@ class ChiSquareCheck(AddSystem):
     def find_group_key(row_dic):
         if config.get_args('month'):
             return f"{int(row_dic.get('ai_count') + row_dic.get('player_count'))}**{row_dic.get('month')}"
-        return f"{int(row_dic.get('ai_count') + row_dic.get('player_count'))}"
+        return int(row_dic.get('ai_count') + row_dic.get('player_count'))
 
 
 

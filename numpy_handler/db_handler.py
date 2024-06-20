@@ -194,7 +194,10 @@ class NumpyReadDb:
                             else getattr(v, i) for i in title])
             else:
                 matrix_dic = v.matrix_dic  # 卡方集合
-                free_d = k - 1  # 自由度K-1
+                if config.get_args('month'):
+                    free_d = int(k.split('**')[0])
+                else:
+                    free_d = k
                 avg_ev_player = v.avg_ev_player
                 avg_outcome_player = v.avg_outcome_player
                 diff_ev_outcome = v.diff_ev_outcome
