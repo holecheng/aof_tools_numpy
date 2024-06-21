@@ -2,7 +2,6 @@ import logging
 import datetime
 import os.path
 import time
-import json
 
 from group.blinds_group import Blinds
 from group.chi_square import ChiSquareCheck
@@ -242,11 +241,11 @@ class NumpyReadDb:
         to_excel_numpy(nps, 'db', page)
 
     def write_to_all_excel(self, row_dic):
-        row = [json.dumps(row_dic[k]) for k in self.title]
+        row = [str(row_dic[k]) if not isinstance(k, (dict, list)) else '' for k in self.title]
         self.f.write(','.join(row) + '\n')
 
     def write_to_hand_detail_excel(self, row_dic):
-        row = [json.dumps(row_dic[k]) for k in ['pId', 'handNumber']]
+        row = [str(row_dic[k]) if not isinstance(k, (dict, list)) else '' for k in ['pId', 'handNumber']]
         self.f.write(','.join(row) + '\n')
 
     @staticmethod
