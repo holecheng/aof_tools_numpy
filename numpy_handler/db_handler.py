@@ -1,3 +1,4 @@
+import json
 import logging
 import datetime
 import os.path
@@ -88,6 +89,7 @@ def init_query():
                 row_dic['all_count'] = ai_count + player_count
                 row_dic['ai_stack'] = ai_stack
                 row_dic['compare_stack'] = compare_stack
+                row_dic['pid_case'] = json.loads(line.get('pid_case'))
                 outcome = line.get('outcome')[hero_index]
                 ev = line.get('ev')[hero_index]
                 flop_ev_list = line.get('flop_ev')
