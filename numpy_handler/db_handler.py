@@ -241,7 +241,7 @@ class NumpyReadDb:
         to_excel_numpy(nps, 'db', page)
 
     def write_to_all_excel(self, row_dic):
-        row = [row_dic[k] for k in self.title]
+        row = [json.dumps(row_dic[k]) for k in self.title]
         self.f.write(','.join(row) + '\n')
 
     def write_to_hand_detail_excel(self, row_dic):
