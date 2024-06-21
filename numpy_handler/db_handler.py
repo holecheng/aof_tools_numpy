@@ -103,7 +103,7 @@ def init_query():
                 row_dic['is_river'] = '1' if line.get('river') else ''  # 是否存在river
                 row_dic['stack'] = int(player.get('stack')) // ante
                 row_dic['blind_l'] = sign_blind_level(line.get('blindLevel')['blinds'])
-                if not (line.get('heroIndex') is None):
+                if line.get('heroIndex') is None:
                     row_dic['heroIndex'] = hero_index
                 if flop_ev_list and turn_ev_list:
                     row_dic['flop_ev'] = flop_ev_list[hero_index]
