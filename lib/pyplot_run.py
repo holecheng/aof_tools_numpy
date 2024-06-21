@@ -26,11 +26,22 @@ def run():
     parser.add_argument('--save', type=int, nargs='?', help='是否需要存储', default=0)
     parser.add_argument('--sort-col', type=str, nargs='?', help='排序内容')
     parser.add_argument('--x-ticks', type=int, nargs='?', help='是否需要显示X轴', default=1)
-    parser.add_argument('--endswith', type=str, nargs='?', help='是否需要显示X轴', default='')
+    parser.add_argument('--endswith', type=str, nargs='?', help='x轴以什么结束', default='')
+    parser.add_argument('--split', type=int, nargs='?', help='x轴取值', default=0)
+    parser.add_argument('--filter-other-key', type=str, nargs='?', help='筛选X值', default='')
+    parser.add_argument('--filter-group-key', type=str, nargs='?', help='筛选X值', default='')
     args = parser.parse_args()
     time_inv = args.f_name.split('_')[1]
     df = pd.read_csv(str(os.path.join(BASE, args.f_name)))
     df = df[df[args.X] != 'total']
+    print(df)
+    if args.split:
+        df['other_key'] = [group_key.split('**')[0] for group_key in df['group_key']]
+        df['group_key'] = [group_key.split('**')[1] for group_key in df['group_key']]
+    if args.filter_group_key:
+        df = df[df['group_key'].map(lambda i: str(i) == args.filter_group_key)]
+    if args.filter_other_key:
+        df = df[df['other_key'].map(lambda i: str(i) == args.filter_other_key)]
     if args.endswith:
         df = df[df[args.X].endswith(args.endswith)]
     if args.count_min:
@@ -80,7 +91,10 @@ def run():
     plt.title('%s' % time_inv)
     total = df[df['group_key'] == 'total']
     if args.types == 'group':
-        plt.xlabel('%s(%s)' % (total['group'], total['allowance']))
+        if 'allowance' in total.columns:
+            plt.xlabel('%s(%s)' % (total['group'], total['allowance']))
+        else:
+            plt.xlabel('%s' % (total['group']))
     else:
         plt.xlabel('%s' % args.X)
     plt.ylabel('%s' % args.Y)
@@ -119,4 +133,6 @@ def run():
 
 
 if __name__ == '__main__':
+    print('start')
     run()
+    print('Done')

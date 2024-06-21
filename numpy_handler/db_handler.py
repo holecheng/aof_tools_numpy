@@ -18,7 +18,7 @@ logger = logging.getLogger()
 
 IS_DIGIT_KEY = ['stack', 'ev_player', 'outcome_player', 'flop_i', 'turn_i', 'player_count', 'is_push',
                 'straddle', 'ante', 'winner', 'is_turn', 'is_flop', 'is_leader_turn', 'is_leader_flop',
-                'flop_ev', 'is_river', 'turn_ev', 'seat', 'ai_count', 'ai_stack', 'compare_stack',
+                'flop_ev', 'is_river', 'turn_ev', 'seat', 'ai_count', 'ai_stack', 'compare_stack', 'all_count',
                 'compare_player']  # 可统计数据（数字类型）
 
 
@@ -85,6 +85,7 @@ def init_query():
                 row_dic['ai_list'] = ai_list
                 row_dic['player_count'] = player_count
                 row_dic['compare_player'] = compare_player
+                row_dic['all_count'] = ai_count + player_count
                 row_dic['ai_stack'] = ai_stack
                 row_dic['compare_stack'] = compare_stack
                 outcome = line.get('outcome')[hero_index]
