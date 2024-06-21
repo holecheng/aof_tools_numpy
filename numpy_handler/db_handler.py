@@ -22,10 +22,11 @@ IS_DIGIT_KEY = ['stack', 'ev_player', 'outcome_player', 'flop_i', 'turn_i', 'pla
                 'flop_ev', 'is_river', 'turn_ev', 'seat', 'ai_count', 'ai_stack', 'compare_stack', 'all_count',
                 'compare_player']  # 可统计数据（数字类型）
 
-PLAYER_KEY = ['pId', 'action', 'cards', 'blind_l', 'pid_case', 'flop', 'turn', 'blindLevel']
+PLAYER_KEY = ['pId', 'action', 'cards', 'blind_l', 'flop', 'turn', 'blindLevel', 'handNumber',
+              'river', 'heroIndex', 'reqid', 'leagueName', 'date', 'hours',
+              'month',]
 
-LINE_KEY = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName', 'date', 'hours',
-            'month', 'ai_list', 'players']
+LINE_KEY = ['ai_list', 'players', 'pid_case']
 
 
 def init_query():
