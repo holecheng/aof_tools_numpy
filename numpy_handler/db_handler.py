@@ -91,8 +91,7 @@ def init_query():
                 row_dic['all_count'] = ai_count + player_count
                 row_dic['ai_stack'] = ai_stack
                 row_dic['compare_stack'] = compare_stack
-                print(hero_index)
-                row_dic['heroIndex'] = hero_index
+                row_dic['heroIndex'] = str(hero_index)
                 outcome = line.get('outcome')[hero_index]
                 ev = line.get('ev')[hero_index]
                 flop_ev_list = line.get('flop_ev')
