@@ -22,6 +22,9 @@ IS_DIGIT_KEY = ['stack', 'ev_player', 'outcome_player', 'flop_i', 'turn_i', 'pla
                 'flop_ev', 'is_river', 'turn_ev', 'seat', 'ai_count', 'ai_stack', 'compare_stack', 'all_count',
                 'compare_player']  # 可统计数据（数字类型）
 
+LINE_KEY = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName', 'date', 'hours',
+            'month', 'ai_list', 'players']
+
 
 def init_query():
     # todo此处可以对处理数据进行进一步query筛选
@@ -41,11 +44,9 @@ def init_query():
                 continue
             if i.get('heroIndex') < 0:
                 continue
-            line_key = ['handNumber', 'river', 'heroIndex', 'reqid', 'leagueName', 'date', 'hours', 'month']
-            player_key = ['pId', 'action', 'cards', 'blind_l',  'pid_case',
-                          'ai_list', 'players', 'flop', 'turn', 'blindLevel']
+            player_key = ['pId', 'action', 'cards', 'blind_l', 'pid_case', 'flop', 'turn', 'blindLevel']
             if not row_key:
-                row_key = line_key + player_key + IS_DIGIT_KEY
+                row_key = LINE_KEY + player_key + IS_DIGIT_KEY
                 yield row_key
             line = i.copy()
             hand_num = line.get('handNumber')
@@ -242,11 +243,11 @@ class NumpyReadDb:
         to_excel_numpy(nps, 'db', page)
 
     def write_to_all_excel(self, row_dic):
-        row = [str(row_dic[k]) if not isinstance(k, (dict, list)) and k != 'pid_case' else '' for k in self.title]
+        row = [str(row_dic[k]) if k in (LINE_KEY + IS_DIGIT_KEY) else '' for k in self.title]
         self.f.write(','.join(row) + '\n')
 
     def write_to_hand_detail_excel(self, row_dic):
-        row = [str(row_dic[k]) if not isinstance(k, (dict, list)) and k != 'pid_case' else '' for k in ['pId', 'handNumber']]
+        row = [str(row_dic[k]) if k in (LINE_KEY + IS_DIGIT_KEY) else '' for k in ['pId', 'handNumber']]
         self.f.write(','.join(row) + '\n')
 
     @staticmethod
