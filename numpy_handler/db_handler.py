@@ -245,7 +245,7 @@ class NumpyReadDb:
         self.f.write(','.join(row) + '\n')
 
     def write_to_hand_detail_excel(self, row_dic):
-        row = [str(row_dic[k]) for k in ['pId', 'handNumber']]
+        row = [json.dumps(row_dic[k]) for k in ['pId', 'handNumber']]
         self.f.write(','.join(row) + '\n')
 
     @staticmethod
