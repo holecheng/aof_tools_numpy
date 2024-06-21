@@ -89,7 +89,6 @@ def init_query():
                 row_dic['all_count'] = ai_count + player_count
                 row_dic['ai_stack'] = ai_stack
                 row_dic['compare_stack'] = compare_stack
-                row_dic['pid_case'] = json.loads(line.get('pid_case', ''))
                 outcome = line.get('outcome')[hero_index]
                 ev = line.get('ev')[hero_index]
                 flop_ev_list = line.get('flop_ev')
@@ -243,11 +242,11 @@ class NumpyReadDb:
         to_excel_numpy(nps, 'db', page)
 
     def write_to_all_excel(self, row_dic):
-        row = [str(row_dic[k]) if not isinstance(k, (dict, list)) else '' for k in self.title]
+        row = [str(row_dic[k]) if not isinstance(k, (dict, list)) and k != 'pid_case' else '' for k in self.title]
         self.f.write(','.join(row) + '\n')
 
     def write_to_hand_detail_excel(self, row_dic):
-        row = [str(row_dic[k]) if not isinstance(k, (dict, list)) else '' for k in ['pId', 'handNumber']]
+        row = [str(row_dic[k]) if not isinstance(k, (dict, list)) and k != 'pid_case' else '' for k in ['pId', 'handNumber']]
         self.f.write(','.join(row) + '\n')
 
     @staticmethod
