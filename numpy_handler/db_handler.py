@@ -91,6 +91,7 @@ def init_query():
                 row_dic['all_count'] = ai_count + player_count
                 row_dic['ai_stack'] = ai_stack
                 row_dic['compare_stack'] = compare_stack
+                row_dic['heroIndex'] = hero_index
                 outcome = line.get('outcome')[hero_index]
                 ev = line.get('ev')[hero_index]
                 flop_ev_list = line.get('flop_ev')
@@ -122,8 +123,6 @@ def init_query():
                 player['turn_i'] = turn_insurance[0].get('betStacks', '0') if turn_insurance else ''
                 row_dic.update({key: player.get(key) if not row_dic.get(key) else row_dic.get(key) for key in row_key})
                 row_dic.update({key: float(row_dic.get(key) if row_dic.get(key) else 0) for key in IS_DIGIT_KEY})
-                if line.get('heroIndex') is None:
-                    row_dic['heroIndex'] = hero_index
                 yield {key: row_dic.get(key, '') for key in row_key}
         print(f'总共{count}手(pID-handNo)数据{alls}不含表演赛存在局数, 非AI手数{cnt_ai}')
 
