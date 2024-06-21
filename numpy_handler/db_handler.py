@@ -103,8 +103,6 @@ def init_query():
                 row_dic['is_river'] = '1' if line.get('river') else ''  # 是否存在river
                 row_dic['stack'] = int(player.get('stack')) // ante
                 row_dic['blind_l'] = sign_blind_level(line.get('blindLevel')['blinds'])
-                if line.get('heroIndex') is None:
-                    row_dic['heroIndex'] = hero_index
                 if flop_ev_list and turn_ev_list:
                     row_dic['flop_ev'] = flop_ev_list[hero_index]
                     row_dic['turn_ev'] = turn_ev_list[hero_index]
@@ -124,6 +122,8 @@ def init_query():
                 player['turn_i'] = turn_insurance[0].get('betStacks', '0') if turn_insurance else ''
                 row_dic.update({key: player.get(key) if not row_dic.get(key) else row_dic.get(key) for key in row_key})
                 row_dic.update({key: float(row_dic.get(key) if row_dic.get(key) else 0) for key in IS_DIGIT_KEY})
+                if line.get('heroIndex') is None:
+                    row_dic['heroIndex'] = hero_index
                 yield {key: row_dic.get(key, '') for key in row_key}
         print(f'总共{count}手(pID-handNo)数据{alls}不含表演赛存在局数, 非AI手数{cnt_ai}')
 
