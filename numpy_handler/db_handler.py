@@ -17,14 +17,13 @@ from db.db_loader import db_col
 
 logger = logging.getLogger()
 
-IS_DIGIT_KEY = ['stack', 'ev_player', 'outcome_player', 'flop_i', 'turn_i', 'player_count', 'is_push',
-                'straddle', 'ante', 'winner', 'is_turn', 'is_flop', 'is_leader_turn', 'is_leader_flop',
-                'flop_ev', 'is_river', 'turn_ev', 'seat', 'ai_count', 'ai_stack', 'compare_stack', 'all_count',
-                'compare_player']  # 可统计数据（数字类型）
+IS_DIGIT_KEY = ['ev_player', 'outcome_player', 'stack', 'flop_i', 'turn_i', 'player_count', 'ai_count',
+                'all_count', 'compare_player', 'is_push', 'ai_stack', 'flop_ev', 'turn_ev', 'straddle',
+                'seat', 'ante', 'winner', 'is_turn', 'is_flop', 'is_leader_turn',
+                'is_leader_flop', 'compare_stack', 'is_river']  # 可统计数据（数字类型）
 
-PLAYER_KEY = ['pId', 'action', 'cards', 'blind_l', 'flop', 'turn', 'handNumber',
-              'river', 'heroIndex', 'reqid', 'leagueName', 'date', 'hours',
-              'month',]
+PLAYER_KEY = ['pId', 'blind_l',  'date', 'hours', 'month', 'heroIndex', 'cards', 'action',
+              'flop', 'turn', 'handNumber', 'river',  'reqid', 'leagueName']
 
 LINE_KEY = ['ai_list', 'players', 'pid_case', 'blindLevel',]
 
@@ -48,7 +47,7 @@ def init_query():
             if i.get('heroIndex') < 0:
                 continue
             if not row_key:
-                row_key = LINE_KEY + PLAYER_KEY + IS_DIGIT_KEY
+                row_key = PLAYER_KEY + LINE_KEY + IS_DIGIT_KEY
                 yield row_key
             line = i.copy()
             hand_num = line.get('handNumber')
