@@ -56,8 +56,6 @@ class EvOutcomeBase(AddSystem):
                 key_list = [f'{c}-{0}']
             else:
                 key_list = [f'{c}-{d // appended}', f'{c}-{d // appended + 1}']
-            if config.get_args('month'):
-                key_list.append(row_dic.get('month'))
             return '-'.join(key_list)
         else:
             return None
