@@ -18,14 +18,14 @@ from db.db_loader import db_col
 logger = logging.getLogger()
 
 IS_DIGIT_KEY = ['ev_player', 'outcome_player', 'stack', 'flop_i', 'turn_i', 'player_count', 'ai_count',
-                'all_count', 'compare_player', 'is_push', 'ai_stack', 'flop_ev', 'turn_ev', 'straddle',
+                'all_count', 'is_push', 'ai_stack', 'flop_ev', 'turn_ev', 'straddle',
                 'seat', 'ante', 'winner', 'is_turn', 'is_flop', 'is_leader_turn',
                 'is_leader_flop', 'compare_stack', 'is_river']  # 可统计数据（数字类型）
 
 PLAYER_KEY = ['pId', 'blind_l',  'date', 'hours', 'month', 'heroIndex', 'cards', 'action',
-              'flop', 'turn', 'handNumber', 'river',  'reqid', 'leagueName']
+              'flop', 'turn', 'handNumber', 'river',  'reqid', 'leagueName', 'lineup']
 
-LINE_KEY = ['ai_list', 'players', 'pid_case', 'blindLevel',]
+LINE_KEY = ['ai_list', 'players', 'pid_case', 'blindLevel']
 
 
 def init_query():
@@ -64,16 +64,17 @@ def init_query():
                 query_round.add(hand_num)
             if not i.get('pid_case'):
                 db_col.run_update(i)  # 避免数据未更新
-            compare_player = ai_count / player_count
             ante = line.get('blindLevel')['blinds'][-1]
             ai_stack = sum([float(i.get('stack') / ante) for i in filter(
                 lambda x: x.get('pId') in pid_set, players)])
+            player_stack = (sum([int(i.get('stack')) / ante for i in players]) - ai_stack)
+            lineup = f'ai: {ai_count}-player: {player_count}'
             if sum([int(i.get('stack')) / ante for i in players]) == ai_stack:
                 compare_stack = 0
                 cnt += 1
                 print('存在异常的数据,第{}个'.format(cnt))
             else:
-                compare_stack = ai_stack / (sum([int(i.get('stack')) / ante for i in players]) - ai_stack)
+                compare_stack = ai_stack / player_stack
             for hero_index, player in enumerate(players):
                 if config.get_args('player') and str(config.get_args('player')) != player.get('pId'):
                     continue
@@ -87,11 +88,11 @@ def init_query():
                 row_dic['ai_count'] = ai_count
                 row_dic['ai_list'] = ai_list
                 row_dic['player_count'] = player_count
-                row_dic['compare_player'] = compare_player
                 row_dic['all_count'] = ai_count + player_count
                 row_dic['ai_stack'] = ai_stack
                 row_dic['compare_stack'] = compare_stack
                 row_dic['heroIndex'] = str(hero_index)
+                row_dic['lineup'] = lineup
                 outcome = line.get('outcome')[hero_index]
                 ev = line.get('ev')[hero_index]
                 flop_ev_list = line.get('flop_ev')
