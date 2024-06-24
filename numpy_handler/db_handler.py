@@ -21,7 +21,7 @@ logger = logging.getLogger()
 IS_DIGIT_KEY = ['ev_player', 'outcome_player', 'stack', 'flop_i', 'turn_i', 'player_count', 'ai_count',
                 'all_count', 'is_push', 'ai_stack', 'flop_ev', 'turn_ev', 'straddle',
                 'seat', 'ante', 'winner', 'is_turn', 'is_flop', 'is_leader_turn',
-                'is_leader_flop', 'compare_stack', 'is_river']  # 可统计数据（数字类型）
+                'is_leader_flop', 'compare_stack', 'is_river', 'cnt_id']  # 可统计数据（数字类型）
 
 PLAYER_KEY = ['pId', 'blind_l',  'date', 'hours', 'month', 'heroIndex', 'cards', 'action',
               'flop', 'turn', 'handNumber', 'river',  'reqid', 'leagueName', 'lineup']
