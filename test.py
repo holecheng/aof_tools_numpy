@@ -1,10 +1,18 @@
 
 
-hex_num = 'oxB8'
-dec_num = oct(int('B8', 16))
-print(dec_num)
+cnt = 12300
+
+vid = 1000
+cnt_s = 200
 
 
-hex_num = '0b10101001'  # 16进制数
-hex_num1 = '0b00101011'
-print(oct(int(hex_num, 2) + int(hex_num1, 2)))
+c,  d = divmod(cnt, vid)
+print(c, d)  # 12 300
+
+if d < cnt_s:
+    print(f'{c}{0}')
+else:
+    print(f'{c}-{d // cnt_s}', f'{c}-{d // cnt_s + 1}')
+
+
+

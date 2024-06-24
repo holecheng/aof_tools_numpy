@@ -1,0 +1,63 @@
+from group.group_base import AddSystem, Base
+from config_parse import config
+
+
+class EvOutcomeBase(AddSystem):
+    __slots__ = ('group',
+                 'group_key',  # 几人场
+                 'cnt_id',  # 第N个数据
+                 'avg_ev_player',
+                 'avg_outcome_player',
+                 'diff_ev_outcome',
+                 'total',
+                 'counts',  # 符合条件的计数
+                 'sum_ev_player',
+                 'sum_outcome_player',
+                 'row_dic'  # 数据字典
+                 )
+
+    def __init__(self, group, row_dic=None, total=None):
+        super().__init__()
+        if hasattr(self, '__slots__'):
+            for i in self.__slots__:
+                self.__setattr__(i, 0)
+        self.group = group
+        self.group_key = self.find_group_key(row_dic)
+        self.total = total
+        self._init_row_dic()
+        
+    def __eq__(self, other):
+        return self.group == other.group and self.group_key == self.find_group_key(other.row_dic)
+
+    def _init_row_dic(self):
+        self.counts = 1
+        self.covert(self.row_dic, 'init')
+        return self
+    
+    def covert(self, row_dic, types):
+        if types == 'add':
+            self.add_or_init('ev_player', row_dic, types='init')
+            self.add_or_init('outcome_player', row_dic, types='init')
+        else:
+            self.add_or_init('ev_player', row_dic)
+            self.add_or_init('outcome_player', row_dic)
+        self.diff_ev_outcome = self.avg_outcome_player - self.avg_ev_player
+
+    @staticmethod
+    def find_group_key(row_dic):
+        if config.get_args('slide'):
+            interval, appended = map(int, config.get_args('slide').strip().split(','))   # 10000， 4000
+            if not interval:
+                print('错误的分区')
+                exit(0)
+            cnt_id = row_dic['cnt_id']
+            c, d = divmod(cnt_id, interval)
+            if d < appended:
+                key_list = [f'{c}-{0}']
+            else:
+                key_list = [f'{c}-{d // appended}', f'{c}-{d // appended + 1}']
+            if config.get_args('month'):
+                key_list.append(row_dic.get('month'))
+            return '-'.join(key_list)
+        else:
+            return None
