@@ -34,14 +34,19 @@ class EvOutcomeBase(AddSystem):
         self.covert(self.row_dic, 'init')
         return self
     
-    def covert(self, row_dic, types):
-        if types == 'add':
+    def covert(self, row_dic, types=None):
+        if types:
             self.add_or_init('ev_player', row_dic, types='init')
             self.add_or_init('outcome_player', row_dic, types='init')
         else:
             self.add_or_init('ev_player', row_dic)
             self.add_or_init('outcome_player', row_dic)
         self.diff_ev_outcome = self.avg_outcome_player - self.avg_ev_player
+
+    def __add__(self, other):
+        row_dic = other.row_dic
+        self.covert(row_dic)
+        return self
 
     @staticmethod
     def find_group_key(row_dic):
