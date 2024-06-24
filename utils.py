@@ -14,7 +14,9 @@ def resize_timestamp(result):
 def to_excel_numpy(nps, df_path, suffix='all'):
     f_name = './output/' + os.path.basename(df_path).split('.')[0] + '_' + suffix
     if config.get_args('month'):
-        f_name = f_name + 'month'
+        f_name = f_name + '_month'
+    if config.get_args('allowance'):
+        f_name = f_name + f'_allowance_{config.get_args("allowance")}'
     with open(f_name + '.csv', 'w+', encoding='utf-8') as f:
         for i in nps:
             f.write(','.join(map(lambda x: str(round(x, 5)) if isinstance(x, float) else str(x), i)) + '\n')
