@@ -41,7 +41,7 @@ class Config(object):
         self._parser.add_argument('--update-db', type=int, nargs='?', help='是否更新数据库', default=0)
         self._parser.add_argument('--aof', type=int, nargs='?', help='原数据提取', default=0)
         self._parser.add_argument('--month', type=int, nargs='?', help='以月为单位', default=0)
-        self._parser.add_argument('--slide', type=int, nargs='?', help='滑动窗口统计', default=0)
+        self._parser.add_argument('--slide', type=str, nargs='?', help='滑动窗口统计', default=0)
         self._args = self._parser.parse_args()
 
     def get_args(self, key):
