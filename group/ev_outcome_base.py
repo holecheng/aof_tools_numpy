@@ -23,6 +23,7 @@ class EvOutcomeBase(AddSystem):
                 self.__setattr__(i, 0)
         self.group = group
         self.group_key = self.find_group_key(row_dic)
+        self.row_dic = row_dic
         self.total = total
         self._init_row_dic()
         
