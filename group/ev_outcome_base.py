@@ -50,6 +50,7 @@ class EvOutcomeBase(AddSystem):
 
     def __add__(self, other):
         row_dic = other.row_dic
+        self.counts += 1
         self.covert(row_dic)
         return self
 
@@ -63,9 +64,9 @@ class EvOutcomeBase(AddSystem):
             cnt_id = row_dic['cnt_id']
             c, d = map(int, divmod(cnt_id, interval))
             if d < appended:
-                key_list = [f'{c}-{0}']
+                key_list = [f'{c}_{0}']
             else:
-                key_list = [f'{c}-{d // appended}', f'{c}-{d // appended + 1}']
+                key_list = [f'{c}_{d // appended}', f'{c}_{d // appended + 1}']
             return '..'.join(key_list)
         else:
             return None
