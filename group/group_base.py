@@ -15,6 +15,9 @@ class Base(object):
         else:
             self.group_key = self.return_group_key(row_dic)
 
+    def __str__(self):
+        return f'group_key； {self.group_key}， group； {self.group}, allowance: {self.allowance}'
+
     def return_group_key(self, row_dic):
         group_merge = ''  # 返回的键值 '1,2'
         group_list = self.group.split('**')

@@ -25,6 +25,9 @@ class EvOutcomeBase(AddSystem):
         self.row_dic = row_dic
         self.total = total
         self._init_row_dic()
+
+    def __str__(self):
+        return f'group_key； {self.group_key}， group； {self.group}'
         
     def __eq__(self, other):
         if self.total:
