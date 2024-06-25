@@ -17,8 +17,8 @@ def run():
     av = df.loc[:, ['avg_ev_player', 'avg_outcome_player']]
     dc = []
     for i, r in av.iterrows():
-        dc.append([(r.avg_ev_player - total.avg_ev_player[1]) ** 2,
-                   (r.avg_outcome_player - total.avg_outcome_player[1]) ** 2])
+        dc.append([round((r.avg_ev_player - total.avg_ev_player[1]) ** 2, 8),
+                   round((r.avg_outcome_player - total.avg_outcome_player[1]) ** 2, 8)])
     dc = pd.DataFrame(dc)
     dc.columns = ['var_ev_player', 'var_outcome_player']
     ans = pd.concat([dc, df], axis=1)
