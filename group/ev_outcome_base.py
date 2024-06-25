@@ -65,7 +65,7 @@ class EvOutcomeBase(AddSystem):
             c, d = map(int, divmod(cnt_id, appended))
             key_list = []
             start = (cnt_id - interval) // appended if cnt_id > interval else 0
-            for i in range(start, c + 1):
+            for i in range(int(start), c + 1):
                 key_list.append(f'{i}')
             return '..'.join(key_list)
         else:
