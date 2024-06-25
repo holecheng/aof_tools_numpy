@@ -17,7 +17,7 @@ class Base(object):
 
     def __str__(self):
         return (f'group_key； {self.group_key}， group； {self.group}, '
-                f'allowance: {self.allowance}, row_dic: {self.row_dic}')
+                f'allowance: {self.allowance}')
 
     def return_group_key(self, row_dic):
         group_merge = ''  # 返回的键值 '1,2'
