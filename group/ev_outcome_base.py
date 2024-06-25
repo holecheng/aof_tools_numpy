@@ -5,14 +5,13 @@ from config_parse import config
 class EvOutcomeBase(AddSystem):
     __slots__ = ('group',
                  'group_key',  # 几人场
-                 'cnt_id',  # 第N个数据
                  'avg_ev_player',
                  'avg_outcome_player',
                  'diff_ev_outcome',
-                 'total',
                  'counts',  # 符合条件的计数
                  'sum_ev_player',
                  'sum_outcome_player',
+                 'total',
                  'row_dic'  # 数据字典
                  )
 
@@ -40,6 +39,7 @@ class EvOutcomeBase(AddSystem):
             self.add_or_init('ev_player', row_dic, types='init')
             self.add_or_init('outcome_player', row_dic, types='init')
         else:
+            self.counts += 1
             self.add_or_init('ev_player', row_dic)
             self.add_or_init('outcome_player', row_dic)
         self.diff_ev_outcome = self.avg_outcome_player - self.avg_ev_player
