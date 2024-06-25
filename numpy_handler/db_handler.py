@@ -227,7 +227,7 @@ class NumpyReadDb:
             self.group_dic[group_key] = groups
         else:
             self.group_dic[group_key] += groups
-        if self.group != 'chi_square':
+        if self.group not in ['chi_square', 'interval']:
             total = data_format(self.group, row_dic, total=1)
             if 'total' not in self.group_dic:
                 self.group_dic['total'] = total

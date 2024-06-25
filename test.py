@@ -1,18 +1,24 @@
+import collections
+
+cnt = 1230
+
+vid = 100
+cnt_s = 20
 
 
-cnt = 12300
+def get_key(i):
+    c, d = divmod(i, vid)
+    if d < cnt_s:
+        return f'{c}{0}'
+    else:
+        return f'{c}-{d // cnt_s}', f'{c}-{d // cnt_s + 1}'
 
-vid = 1000
-cnt_s = 200
 
+dic = collections.defaultdict(list)
+for i in range(cnt):
+    dic[get_key(i)].append(i)
 
-c,  d = divmod(cnt, vid)
-print(c, d)  # 12 300
-
-if d < cnt_s:
-    print(f'{c}{0}')
-else:
-    print(f'{c}-{d // cnt_s}', f'{c}-{d // cnt_s + 1}')
+print(dic)
 
 
 
