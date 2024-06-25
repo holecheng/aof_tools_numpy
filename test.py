@@ -5,7 +5,6 @@ cnt = 1230
 vid = 100
 cnt_s = 20
 
-
 def get_key(i):
     c, d = divmod(i, vid)
     if d < cnt_s:

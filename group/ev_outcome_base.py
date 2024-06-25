@@ -27,6 +27,8 @@ class EvOutcomeBase(AddSystem):
         self._init_row_dic()
         
     def __eq__(self, other):
+        if self.total:
+            return True
         return self.group == other.group and self.group_key == self.find_group_key(other.row_dic)
 
     def _init_row_dic(self):
@@ -62,6 +64,6 @@ class EvOutcomeBase(AddSystem):
                 key_list = [f'{c}-{0}']
             else:
                 key_list = [f'{c}-{d // appended}', f'{c}-{d // appended + 1}']
-            return '-'.join(key_list)
+            return '..'.join(key_list)
         else:
             return None

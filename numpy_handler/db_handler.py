@@ -197,6 +197,7 @@ class NumpyReadDb:
         title.remove('row_dic')
         ans = [title]
         for k, v in self.group_dic.items():
+            v.group_key = k  # 重置分组对象
             if self.group != 'chi_square':
                 ans.append([round(getattr(v, i), 5) if isinstance(getattr(v, i), float)
                             else getattr(v, i) for i in title])
@@ -223,11 +224,17 @@ class NumpyReadDb:
     def apply_blinds_id(self, row_dic, data_format):
         groups = data_format(self.group, row_dic)
         group_key = groups.group_key
-        if group_key not in self.group_dic:
-            self.group_dic[group_key] = groups
+        if config.get_args('slide'):
+            key_list = group_key.split('..')
         else:
-            self.group_dic[group_key] += groups
-        if self.group not in ['chi_square', 'interval']:
+            key_list = [group_key]
+        if group_key not in self.group_dic:
+            for key in key_list:
+                self.group_dic[key] = groups
+        else:
+            for key in key_list:
+                self.group_dic[key] += groups
+        if self.group not in ['chi_square']:
             total = data_format(self.group, row_dic, total=1)
             if 'total' not in self.group_dic:
                 self.group_dic['total'] = total
