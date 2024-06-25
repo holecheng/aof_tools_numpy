@@ -199,7 +199,6 @@ class NumpyReadDb:
         ans = [title]
         for k, v in self.group_dic.items():
             print(k, v)
-            break
             if self.group != 'chi_square':
                 v.group_key = k  # 重置分组对象
                 ans.append([round(getattr(v, i), 5) if isinstance(getattr(v, i), float)
