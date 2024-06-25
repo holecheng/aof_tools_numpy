@@ -44,7 +44,6 @@ class EvOutcomeBase(AddSystem):
             self.add_or_init('ev_player', row_dic, types='init')
             self.add_or_init('outcome_player', row_dic, types='init')
         else:
-            self.counts += 1
             self.add_or_init('ev_player', row_dic)
             self.add_or_init('outcome_player', row_dic)
         self.diff_ev_outcome = self.avg_outcome_player - self.avg_ev_player
