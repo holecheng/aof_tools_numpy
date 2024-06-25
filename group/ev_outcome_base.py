@@ -62,7 +62,7 @@ class EvOutcomeBase(AddSystem):
                 print('错误的分区')
                 exit(0)
             cnt_id = row_dic['cnt_id']
-            c, d = divmod(cnt_id, interval)
+            c, d = map(int, divmod(cnt_id, interval))
             if d < appended:
                 key_list = [f'{c}-{0}']
             else:

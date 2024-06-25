@@ -198,12 +198,9 @@ class NumpyReadDb:
         title.remove('row_dic')
         ans = [title]
         for k, v in self.group_dic.items():
-            print(k, v)
             if self.group != 'chi_square':
                 v.group_key = k  # 重置分组对象
                 ans.append([round(getattr(v, i), 5) if isinstance(getattr(v, i), float)
-                            else getattr(v, i) for i in title])
-                print([round(getattr(v, i), 5) if isinstance(getattr(v, i), float)
                             else getattr(v, i) for i in title])
             else:
                 matrix_dic = v.matrix_dic  # 卡方集合
@@ -232,11 +229,10 @@ class NumpyReadDb:
             key_list = group_key.split('..')
         else:
             key_list = [group_key]
-        if group_key not in self.group_dic:
-            for order_key in key_list:
+        for order_key in key_list:
+            if order_key not in self.group_dic:
                 self.group_dic[order_key] = groups
-        else:
-            for order_key in key_list:
+            else:
                 self.group_dic[order_key] += groups
         if self.group not in ['chi_square']:
             total = data_format(self.group, row_dic, total=1)
