@@ -20,7 +20,7 @@ logger = logging.getLogger()
 
 IS_DIGIT_KEY = ['ev_player', 'outcome_player', 'stack', 'flop_i', 'turn_i', 'player_count', 'ai_count',
                 'all_count', 'is_push', 'ai_stack', 'flop_ev', 'turn_ev', 'straddle',
-                'seat', 'ante', 'winner', 'is_turn', 'is_flop', 'is_leader_turn',
+                'seat', 'stack_ante_ratio', 'winner', 'is_turn', 'is_flop', 'is_leader_turn',
                 'is_leader_flop', 'compare_stack', 'is_river', 'cnt_id']  # 可统计数据（数字类型）
 
 PLAYER_KEY = ['pId', 'blind_l',  'date', 'hours', 'month', 'heroIndex', 'cards', 'action',
@@ -105,7 +105,7 @@ def init_query():
                 row_dic['month'] = date_obj.strftime('%Y-%m')
                 row_dic['is_turn'] = '1' if line.get('turn') else ''  # 是否turn
                 row_dic['is_river'] = '1' if line.get('river') else ''  # 是否存在river
-                row_dic['stack'] = int(player.get('stack')) // ante
+                row_dic['stack_ante_ratio'] = int(player.get('stack')) // ante
                 row_dic['blind_l'] = sign_blind_level(line.get('blindLevel')['blinds'])
                 if flop_ev_list and turn_ev_list:
                     row_dic['flop_ev'] = flop_ev_list[hero_index]
@@ -126,6 +126,7 @@ def init_query():
                 player['turn_i'] = turn_insurance[0].get('betStacks', '0') if turn_insurance else ''
                 row_dic.update({key: player.get(key) if not row_dic.get(key) else row_dic.get(key) for key in row_key})
                 row_dic.update({key: float(row_dic.get(key) if row_dic.get(key) else 0) for key in IS_DIGIT_KEY})
+                # 注意此处将所有的数字类型的数据全部转化成了float并且更新，因此与元数据同名的数据类型必须未经过加工，否则会被覆盖
                 yield {key: row_dic.get(key, '') for key in row_key}
         print(f'总共{cnt_id}手(pID-handNo)数据{alls}不含表演赛存在局数, 非AI手数{cnt_ai}')
 
