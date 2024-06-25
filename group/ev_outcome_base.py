@@ -62,11 +62,9 @@ class EvOutcomeBase(AddSystem):
                 print('错误的分区')
                 exit(0)
             cnt_id = row_dic['cnt_id']
-            c, d = map(int, divmod(cnt_id, appended))
+            c = int(cnt_id//appended)   # 0-400 0 400-800 1 800-1000 2 1000-1200 2
             key_list = []
-            start = (cnt_id - interval) // appended + 1 if cnt_id > interval else 1
-            if start == c:
-                key_list.append('0')
+            start = (cnt_id - interval) // appended + 1 if cnt_id > interval else 0  # 1
             for i in range(int(start), c+1):
                 key_list.append(f'{i}')
             return '..'.join(key_list)
