@@ -18,7 +18,7 @@ from db.db_loader import db_col
 
 logger = logging.getLogger()
 
-IS_DIGIT_KEY = ['ev_player', 'outcome_player', 'stack', 'flop_i', 'turn_i', 'player_count', 'ai_count',
+IS_DIGIT_KEY = ['ev_player', 'outcome_player', 'ante', 'flop_i', 'turn_i', 'player_count', 'ai_count',
                 'all_count', 'is_push', 'ai_stack', 'flop_ev', 'turn_ev', 'straddle',
                 'seat', 'stack_ante_ratio', 'winner', 'is_turn', 'is_flop', 'is_leader_turn',
                 'is_leader_flop', 'compare_stack', 'is_river', 'cnt_id']  # 可统计数据（数字类型）
