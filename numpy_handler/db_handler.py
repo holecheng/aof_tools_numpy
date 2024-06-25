@@ -203,6 +203,8 @@ class NumpyReadDb:
                 v.group_key = k  # 重置分组对象
                 ans.append([round(getattr(v, i), 5) if isinstance(getattr(v, i), float)
                             else getattr(v, i) for i in title])
+                print([round(getattr(v, i), 5) if isinstance(getattr(v, i), float)
+                            else getattr(v, i) for i in title])
             else:
                 matrix_dic = v.matrix_dic  # 卡方集合
                 if config.get_args('month'):
